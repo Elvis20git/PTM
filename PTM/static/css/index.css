@@ -1,0 +1,65 @@
+
+body {
+    font-family: Arial, sans-serif;
+    margin: auto;
+}
+
+.form1{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.template {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    border-width: 50cm;
+
+}
+
+.noteInput {
+    width: 52%;
+    min-height: 100px;
+    margin-right: 10px;
+    padding: 10px;
+    font-size: 1.6ev;
+    resize: vertical;
+    display: flex;
+
+
+
+}
+.savebutton {
+    align-content: space-between;
+    padding: 5px 15px;
+    top: 2%;
+    margin-left: 66.5%;
+    border-radius: 10%;
+    background-color: rgb(223, 227, 230);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+}
+
+.actionSelect, .datePicker {
+    padding: 10px;
+    font-size: 16px;
+
+}
+
+
+.addTemplate {
+    font-size: 24px;
+    padding: 5px 15px;
+    cursor: pointer;
+    display: flex;
+    margin-left: 19%;
+
+}
+

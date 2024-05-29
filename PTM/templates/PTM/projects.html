@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Admin Dashbaord</title>
+    {% load static %}
+    {% load sweetify %}
+    {{ sweetify_include }}
+{#    {% load sweetify_resources %}#}
+{#    {% sweetify_resources %}#}
+    <link rel="stylesheet" href="{% static 'signup.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dataTables.bootstrap5.min.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <style>
+        [data-toggle="tooltip"] {
+        position: relative;
+        display: inline-block;
+    }
+
+    [data-toggle="tooltip"]::before {
+        content: attr(title);
+        position: absolute;
+        bottom: -30px; /* Adjust the distance from the button */
+        left: 50%; /* Center horizontally */
+        transform: translateX(-50%); /* Center horizontally */
+        background-color: blueviolet; /* Tooltip background color */
+        color: #fff; /* Tooltip text color */
+        border-radius: 4px;
+        padding: 4px 8px;
+        font-size: 12px;
+        white-space: nowrap;
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    [data-toggle="tooltip"]:hover::before {
+        visibility: visible;
+        opacity: 1;
+    }
+    </style>
+</head>
+
+<body>
+
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light shadow-sm bg-light">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
+                aria-controls="offcanvasExample">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand fw-bold" href="{% url 'dashboard' %}">Dashbaord</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto me-md-4 mb-2 mb-lg-0">
+                    <li class="nav-item dropdown d-flex text-light">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="fa-regular fa-user"></i> Admin
+                        </a>
+                        <ul class="dropdown-menu border-0 bg-light ms-auto">
+                            <li><a class="dropdown-item" href="{% url 'profile' %}">Edit Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                        </ul>
+                </ul>
+                </li>
+            </div>
+        </div>
+    </nav>
+    <!-- navbar end -->
+
+    <!-- sidebar -->
+    <div class="offcanvas offcanvas-start bg-purple text-white sidebar-nav" tabindex="-1" id="offcanvasExample"
+        aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header shadow-sm d-block text-center">
+            <div class="offcanvas-title" id="offcanvasExampleLabel">
+                <a class="navbar-brand fw-bold" href="{% url 'dashboard' %}">Dashboard</a>
+            </div>
+        </div>
+        <div class="offcanvas-body pt-3 p-0">
+            <nav class="navbar-dark">
+                <ul class="navbar-nav sidenav">
+                    <li class="nav-link bordered px-3">
+                        <a href="{% url 'dashboard' %}" class="nav-link px-3">
+                            <span class="me-2"><i class="bi bi-speedometer2"></i></span>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-link bordered px-3">
+                        <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#collapseUsers"
+                            role="button" aria-expanded="false" aria-controls="collapseExample">
+                            <span class="me-2">
+                                <i class="bi bi-people-fill"></i>
+                            </span>
+                            <span>Users</span>
+                            <span class="right-icon ms-auto">
+                                <i class="bi bi-chevron-down"></i>
+                            </span>
+                        </a>
+                        <div class="collapse" id="collapseUsers">
+                            <div>
+                                <ul class="navbar-nav ps-3">
+                                    <li>
+                                        <a href="{% url 'addUser' %}" class="nav-link px-3">
+                                            <span class="me-2"><i class="bi bi-1-circle"></i></span>
+                                            <span>Add User</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'User' %}" class="nav-link px-3">
+                                            <span class="me-2"><i class="bi bi-2-circle"></i></span>
+                                            <span>All Users</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-link bordered px-3">
+                        <a href="{% url 'projects' %}" class="nav-link px-3 active">
+                            <span class="me-2"><i class="bi bi-intersect"></i></span>
+                            <span>Projects</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link bordered px-3">
+                        <a href="{% url 'tasks' %}" class="nav-link px-3">
+                            <span class="me-2"><i class="bi bi-journal-text"></i></span>
+                            <span>Tasks</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link bordered px-3">
+                        <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#collapseMeeting" role="button"
+                          aria-expanded="false" aria-controls="collapseExample">
+                          <span class="me-2">
+                            <i class="bi bi-people-fill"></i>
+                          </span>
+                          <span>Meeting</span>
+                          <span class="right-icon ms-auto">
+                            <i class="bi bi-chevron-down"></i>
+                          </span>
+                        </a>
+                      <div class="collapse" id="collapseMeeting">
+
+              <ul class="navbar-nav ps-3">
+                  <li>
+                      <a href="{% url 'meeting_list' %}" class="nav-link px-3">
+                          <span class="me-2"><i class="bi bi-1-circle"></i></span>
+                          <span>Meeting List</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="{% url 'create_meeting' %}" class="nav-link px-3">
+                          <span class="me-2"><i class="bi bi-2-circle"></i></span>
+                          <span>New Meeting</span>
+                      </a>
+                  </li>
+              </ul>
+          </div>
+                      </li>
+                    <li class="nav-link bordered px-3">
+                        <a href="{% url 'profile' %}" class="nav-link px-3">
+                            <span class="me-2"><i class="bi bi-person"></i></span>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <!-- sidebar end -->
+
+    <!-- main content -->
+    <main class="mt-3 p-2">
+        <div class="container">
+            <div class="page-title">
+                <div style="font-weight: 500;" class="page-title fs-5 fw-bold mb-4">Projects</div>
+            </div>
+            <nav class="mt-2 mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Projects</li>
+                </ol>
+            </nav>
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="add-dept mt-5">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="page-title fs-5 fw-bold mb-4">
+                                    Add New Project
+                                </div>
+                                <form action="/add_project" method="post">
+                                    {% csrf_token %}
+{#                                    {{ form.as_p }}#}
+                                    <div class="row">
+                                        <div class="col-md-12">
+
+
+                                            <div class="mb-3 px-2">
+                                                <label for="pg_name" class="form-label">Project_Nane</label>
+                                                <input class="form-control" placeholder="BSc" type="text" id="pg_name"
+                                                    name="project_name" required>
+                                            </div>
+                                            <div class="mb-3 px-2">
+                                                <label for="cat_code" class="form-label">Project Manager</label>
+                                                <input class="form-control" placeholder="XYZ" type="text" id="cat_code"
+                                                    name="project_manager" required>
+                                            </div>
+                                            <div class="mb-3 px-2">
+                                                <label for="cat_name" class="form-label">Project_Members</label>
+                                                <input class="form-control" placeholder="Type Names of Members" required id="cat_name"
+                                                    name="ProjectM_tags">
+                                            </div>
+
+                                            <div class="col-12 mt-md-4">
+                                                <div class="mb-3 px-2">
+                                                    <button type="submit" class="btn btn-success" id="submit"> Submit </button><br>
+                                                    <br><button type="reset" class="btn btn-warning"> Reset </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="all-student mt-5">
+                        <div class="card border-0 shadow-sm">
+                            <br class="card-body">
+                                <div class="page-title fs-5 fw-bold mb-4">
+                                    All Projects
+                                </div>
+{#                                <div class="row" >#}
+{#                                    <div class="col-sm-12 col-md-6">#}
+{#                                        <div class="dataTables_length" id="datatable_length">#}
+{#                                            <div class="me-2" style="display: inline-block;">#}
+{#                                                <label>Show</label>#}
+{#                                            </div>#}
+{##}
+{#                                                <select name="datatable_length" aria-controls="datatable" class="form-select form-select-sm" style="display: inline-block; width: 15%;">#}
+{#                                                    <option value="10">5</option>#}
+{#                                                    <option value="25">10</option>#}
+{#                                                    <option value="50">15</option>#}
+{#                                                    <option value="100">100</option>#}
+{#                                                </select>#}
+{##}
+{##}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                    <div class="col-sm-12 col-md-6">#}
+{#                                        <div id="datatable_filter" class="dataTables_filter" style="margin-left: 30%">#}
+{#                                            <div class="me-2" style="display: inline-block;">#}
+{#                                                <label>Search</label>#}
+{#                                            </div>#}
+{#                                            <input type="" class="form-control form-control-sm" placeholder="" aria-controls="datatable" style="display: inline-block; width: 60%;">#}
+{##}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div></br>#}
+                                <table id="datatable" class="table table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>N0</th>
+                                            <th>project_Name</th>
+                                            <th>Project Manager</th>
+                                            <th>Project Members</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                     {% for project in projects %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ project.project_name }}</td>
+                                            <td>{{ project.project_manager }}</td>
+                                            <td>
+
+                                            {% for tag in project.ProjectM_tags %}
+                                                <span class="tagify__tag" style="color: #000000;background-color: rgba(25,115,135,0.4);border-radius: 10px;padding: 5px;font-weight: 700">{{tag.value}}</span>
+                                            {% endfor %}
+                                            </td>
+
+                                            <td>
+{#                                                <a href="#" class="btn btn-sm btn-info">#}
+{#                                                    <i class="bi bi-eye"></i>#}
+{#                                                </a>#}
+                                                <a href="edit_project/{{ project.id }}" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Edit Task">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </a>
+                                                <!-- Hidden modal for confirmation -->
+                                                <div id="deleteProjectModal" class="modal">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Confirm Delete</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p>Are you sure you want to delete this project?</p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: blueviolet">Cancel</button>
+                                                                <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <a href="#" class="btn btn-sm btn-danger delete-project" data-project-id="{{ project.id }}" data-toggle="tooltip" title="Delete Project">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                      {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+    </main>
+    {% sweetify %}
+    <!-- main content end-->
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+
+    <script>
+        document.querySelectorAll('.delete-project').forEach(button => {
+    button.addEventListener('click', function(event) {
+        event.preventDefault();
+        const projectId = this.getAttribute('data-project-id');
+        const modal = new bootstrap.Modal(document.getElementById('deleteProjectModal'));
+        document.getElementById('confirmDelete').addEventListener('click', function() {
+            deleteProject(projectId);
+            modal.hide();
+        });
+        modal.show();
+    });
+});
+
+// Function to handle delete action
+function deleteProject(projectId) {
+    // Perform delete action using AJAX or form submission
+    // Example using AJAX:
+    fetch(`/delete_project/${projectId}`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken') // Include CSRF token if using Django
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            // Task deleted successfully, update UI or redirect
+            window.location.href = '/projects';
+        } else {
+            // Handle error
+            console.error('Error deleting project');
+        }
+    })
+    .catch(error => {
+        console.error('Error deleting project:', error);
+    });
+}
+
+// Function to get CSRF token from cookies
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+    </script>
+    <script>
+        // Initialize Tagify on the input element with class "tagify"
+        var input = document.querySelector('input[name=ProjectM_tags]');
+        new Tagify(input);
+    </script>
+    <script src="{% static 'js/jquery-3.5.1.js' %}"></script>
+    <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'js/dataTables.bootstrap5.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#datatable').DataTable({
+                "pageLength": 5,
+                "lengthMenu": [5, 10, 15, 25, 50],
+                "pagingType": "full_numbers",
+                "dom": '<"row"<"col-sm-12 col-md-6"<"dataTables_length"l>><"col-sm-12 col-md-6"f>>' +
+                       '<"row"<"col-sm-12"tr>>' +
+                       '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                "language": {
+                    "lengthMenu": '<div class="me-2" style="display: inline-block;"><label>Show</label></div>' +
+                                  '<select class="form-select form-select-sm" style="display: inline-block; width: 15%;">' +
+                                  '<option value="5">5</option>' +
+                                  '<option value="10">10</option>' +
+                                  '<option value="15">15</option>' +
+                                  '<option value="25">25</option>' +
+                                  '<option value="50">50</option>' +
+                                  '</select>',
+
+                    "paginate": {
+                        "previous": "&lt;",
+                        "next": "&gt;"
+                    }
+                },
+            });
+
+            $('.dataTables_filter input[type="search"]').addClass('form-control form-control-sm');
+        });
+    </script>
+
+{#    <script>#}
+{#        document.querySelectorAll('.delete-project-btn').forEach(button => {#}
+{#        button.addEventListener('click', function(event) {#}
+{#            event.preventDefault();#}
+{##}
+{#            const projectId = this.getAttribute('data-project-id');#}
+{#            fetch(`/delete_project/${projectId}/`, {#}
+{#                method: 'POST',#}
+{#                headers: {#}
+{#                    'X-CSRFToken': '{{ csrf_token }}',#}
+{#                    'Content-Type': 'application/json'#}
+{#                },#}
+{#            })#}
+{#            .then(response => {#}
+{#                if (response.ok) {#}
+{#                    // Reload page or update UI as needed#}
+{#                    window.location.reload(); // Example: reload page#}
+{#                } else {#}
+{#                    console.error('Error deleting project:', response.statusText);#}
+{#                }#}
+{#            })#}
+{#            .catch(error => console.error('Error deleting project:', error));#}
+{#        });#}
+{#    });#}
+{#    </script>#}
+    <script>
+        $(document).ready(function () {
+
+        });
+    </script>
+   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{#    <script>#}
+{#        $("#submit").click(function(){#}
+            {#event.preventDefault();#}
+{#            var pg_name = $("#pg_name").val();#}
+{#            var cat_code = $("#cat_code").val();#}
+{#            var cat_name = $("#cat_name").val();#}
+{##}
+{#            if(pg_name == '' || cat_code == '' || cat_name == ''){#}
+{#                swal({#}
+{#                      title: "Empty Fields!!",#}
+{#                      text: "Please provide missing information!!",#}
+{#                      icon: "warning",#}
+{#                      button: "OK",#}
+{#                    });#}
+{#            }else{#}
+{#                swal({#}
+{#                      title: "Project creation!!",#}
+{#                      text: "Project Created Successfully.",#}
+{#                      icon: "success",#}
+{#                      button: "ok",#}
+{#                    });#}
+{#            }#}
+{##}
+{##}
+{#        })#}
+{#    </script>#}
+{% if messages %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            {% for message in messages %}
+                Swal.fire({
+                    title: "{% if message.tags == 'success' %}Success!{% else %}Error!{% endif %}",
+                    text: "{{ message }}",
+                    icon: "{% if message.tags == 'success' %}success{% else %}error{% endif %}",
+                    confirmButtonText: 'OK'
+                });
+            {% endfor %}
+        });
+    </script>
+{% endif %}
+
+
+</body>
+</html> 

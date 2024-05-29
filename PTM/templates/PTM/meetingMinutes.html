@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Admin Dashboard</title>
+    {% load static %}
+    {% load sweetify %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'signup.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'css/dataTables.bootstrap5.min.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
+    <style>
+        body {
+            background-color: #F6F9FF;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        #editor {
+            height: 100px;
+        }
+
+        .containers {
+            background-color: #ffffff;
+            width: 56%;
+            margin-left: 20.5%;
+            margin-right: 20%;
+        }
+    </style>
+</head>
+<body>
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light shadow-sm bg-light">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
+                aria-controls="offcanvasExample">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand fw-bold" href="{% url 'dashboard' %}">Dashbaord</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto me-md-4 mb-2 mb-lg-0">
+                    <li class="nav-item dropdown d-flex text-light">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="fa-regular fa-user"></i> Admin
+                        </a>
+                        <ul class="dropdown-menu border-0 bg-light ms-auto">
+                            <li><a class="dropdown-item" href="{% url 'profile' %}">Edit Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                        </ul>
+                </ul>
+                </li>
+            </div>
+        </div>
+    </nav>
+    <!-- navbar end -->
+
+    <!-- sidebar -->
+    <div class="offcanvas offcanvas-start bg-purple text-white sidebar-nav" tabindex="-1" id="offcanvasExample"
+        aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header shadow-sm d-block text-center">
+            <div class="offcanvas-title" id="offcanvasExampleLabel">
+                <a class="navbar-brand fw-bold" href="{% url 'dashboard' %}">Dashboard</a>
+            </div>
+        </div>
+        <div class="offcanvas-body pt-3 p-0">
+            <nav class="navbar-dark">
+                <ul class="navbar-nav sidenav">
+                    <li class="nav-link bordered px-3">
+                        <a href="{% url 'dashboard' %}" class="nav-link px-3">
+                            <span class="me-2"><i class="bi bi-speedometer2"></i></span>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-link bordered px-3">
+                        <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#collapseUsers"
+                            role="button" aria-expanded="false" aria-controls="collapseExample">
+                            <span class="me-2">
+                                <i class="bi bi-people-fill"></i>
+                            </span>
+                            <span>Users</span>
+                            <span class="right-icon ms-auto">
+                                <i class="bi bi-chevron-down"></i>
+                            </span>
+                        </a>
+                        <div class="collapse" id="collapseUsers">
+                            <div>
+                                <ul class="navbar-nav ps-3">
+                                    <li>
+                                        <a href="{% url 'addUser' %}" class="nav-link px-3">
+                                            <span class="me-2"><i class="bi bi-1-circle"></i></span>
+                                            <span>Add User</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'User' %}" class="nav-link px-3">
+                                            <span class="me-2"><i class="bi bi-2-circle"></i></span>
+                                            <span>All Users</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-link bordered px-3">
+                        <a href="{% url 'projects' %}" class="nav-link px-3 active">
+                            <span class="me-2"><i class="bi bi-intersect"></i></span>
+                            <span>Projects</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link bordered px-3">
+                        <a href="{% url 'tasks' %}" class="nav-link px-3">
+                            <span class="me-2"><i class="bi bi-journal-text"></i></span>
+                            <span>Tasks</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link bordered px-3">
+                        <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#collapseMeeting" role="button"
+                          aria-expanded="false" aria-controls="collapseExample">
+                          <span class="me-2">
+                            <i class="bi bi-people-fill"></i>
+                          </span>
+                          <span>Meeting</span>
+                          <span class="right-icon ms-auto">
+                            <i class="bi bi-chevron-down"></i>
+                          </span>
+                        </a>
+                      <div class="collapse" id="collapseMeeting">
+
+                          <ul class="navbar-nav ps-3">
+                            <li>
+                              <a href="{% url 'meeting_list' %}" class="nav-link px-3">
+                                <span class="me-2"><i class="bi bi-1-circle"></i></span>
+                                <span>Meeting List</span>
+                              </a>
+                            </li>
+                            <li>
+                              <a href="{% url 'create_meeting' %}" class="nav-link px-3">
+                                <span class="me-2"><i class="bi bi-2-circle"></i></span>
+                                <span>New Meeting</span>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </li>
+                    <li class="nav-link bordered px-3">
+                        <a href="{% url 'profile' %}" class="nav-link px-3">
+                            <span class="me-2"><i class="bi bi-person"></i></span>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <!-- sidebar end -->
+
+    <!-- Main form content -->
+    <form method="post" action="{% url 'create_meeting' %}">
+        {% csrf_token %}
+        <div class="container mt-5 me-5">
+            <h2 style="margin-left: 15%">Meeting Record</h2>
+            <br><div class="row mt-3" style="margin-left: 13%">
+                <div class="col-md-2 mb-3">
+                    <label for="meeting-date" class="form-label">Meeting Date</label>
+                    {{ meeting_form.meeting_date }}
+                </div>
+                <div class="col-md-2 mb-3">
+                    <label for="meeting-time" class="form-label">Meeting Time</label>
+                    {{ meeting_form.meeting_time }}
+                </div>
+                <div class="col-md-2 mb-3">
+                    <label for="project-dropdown" class="form-label">Project</label>
+                    {{ meeting_form.project }}
+                </div>
+                <div class="col-md-3 mb-3 d-flex align-items-end">
+            <button id="addButton" class="btn btn-primary w-100 me-3" type="button">Add</button>
+            <button class="btn btn-success w-100" type="submit">Save</button>
+        </div>
+            </div>
+        </div>
+        <div id="containers" class="containers">
+            {{ meeting_note_formset.management_form }}
+            {% for form in meeting_note_formset %}
+            <div class="container mt-2 me-5 meeting-note-form">
+                <div class="mt-4 col-md-14">
+                    <label for="meeting-notes" class="form-label">Meeting Notes</label>
+                    {{ form.note_content }}
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-3">
+                        <label for="note-type-dropdown" class="form-label">Note Type</label>
+                        {{ form.note_type }}
+                    </div>
+                    <div class="col-md-3 d-none" id="decided-by-field">
+                        <label for="decided-by" class="form-label">Decided By</label>
+                        {{ form.decided_by }}
+                    </div>
+                    <div class="col-md-3 d-none" id="assigned-to-field">
+                        <label for="assigned-to" class="form-label">Assigned To</label>
+                        {{ form.assigned_to }}
+                    </div>
+                    <div class="col-md-3 d-none" id="assigned-by-field">
+                        <label for="assigned-by" class="form-label">Assigned By</label>
+                        {{ form.assigned_by }}
+                    </div>
+                    <div class="col-md-3 d-none" id="deadline-date-field">
+                        <label for="deadline-date" class="form-label">Deadline Date</label>
+                        {{ form.deadline_date }}
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1 mb-3" style="width: 100px">
+                            <br><button class="btn btn-danger deleteButton" type="button">Delete</button>
+                        </div>
+{#                        <div class="col-md-1 mb-3">#}
+{#                            <br><button class="btn btn-success button-spacing" type="submit">Save</button>#}
+{#                        </div>#}
+
+{#                        <div class="col-md-1 mb-3">#}
+{#                            <div style="width: 10px;"></div>#}
+{#                        </div>#}
+
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script>
+    function updateContainerIDs(container, index) {
+        container.querySelectorAll('input, textarea, select').forEach(function(element) {
+            if (element.name) {
+                element.name = element.name.replace(/-\d+-/, `-${index}-`);
+            }
+            if (element.id) {
+                element.id = element.id.replace(/_\d+_/, `_${index}_`);
+            }
+        });
+        container.querySelectorAll('[id^="decided-by-field-"], [id^="assigned-to-field-"], [id^="assigned-by-field-"], [id^="deadline-date-field-"]').forEach(function(element) {
+            element.classList.add('');
+        });
+    }
+
+    function createNewContainer() {
+        var formCount = parseInt(document.getElementById('id_form-TOTAL_FORMS').value);
+        var container = document.querySelector('.meeting-note-form').cloneNode(true);
+
+        updateContainerIDs(container, formCount);
+
+        // Reset the dropdown and other fields in the new container
+        var noteTypeDropdown = container.querySelector('#note-type-dropdown');
+        noteTypeDropdown.value = ''; // Reset the dropdown
+
+        container.querySelector('#decided-by').value = '';
+        container.querySelector('#assigned-to').value = '';
+        container.querySelector('#assigned-by').value = '';
+        container.querySelector('#deadline-date').value = '';
+
+        container.querySelector('button.deleteButton').addEventListener('click', function(event) {
+            event.preventDefault();
+            container.remove();
+            formCount--;
+            document.getElementById('id_form-TOTAL_FORMS').value = formCount;
+        });
+
+        // Attach event listener to the dropdown in the new container
+        noteTypeDropdown.addEventListener('change', function () {
+            var noteType = this.value;
+            container.querySelector('#decided-by-field').classList.toggle('d-none', noteType !== 'decision');
+            container.querySelector('#assigned-to-field').classList.toggle('d-none', noteType !== 'action');
+            container.querySelector('#deadline-date-field').classList.toggle('d-none', noteType !== 'action');
+            container.querySelector('#assigned-by-field').classList.toggle('d-none', noteType !== 'action');
+        });
+
+        document.getElementById('containers').appendChild(container);
+        formCount++;
+        document.getElementById('id_form-TOTAL_FORMS').value = formCount;
+    }
+
+    document.getElementById('addButton').addEventListener('click', function () {
+        createNewContainer();
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('button.deleteButton').forEach(function(button) {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                button.closest('.meeting-note-form').remove();
+                var formCount = parseInt(document.getElementById('id_form-TOTAL_FORMS').value);
+                formCount--;
+                document.getElementById('id_form-TOTAL_FORMS').value = formCount;
+            });
+        });
+
+        var quill = new Quill('#editor', {
+            theme: 'snow'
+        });
+
+        var form = document.querySelector('form');
+        form.onsubmit = function () {
+            var meetingNotes = document.querySelector('textarea[name=meeting_notes]');
+            meetingNotes.value = quill.root.innerHTML;
+        };
+
+        document.getElementById('note-type-dropdown').addEventListener('change', function () {
+            var noteType = this.value;
+            document.getElementById('decided-by-field').classList.toggle('d-none', noteType !== 'decision');
+            document.getElementById('assigned-to-field').classList.toggle('d-none', noteType !== 'action');
+            document.getElementById('deadline-date-field').classList.toggle('d-none', noteType !== 'action');
+            document.getElementById('assigned-by-field').classList.toggle('d-none', noteType !== 'action');
+        });
+
+        // Initially hide the 'decided by' field
+        document.getElementById('decided-by-field').classList.add('d-none');
+    });
+</script>
+</body>
+</html>

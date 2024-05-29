@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SCOPE_TYPE" value="3" />
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3936afda-4ee2-4e2c-a9e7-570940ba2cd0" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/test1.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/admin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/apps.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/migrations/0001_initial.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/migrations/0002_delete_project.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/migrations/0003_remove_meeting_notes.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/migrations/0008_taskdeadlineupdate_timestamp.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/css/allMeetings.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/css/bootstrap.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/css/dataTables.bootstrap5.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/css/index.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/css/meeting.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/css/style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/css/styles.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/css/test4.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/css/test8.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/js/bootstrap.bundle.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/js/dataTables.bootstrap5.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/js/jquery-3.5.1.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/js/meeting.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/js/script.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/login.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/logout.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/signup.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/Dashboard.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/UpdateDeadline.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/UpdateP.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/addUser.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/allUser.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/delete.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/logout.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/meetingMinutes.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/meetingMinutesList.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/profile.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/projects.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/register.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/tasks.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/updateTask.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/updatedDeadlineList.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/user_login.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/templatetags/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/templatetags/custom_filters.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/tests.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/manage.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test1/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test1/asgi.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test1/settings.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test1/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test1/wsgi.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+        <option value="CSS File" />
+        <option value="Python Script" />
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/PTM/views.py" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2fY8FhqU3drznQWqN8lML19IvsD" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.pycharm.django.structure.promotion.once.per.project&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;http.proxy&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\100123\PycharmProjects\test1\PTM\templatetags" />
+      <recent name="C:\Users\100123\PycharmProjects\test1\PTM\static" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="test1" type="Python.DjangoServer" factoryName="Django server">
+      <module name="test1" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="localhost" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-PY-241.14494.241" />
+        <option value="bundled-python-sdk-0509580d9d50-28c9f5db9ffe-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.14494.241" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3936afda-4ee2-4e2c-a9e7-570940ba2cd0" name="Changes" comment="" />
+      <created>1713966550808</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1713966550808</updated>
+      <workItem from="1713966550862" duration="84063000" />
+      <workItem from="1714293285108" duration="11877000" />
+      <workItem from="1714380208806" duration="21188000" />
+      <workItem from="1714472643322" duration="28500000" />
+      <workItem from="1714720265494" duration="18275000" />
+      <workItem from="1714898917794" duration="81957000" />
+      <workItem from="1715585224309" duration="48964000" />
+      <workItem from="1715756483756" duration="32114000" />
+      <workItem from="1715853343754" duration="554000" />
+      <workItem from="1715854711876" duration="17195000" />
+      <workItem from="1715935709279" duration="6791000" />
+      <workItem from="1716187247219" duration="17472000" />
+      <workItem from="1716208583131" duration="12293000" />
+      <workItem from="1716282456426" duration="10736000" />
+      <workItem from="1716371384045" duration="13317000" />
+      <workItem from="1716459638580" duration="5762000" />
+      <workItem from="1716469519779" duration="6801000" />
+      <workItem from="1716533401087" duration="23009000" />
+      <workItem from="1716713463174" duration="39612000" />
+      <workItem from="1716886052223" duration="10410000" />
+      <workItem from="1716902085311" duration="36467000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+</project>
