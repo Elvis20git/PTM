@@ -9,6 +9,7 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib import messages
 import json
+from django.contrib.auth.views import PasswordChangeView
 from PTM.models import User, Allprojects, Task
 from django.shortcuts import render
 from .models import Allprojects
@@ -20,6 +21,9 @@ from .models import MeetingNote
 from django.forms import formset_factory
 from allauth.account.views import SignupView
 from .forms import CustomUserCreationForm, UserChangeForm
+from django.urls import reverse_lazy
+from django.views.generic import RedirectView
+from PTM.models import CustomUser
 # from .forms import CustomSignupForm
 
 
@@ -71,7 +75,7 @@ def user_login(request):
     return render(request, 'PTM/user_login.html')
 def dashboard(request):
 
-    return render(request, 'PTM/dashboard.html')
+    return render(request, 'PTM/dashboard.html',{'user': request.user})
 
 def logout(request):
 
@@ -292,12 +296,13 @@ def addUser(request):
         myuser.save()
         messages.success(request, 'Your account has been created!')
         return redirect('user_login')
-    return render(request, 'PTM/addUser.html')
+    return render(request, 'PTM/addUser.html', {'user': request.user})
 
 def dashboard(request):
     # Retrieve the count of projects from the database
     project_count = Allprojects.objects.count()
     task_count = Task.objects.count()
+    user_count = CustomUser.objects.count()
     completed_tasks_count = Task.objects.filter(status=2).count()
     in_progress_tasks_count = Task.objects.filter(status=3).count()
     overDue_tasks_count = Task.objects.filter(status=4).count()
@@ -306,6 +311,7 @@ def dashboard(request):
     context = {
         'project_count': project_count,
         'task_count': task_count,
+        'user_count': user_count,
         'completed_tasks_count': completed_tasks_count,
         'in_progress_tasks_count': in_progress_tasks_count,
         'overDue_tasks_count': overDue_tasks_count,
@@ -383,9 +389,37 @@ def delete_meeting(request, meeting_id):
         return redirect('meeting_list')
     return render(request, 'delete_meeting.html', {'meeting': meeting})
 def profile(request):
-    return render(request, 'PTM/profile.html')
+    return render(request, 'PTM/profile.html', {'user': request.user})
 
+def edit_profile(request):
+    if request.method == 'POST':
+        user_form = CustomUserChangeForm(request.POST, instance=request.user)
+        if user_form.is_valid():
+            user_form.save()
+            return redirect('profile')
+    else:
+        user_form = CustomUserChangeForm(instance=request.user)
+    return render(request, 'PTM/edit_profile.html', {'user_form': user_form})
 
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            return redirect('user_login')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'PTM/change_password.html', {'form': form})
+
+class CustomPasswordChangeView(PasswordChangeView):
+    template_name = 'PTM/change_password.html'  # Ensure this matches your template name
+    success_url = reverse_lazy('logout')  # Redirect to login page after logout
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        logout(self.request)  # Log out the user
+        return response
 # class CustomSignupView(SignupView):
 #     form_class = CustomSignupForm
 #

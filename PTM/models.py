@@ -11,10 +11,16 @@ class MyModel(models.Model):
 
 class CustomUser(AbstractUser):
     # Your custom fields here
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+    full_name = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     account_activation = models.BooleanField(default=False)
+    ROLE_CHOICES = (
+        ('admin', 'Admin'),
+        ('manager', 'Manager'),
+        ('user', 'User'),
+    )
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user')
 
     # Specify unique related names for groups and user_permissions fields
     groups = models.ManyToManyField(
@@ -44,14 +50,6 @@ class Allprojects(models.Model):
     def __str__(self):
         return self.project_name
 
-
-# class Allprojects(models.Model):
-#     project_name = models.CharField(max_length=100)
-#     project_manager = models.CharField(max_length=100)
-#     ProjectM_tags = models.ManyToManyField(CustomUser, related_name='projects')
-#
-#     def __str__(self):
-#         return self.project_name
 
 class Task(models.Model):
     project = models.ForeignKey(Allprojects, on_delete=models.CASCADE)

@@ -1,3 +1,4 @@
+<!-- profile.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -159,17 +160,14 @@
                 </ol>
             </nav>
 
-            <div class="profile">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body">
-                        <div class="page-title fs-5 fw-bold mb-4">
-                            Admin Profile
-                        </div>
+            <div class="row mt-3">
+                <div class="col-12 col-lg-12">
+                    <div class="profile-main shadow-sm rounded bg-white p-3">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active" id="profile-tab" data-bs-toggle="tab"
                                     data-bs-target="#profile-tab-pane" type="button" role="tab"
-                                    aria-controls="profile-tab-pane" aria-selected="false">Profile</button>
+                                    aria-controls="profile-tab-pane" aria-selected="true">Profile</button>
                             </li>
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="editpro-tab" data-bs-toggle="tab"
@@ -198,11 +196,11 @@
                                         <div class="col-md-8">
                                             <ul class="profile-details">
                                                 <li class="text-muted">Name : </li>
-                                                <li class="ms-3 fix-w"> {{ user.full_name }}</li>
+                                                <li class="ms-3 fix-w"> {{ user.first_name }}</li>
                                             </ul>
                                             <ul class="profile-details">
                                                 <li class="text-muted">Phone : </li>
-                                                <li class="ms-3 fix-w"> {{ user.phone_number }}</li>
+                                                <li class="ms-3 fix-w"> {{ user.profile.phone }}</li>
                                             </ul>
                                             <ul class="profile-details">
                                                 <li class="text-muted">Email : </li>
@@ -230,7 +228,7 @@
                                                 <div class="mb-3 row">
                                                     <label for="user_name" class="col-sm-2 col-form-label">Name</label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" class="form-control" value="{{ user.full_name }}"
+                                                        <input type="text" class="form-control" value="{{ user.first_name }}"
                                                             name="first_name" id="user_name">
                                                     </div>
                                                 </div>
@@ -238,7 +236,7 @@
                                                     <label for="user_phone"
                                                         class="col-sm-2 col-form-label">Phone</label>
                                                     <div class="col-sm-10">
-                                                        <input type="tel" class="form-control" value="{{ user.phone_number }}"
+                                                        <input type="tel" class="form-control" value="{{ user.profile.phone }}"
                                                             name="phone" id="user_phone">
                                                     </div>
                                                 </div>
@@ -268,7 +266,7 @@
                                 <div class="mt-4 px-4">
                                     <div class="row">
                                         <div class="col-12 col-md-8 m-auto">
-                                            <form action="{% url 'password_change' %}" method="post">
+                                            <form action="{% url 'change_password' %}" method="post">
                                                 {% csrf_token %}
                                                 <div class="mb-3 row">
                                                     <label for="o_psw" class="col-sm-4 col-form-label">Old

@@ -74,26 +74,28 @@ class TaskDeadlineUpdateForm(forms.ModelForm):
 #         return user
 
 class CustomUserCreationForm(UserCreationForm):
-    first_name = forms.CharField(max_length=30, label='First Name')
-    last_name = forms.CharField(max_length=30, label='Last Name')
+    full_name = forms.CharField(max_length=30, label='First Name')
+    phone_number = forms.CharField(max_length=30, label='Phone Number')
     email = forms.EmailField(label='Email')
     account_activation = forms.BooleanField(required=False, label='Account Activation')
+    role = forms.ChoiceField(choices=[('admin', 'Admin'), ('manager', 'Manager'), ('user', 'User')], label='Role')
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'account_activation']
+        fields = ['username', 'full_name', 'phone_number', 'email', 'password1', 'password2', 'account_activation', 'role']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Username'})
-        self.fields['first_name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'First Name'})
-        self.fields['last_name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Last Name'})
+        self.fields['full_name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Full Name'})
+        self.fields['phone_number'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Phone Number'})
         self.fields['email'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Email'})
         self.fields['password1'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Password'})
         self.fields['password2'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Confirm Password'})
         self.fields['account_activation'].widget.attrs.update({'class': 'form-check-input'})
+        self.fields['role'].widget.attrs.update({'class': 'form-select'})
 
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
-        fields = ('username', 'first_name', 'last_name', 'email', 'account_activation')
+        fields = ('username', 'full_name', 'phone_number', 'email', 'account_activation')

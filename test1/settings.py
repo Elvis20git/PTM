@@ -64,6 +64,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'test1.urls'
+LOGIN_URL = 'user_login'  # URL name for your login view
+LOGOUT_REDIRECT_URL = 'user_login'
 
 TEMPLATES = [
     {
@@ -93,7 +95,7 @@ WSGI_APPLICATION = 'test1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'djangoAuthDb',
+        'NAME': 'PTMdb',
         'USER': 'postgres',
         'PASSWORD': 'andromeda',
         'HOST': 'localhost',

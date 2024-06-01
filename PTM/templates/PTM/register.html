@@ -35,7 +35,7 @@
                     <li class="nav-item dropdown d-flex text-light">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            <i class="fa-regular fa-user"></i> Admin
+                            <i class="fa-regular fa-user"></i> {{ user.username }}
                         </a>
                         <ul class="dropdown-menu border-0 bg-light ms-auto">
                             <li><a class="dropdown-item" href="{% url 'profile' %}">Edit Profile</a></li>
@@ -162,12 +162,12 @@
             {% csrf_token %}
             <div class="row">
                 <div class="col-md-4 mb-3">
-                    <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name</label>
-                    {{ form.first_name }}
+                    <label for="{{ form.full_name.id_for_label }}" class="form-label">Full Name</label>
+                    {{ form.full_name }}
                 </div>
                 <div class="col-md-4 mb-3">
-                    <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name</label>
-                    {{ form.last_name }}
+                    <label for="{{ form.phone_number.id_for_label }}" class="form-label">Phone Number</label>
+                    {{ form.phone_number }}
                 </div>
                 <div class="col-md-4 mb-3">
                     <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
@@ -187,12 +187,18 @@
                     <label for="{{ form.password2.id_for_label }}" class="form-label">Confirm Password</label>
                     {{ form.password2 }}
                 </div>
+
+                <div class="col-md-4 mb-3">
+                    <label for="{{ form.role.id_for_label }}" class="form-label">Role</label>
+                        {{ form.role }}
+                </div>
                 <div class="col-12 mb-3">
                     <div class="form-check">
                         {{ form.account_activation.label_tag }}
                         {{ form.account_activation }}
                     </div>
                 </div>
+
                 <div class="col-12">
                     <button type="submit" class="btn btn-success">Register</button>
                 </div>

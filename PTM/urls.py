@@ -1,6 +1,8 @@
 from django.urls import path, include
 from . import views, admin
-from .views import update_task_deadline, register
+from .views import update_task_deadline, register, CustomPasswordChangeView
+from django.urls import path
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.homepage, name=""),
@@ -14,7 +16,7 @@ urlpatterns = [
     path('User', views.addUser, name="User"),
     path('allUser', views.allUser, name="allUser"),
     path('create_meeting', views.create_meeting, name="create_meeting"),
-    path('profile', views.profile, name="profile"),
+    path('profile/', views.profile, name="profile"),
     path('add_project', views.add_project, name="add_project"),
     path('delete_project/<int:project_id>', views.delete_project, name="delete_project"),
     path('edit_project/<int:id>', views.edit_project, name="edit_project"),
@@ -26,6 +28,10 @@ urlpatterns = [
     path('task_update_list/', views.task_update_list, name="task_update_list"),
     path('meeting_list/', views.meeting_list, name="meeting_list"),
     path('register/', register, name='register'),
+    path('profile/edit/', views.edit_profile, name='edit_profile'),
+    path('profile/change_password/', views.change_password, name='change_password'),
+    path('password_change/', CustomPasswordChangeView.as_view(), name='password_change'),
+    path('login/', auth_views.LoginView.as_view(), name='login'),
     # path('account/signup', custom_signup_view, name="signup"),
     # path('accounts/', include('allauth.urls')),
 
