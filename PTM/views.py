@@ -86,24 +86,35 @@ def projects(request):
         projects = Allprojects.objects.all()
         return render(request, 'PTM/projects.html', {'projects': projects})
 
+
 def add_project(request):
     if request.method == "POST":
-        project_name = request.POST['project_name']
-        project_manager = request.POST['project_manager']
-        ProjectM_tags = request.POST['ProjectM_tags']
+        project_name = request.POST.get('project_name')
+        project_manager = request.POST.get('project_manager')
+        ProjectM_tags = request.POST.get('ProjectM_tags')
+
         try:
             # Attempt to load JSON from string to ensure it's properly formatted and stored
             ProjectM_tags = json.loads(ProjectM_tags)
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON data'}, status=400)
 
-        allprojects = Allprojects.objects.create(project_name=project_name, project_manager=project_manager, ProjectM_tags=ProjectM_tags)
+        # # Check if the project manager exists in the CustomUser table
+        # if not CustomUser.objects.filter(username=project_manager).exists():
+        #     return JsonResponse({'error': 'Project manager does not exist'}, status=400)
+
+        # Check if each tagged member exists in the CustomUser table
+        for member in ProjectM_tags:
+            if not CustomUser.objects.filter(username=member['value']).exists():
+                messages.error(request, f'Tagged member {member["value"]} does not exist')
+            return JsonResponse({'error': f'Tagged member {member} does not exist'}, status=400)
+
+        allprojects = Allprojects.objects.create(project_name=project_name, project_manager=project_manager,
+                                                 ProjectM_tags=ProjectM_tags)
         allprojects.save()
         messages.success(request, 'The project has been added.')
         # sweetify.toast(request, 'The project has been added.', icon='success', duration=3000)
         return redirect('projects')
-
-
 def edit_project(request, id):
     # project = Allprojects.objects.get(id=id)
 
