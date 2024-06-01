@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,8 +43,11 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'django.contrib.sites'
+    'django.contrib.sites',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
 SITE_ID = 1
 
@@ -89,7 +93,7 @@ WSGI_APPLICATION = 'test1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'djangoAuth',
+        'NAME': 'djangoAuthDb',
         'USER': 'postgres',
         'PASSWORD': 'andromeda',
         'HOST': 'localhost',
@@ -99,6 +103,14 @@ DATABASES = {
 ACCOUNT_FORMS = {
     'signup': 'PTM.forms.CustomSignupForm',
 }
+
+# MESSAGE_TAGS = {
+#     messages.DEBUG: 'alert-info',
+#     messages.INFO: 'alert-info',
+#     messages.SUCCESS: 'alert-success',
+#     messages.WARNING: 'alert-warning',
+#     messages.ERROR: 'alert-danger',
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -144,7 +156,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-AUTH_USER_MODEL = 'PTM.User'
+AUTH_USER_MODEL = 'PTM.CustomUser'
+# AUTH_USER_MODEL = 'myapp.CustomUser'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

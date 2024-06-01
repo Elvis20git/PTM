@@ -7,69 +7,36 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3936afda-4ee2-4e2c-a9e7-570940ba2cd0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/test1.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/apps.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/migrations/0002_delete_project.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/migrations/0003_remove_meeting_notes.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/migrations/0008_taskdeadlineupdate_timestamp.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/static/css/allMeetings.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/static/css/bootstrap.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/static/css/dataTables.bootstrap5.min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/static/css/index.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/static/css/meeting.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/static/css/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/static/css/styles.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/static/css/test4.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/static/css/test8.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/static/js/bootstrap.bundle.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/static/js/dataTables.bootstrap5.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/static/js/jquery-3.5.1.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/static/js/meeting.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/static/js/script.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/static/login.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/static/logout.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/static/signup.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/Dashboard.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/UpdateDeadline.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/UpdateP.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/addUser.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/allUser.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/delete.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/logout.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/meetingMinutes.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/meetingMinutesList.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/profile.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/projects.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/register.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/tasks.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/updateTask.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/updatedDeadlineList.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/user_login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/templatetags/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/templatetags/custom_filters.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/tests.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/views.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/manage.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test1/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test1/asgi.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test1/settings.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test1/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test1/wsgi.py" afterDir="false" />
+    <list default="true" id="3936afda-4ee2-4e2c-a9e7-570940ba2cd0" name="Changes" comment="ok">
+      <change afterPath="$PROJECT_DIR$/PTM/migrations/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/test1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/test1.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/migrations/0002_delete_project.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/migrations/0003_remove_meeting_notes.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/migrations/0008_taskdeadlineupdate_timestamp.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/Dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/Dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/UpdateDeadline.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/UpdateDeadline.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/UpdateP.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/UpdateP.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/addUser.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/addUser.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/allUser.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/allUser.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/meetingMinutes.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/meetingMinutes.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/meetingMinutesList.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/meetingMinutesList.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/projects.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/projects.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/tasks.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/tasks.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/updateTask.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/updateTask.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/updatedDeadlineList.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/updatedDeadlineList.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/user_login.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/user_login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test1/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/test1/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test1/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/test1/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,6 +59,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Elvis20git&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Elvis20git/PTM.git&quot;,
+    &quot;accountId&quot;: &quot;e6726729-7b6a-4ae4-af7c-287a58ff6172&quot;
+  }
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/PTM/views.py" root0="SKIP_INSPECTION" />
   </component>
@@ -196,8 +175,18 @@
       <workItem from="1716533401087" duration="23009000" />
       <workItem from="1716713463174" duration="39612000" />
       <workItem from="1716886052223" duration="10410000" />
-      <workItem from="1716902085311" duration="36467000" />
+      <workItem from="1716902085311" duration="37091000" />
+      <workItem from="1717051479652" duration="29986000" />
     </task>
+    <task id="LOCAL-00001" summary="ok">
+      <option name="closed" value="true" />
+      <created>1717001691997</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1717001691997</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -216,5 +205,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="ok" />
+    <option name="LAST_COMMIT_MESSAGE" value="ok" />
   </component>
 </project>

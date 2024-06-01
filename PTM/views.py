@@ -19,6 +19,7 @@ from .models import Task, TaskDeadlineUpdate
 from .models import MeetingNote
 from django.forms import formset_factory
 from allauth.account.views import SignupView
+from .forms import CustomUserCreationForm, UserChangeForm
 # from .forms import CustomSignupForm
 
 
@@ -28,27 +29,27 @@ def homepage(request):
 
     return render(request, 'PTM/index.html')
 
-def register(request):
-    if request.method == "POST":
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        phone_number = request.POST['phone']
-        email = request.POST['email']
-        department = request.POST['department']
-        password = request.POST['password']
-
-        myuser = User.objects.create_user(email=email, password=password)
-        myuser.first_name = first_name
-        myuser.last_name = last_name
-        myuser.phone_number = phone_number
-        myuser.department = department
-
-        myuser.save()
-        messages.success(request, 'Your account has been created!')
-        return redirect('login')
-
-
-    return render(request, 'PTM/register.html')
+# def register(request):
+#     if request.method == "POST":
+#         first_name = request.POST['first_name']
+#         last_name = request.POST['last_name']
+#         phone_number = request.POST['phone']
+#         email = request.POST['email']
+#         department = request.POST['department']
+#         password = request.POST['password']
+#
+#         myuser = User.objects.create_user(email=email, password=password)
+#         myuser.first_name = first_name
+#         myuser.last_name = last_name
+#         myuser.phone_number = phone_number
+#         myuser.department = department
+#
+#         myuser.save()
+#         messages.success(request, 'Your account has been created!')
+#         return redirect('user_login')
+#
+#
+#     return render(request, 'PTM/register.html')
 
 def user_login(request):
     if request.method == "POST":
@@ -56,19 +57,18 @@ def user_login(request):
         password = request.POST['password']
 
         user = authenticate(username=username, password=password)
-        print(f'User logged in: {user}')
         if user is not None:
-            login(request, user)
-            return render(request, "PTM/dashboard.html")
-
+            if user.account_activation:
+                login(request, user)
+                return render(request, "PTM/dashboard.html")
+            else:
+                messages.error(request, 'Your account needs to be activated to proceed.')
+                return redirect('user_login')
         else:
             messages.error(request, 'Invalid username or password')
             return redirect('user_login')
 
-
-
     return render(request, 'PTM/user_login.html')
-
 def dashboard(request):
 
     return render(request, 'PTM/dashboard.html')
@@ -396,3 +396,13 @@ def profile(request):
 #         return response
 #
 # custom_signup_view = CustomSignupView.as_view()
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('user_login')  # Redirect to a login page or success page
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'PTM/register.html', {'form': form})

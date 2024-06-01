@@ -1,9 +1,12 @@
 from allauth.account.forms import SignupForm
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import UserManager
 from django.db import models
 from django import forms
-from .models import Meeting, MeetingNote, TaskDeadlineUpdate
+from .models import Meeting, MeetingNote, TaskDeadlineUpdate, CustomUser
 from django.utils import timezone
+from django.contrib.auth.forms import UserChangeForm
+
 
 class MeetingForm(forms.ModelForm):
     class Meta:
@@ -69,3 +72,28 @@ class TaskDeadlineUpdateForm(forms.ModelForm):
 #         user.is_active = False  # Deactivate account until it is activated by an admin
 #         user.save()
 #         return user
+
+class CustomUserCreationForm(UserCreationForm):
+    first_name = forms.CharField(max_length=30, label='First Name')
+    last_name = forms.CharField(max_length=30, label='Last Name')
+    email = forms.EmailField(label='Email')
+    account_activation = forms.BooleanField(required=False, label='Account Activation')
+
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'account_activation']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Username'})
+        self.fields['first_name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'First Name'})
+        self.fields['last_name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Last Name'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Email'})
+        self.fields['password1'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Password'})
+        self.fields['password2'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Confirm Password'})
+        self.fields['account_activation'].widget.attrs.update({'class': 'form-check-input'})
+
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'first_name', 'last_name', 'email', 'account_activation')

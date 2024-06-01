@@ -1,6 +1,6 @@
 from django.urls import path, include
 from . import views, admin
-from .views import update_task_deadline
+from .views import update_task_deadline, register
 
 urlpatterns = [
     path('', views.homepage, name=""),
@@ -25,6 +25,7 @@ urlpatterns = [
     path('meeting_detail/<int:meeting_id>', views.meeting_detail, name="meeting_detail"),
     path('task_update_list/', views.task_update_list, name="task_update_list"),
     path('meeting_list/', views.meeting_list, name="meeting_list"),
+    path('register/', register, name='register'),
     # path('account/signup', custom_signup_view, name="signup"),
     # path('accounts/', include('allauth.urls')),
 

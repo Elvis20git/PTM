@@ -7,29 +7,34 @@ from django.utils import timezone
 
 class MyModel(models.Model):
     tags = JSONField()
-# class Profile(models.Model):
-#     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
-#     department = models.CharField(max_length=100)
-#     def __str__(self):
-#         return str(self.user)
-# class Alluser(models.Model):
-#     first_name = models.CharField(max_length=100)
-#     last_name = models.CharField(max_length=100)
-#     username = models.CharField(max_length=15)
-#     email = models.EmailField()
-#     department = models.CharField(max_length=100, choices=[
-#         ('quality_assurance', 'Quality Assurance'),
-#         ('finance', 'Finance'),
-#     ])
-#     password = models.CharField(max_length=100)
 
-class User(AbstractUser):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    username = models.CharField(max_length=50, unique=True)
+
+class CustomUser(AbstractUser):
+    # Your custom fields here
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    department = models.CharField(max_length=100)
-    password = models.CharField(max_length=100)
+    account_activation = models.BooleanField(default=False)
+
+    # Specify unique related names for groups and user_permissions fields
+    groups = models.ManyToManyField(
+        'auth.Group',
+        verbose_name='groups',
+        blank=True,
+        related_name='customuser_set',  # Specify a unique related name
+        related_query_name='user',
+    )
+
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        verbose_name='user permissions',
+        blank=True,
+        related_name='customuser_set',  # Specify a unique related name
+        related_query_name='user',
+    )
+
+    def __str__(self):
+        return self.username
 
 class Allprojects(models.Model):
     project_name = models.CharField(max_length=100)
@@ -38,6 +43,15 @@ class Allprojects(models.Model):
 
     def __str__(self):
         return self.project_name
+
+
+# class Allprojects(models.Model):
+#     project_name = models.CharField(max_length=100)
+#     project_manager = models.CharField(max_length=100)
+#     ProjectM_tags = models.ManyToManyField(CustomUser, related_name='projects')
+#
+#     def __str__(self):
+#         return self.project_name
 
 class Task(models.Model):
     project = models.ForeignKey(Allprojects, on_delete=models.CASCADE)
@@ -79,11 +93,6 @@ class TaskDeadlineUpdate(models.Model):
 
 class UpdatedTask(models.Model):
     pass
-# class Project(models.Model):
-#     project_name = models.CharField(max_length=200)
-#
-#     def __str__(self):
-#         return self.project_name
 
 
 class Meeting(models.Model):

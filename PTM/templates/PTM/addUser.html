@@ -1,14 +1,14 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Admin Dashbaord</title>
-    {% load static %}
-{#    {% load static %}#}
-{#    {% load crispy_forms_tags %}#}
-
+    <title>Register</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'signup.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
@@ -16,10 +16,8 @@
     <link rel="stylesheet" href="{% static 'css/dataTables.bootstrap5.min.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
 </head>
-
 <body>
-    <!-- navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light shadow-sm bg-light">
+<nav class="navbar navbar-expand-lg navbar-light shadow-sm bg-light">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
                 aria-controls="offcanvasExample">
@@ -50,7 +48,7 @@
     </nav>
     <!-- navbar end -->
 
-    <!-- sidebar -->
+ <!-- sidebar -->
     <div class="offcanvas offcanvas-start bg-purple text-white sidebar-nav" tabindex="-1" id="offcanvasExample"
         aria-labelledby="offcanvasExampleLabel">
         <div class="offcanvas-header shadow-sm d-block text-center">
@@ -82,13 +80,13 @@
                             <div>
                                 <ul class="navbar-nav ps-3">
                                     <li>
-                                        <a href="{% url 'addUser' %}" class="nav-link px-3 active">
+                                        <a href="{% url 'register' %}" class="nav-link px-3 active">
                                             <span class="me-2"><i class="bi bi-1-circle"></i></span>
                                             <span>Add User</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{% url 'User' %}" class="nav-link px-3">
+                                        <a href="{% url 'register' %}" class="nav-link px-3">
                                             <span class="me-2"><i class="bi bi-2-circle"></i></span>
                                             <span>All Users</span>
                                         </a>
@@ -152,104 +150,59 @@
         </div>
     </div>
     <!-- sidebar end -->
-
-    <!-- main content -->
-    <main class="mt-3 p-2">
-        <div class="container">
-            <div class="page-title">
-                <div style="font-weight: 500;" class="fs-3">Add User</div>
-            </div>
-            <nav class="mt-2 mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Add User</li>
-                </ol>
-            </nav>
-
-            <div class="latest-added mt-5">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body">
-                        <div class="page-title fs-5 fw-bold mb-4">
-                            Add New User
-                        </div>
-                        <form action="/addUser" method="post">
-                            {% csrf_token %}
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="mb-3 px-2">
-                                        <label for="st_name" class="form-label">First_Name</label>
-                                        <input class="form-control" placeholder="First name" type="text"
-                                            id="st_name" name="first_name">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="mb-3 px-2">
-                                        <label for="st_name" class="form-label">Last_Name</label>
-                                        <input class="form-control" placeholder="Last name" type="text"
-                                            id="st_name" name="last_name">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="mb-3 px-2">
-                                        <label for="st_email" class="form-label">Username</label>
-                                        <input class="form-control" placeholder="username" type="email"
-                                            id="st_username" name="username">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="mb-3 px-2">
-                                        <label for="st_email" class="form-label">Email</label>
-                                        <input class="form-control" placeholder="example@email.com" type="email"
-                                            id="st_email" name="email">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="mb-3 px-2">
-                                        <label for="st_email" class="form-label">Password</label>
-                                        <input class="form-control" placeholder="password" type="password"
-                                            id="st_password" name="password">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="mb-3 px-2">
-                                        <label for="st_email" class="form-label">Account Activation</label>
-                                        <input class="form-check"  type="checkbox"
-                                            id="st_email" name="email">
-
-                                    </div>
-                                </div>
+<main class="mt-3 p-2">
+  <div class="container">
+    <div class="container mt-5">
+     <div class="card border-0 shadow-sm">
+       <div class="card-body">
+        <div class="page-title fs-5 fw-bold mb-4">
+        <h2>Register</h2>
+        </div>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="{{ form.first_name.id_for_label }}" class="form-label">First Name</label>
+                    {{ form.first_name }}
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="{{ form.last_name.id_for_label }}" class="form-label">Last Name</label>
+                    {{ form.last_name }}
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
+                    {{ form.username }}
+                </div>
 
 
-                                <!-- <div class="col-md-4 mt-md-4">
-                                    <div class="mb-3 px-2">
-                                        <label for="st_image" class="form-label">Image</label>
-                                        <input class="form-control" type="file" id="st_image" name="st_image">
-                                    </div>
-                                </div> -->
-                                <div class="col-12 mt-md-4">
-                                    <div class="mb-3 px-2">
-                                        <div style="display: flex">
-                                        <button type="submit" class="btn btn-success" style="width: 9%;display: inline-block;"> Submit </button><br>
-                                        <br><button type="reset" class="btn btn-warning" style="width: 9%;display: inline-block; margin-left: 4px;"> Reset </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                <div class="col-md-4 mb-3">
+                    <label for="{{ form.email.id_for_label }}" class="form-label">Email</label>
+                    {{ form.email }}
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="{{ form.password1.id_for_label }}" class="form-label">Password</label>
+                    {{ form.password1 }}
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="{{ form.password2.id_for_label }}" class="form-label">Confirm Password</label>
+                    {{ form.password2 }}
+                </div>
+                <div class="col-12 mb-3">
+                    <div class="form-check">
+                        {{ form.account_activation.label_tag }}
+                        {{ form.account_activation }}
                     </div>
                 </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-success">Register</button>
+                </div>
             </div>
-        </div>
-    </main>
-    <!-- main content end-->
-
-    <script src="{% static 'js/jquery-3.5.1.js' %}"></script>
-    <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'js/dataTables.bootstrap5.min.js' %}"></script>
+        </form>
+       </div>
+     </div>
+    </div>
+  </div>
+</main>
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
-
 </html>
