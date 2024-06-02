@@ -24,6 +24,7 @@ from .forms import CustomUserCreationForm, UserChangeForm
 from django.urls import reverse_lazy
 from django.views.generic import RedirectView
 from PTM.models import CustomUser
+from .utils import send_project_email
 # from .forms import CustomSignupForm
 
 
@@ -99,22 +100,30 @@ def add_project(request):
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON data'}, status=400)
 
-        # # Check if the project manager exists in the CustomUser table
-        # if not CustomUser.objects.filter(username=project_manager).exists():
-        #     return JsonResponse({'error': 'Project manager does not exist'}, status=400)
+        # Check if the project manager exists in the CustomUser table
+        if not CustomUser.objects.filter(username=project_manager).exists():
+            return JsonResponse({'error': 'Project manager does not exist'}, status=400)
 
         # Check if each tagged member exists in the CustomUser table
         for member in ProjectM_tags:
             if not CustomUser.objects.filter(username=member['value']).exists():
                 messages.error(request, f'Tagged member {member["value"]} does not exist')
-            return JsonResponse({'error': f'Tagged member {member} does not exist'}, status=400)
+                return JsonResponse({'error': f'Tagged member {member["value"]} does not exist'}, status=400)
 
-        allprojects = Allprojects.objects.create(project_name=project_name, project_manager=project_manager,
-                                                 ProjectM_tags=ProjectM_tags)
+        allprojects = Allprojects.objects.create(
+            project_name=project_name,
+            project_manager=project_manager,
+            ProjectM_tags=ProjectM_tags
+        )
         allprojects.save()
         messages.success(request, 'The project has been added.')
-        # sweetify.toast(request, 'The project has been added.', icon='success', duration=3000)
+
+        # Extracting emails from tagged members
+        member_emails = [member['value'] for member in ProjectM_tags]
+        send_project_email(member_emails, project_name)
+
         return redirect('projects')
+
 def edit_project(request, id):
     # project = Allprojects.objects.get(id=id)
 
