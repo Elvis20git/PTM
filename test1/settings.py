@@ -122,7 +122,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'ptmptm717@gmail.com'
-EMAIL_HOST_PASSWORD = 'vwcb zgdz lsme gaej'
+EMAIL_HOST_PASSWORD = 'ujcs idfg pluh ezns'
 
 AUTH_PASSWORD_VALIDATORS = [
     {

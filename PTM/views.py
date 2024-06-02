@@ -25,6 +25,7 @@ from django.urls import reverse_lazy
 from django.views.generic import RedirectView
 from PTM.models import CustomUser
 from .utils import send_project_email
+from .utils import send_task_email
 # from .forms import CustomSignupForm
 
 
@@ -120,6 +121,7 @@ def add_project(request):
 
         # Extracting emails from tagged members
         member_emails = [member['value'] for member in ProjectM_tags]
+        # member_emails = [CustomUser.objects.get(username=member['value']).email for member in ProjectM_tags]
         send_project_email(member_emails, project_name)
 
         return redirect('projects')
@@ -190,14 +192,27 @@ def create_task(project_id, task_description, assign_to, deadline, assigned_by, 
     task.save()
     return task
 
+def search_users(request):
+    if 'q' in request.GET:
+        query = request.GET.get('q')
+        users = CustomUser.objects.filter(username__icontains=query).values('username')
+        return JsonResponse(list(users), safe=False)
+    return JsonResponse([], safe=False)
 def tasks(request):
     if request.method == "POST":
         project_id = request.POST['project']
         task_description = request.POST['task_description']
-        assign_to = request.POST['assign_to']
+        assign_to_username = request.POST['assign_to']
         deadline = request.POST['deadline']
         assigned_by = request.POST['assigned_by']
         status = int(request.POST['status'])
+
+        # Ensure assigned user exists
+        try:
+            assign_to = CustomUser.objects.get(username=assign_to_username)
+        except CustomUser.DoesNotExist:
+            messages.error(request, 'Assigned user does not exist')
+            return redirect('tasks')
 
         project = Allprojects.objects.get(pk=project_id)
         completion_date = timezone.now().date() if status == 2 else None
@@ -205,7 +220,7 @@ def tasks(request):
         task = Task.objects.create(
             project=project,
             task_description=task_description,
-            assign_to=assign_to,
+            assign_to=assign_to.username,
             deadline=deadline,
             assigned_by=assigned_by,
             status=status,
@@ -213,6 +228,7 @@ def tasks(request):
         )
         task.save()
         messages.success(request, 'The Task has been added.')
+        send_task_email([assign_to_username], project.project_name, task_description)
         return redirect('tasks')
 
     else:
