@@ -56,9 +56,10 @@ class Task(models.Model):
     task_description = models.CharField(max_length=255)
     assign_to = models.CharField(max_length=100)
     deadline = models.DateField()
+    revised_due_date = models.DateField(null=True, blank=True)
     completion_date = models.DateField(blank=True, null=True)
     assigned_by = models.CharField(max_length=100)
-    status = models.IntegerField(choices=[(1, 'Open'), (2, 'Completed'), (3, 'In Progress'), (4, 'Overdue')], default=1)
+    status = models.IntegerField(choices=[(1, 'Not Started'), (2, 'Completed'), (3, 'In Progress'), (4, 'Overdue')], default=1)
     # progress = models.IntegerField(choices=[(0, '0%'), (10, '10%'), (20, '20%'), (30, '30%'), (40, '40%'), (50, '50%'), (60, '60%'), (70, '70%'), (80, '80%'), (90, '90%'), (100, '100%')])
     PROGRESS_CHOICES = [
         (0, '0% progress'),
@@ -80,9 +81,15 @@ class Task(models.Model):
         return self.task_description
 
 class TaskDeadlineUpdate(models.Model):
+    IMPACT_CHOICES = [
+        ('overdue_no_impact', 'Overdue - No impact on final result'),
+        ('overdue_impact', 'Overdue - Impact on final result'),
+    ]
+
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     old_deadline = models.DateField()
     new_deadline = models.DateField()
+    impact_on_result = models.CharField(max_length=30, choices=IMPACT_CHOICES, blank=True, null=True)
     comment = models.TextField()
     timestamp = models.DateTimeField(default=timezone.now)
 

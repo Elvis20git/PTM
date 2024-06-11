@@ -252,26 +252,77 @@
                                 <table id="datatable" class="table table-striped table-bordered" style="width:100%">
                                     <thead>
                                         <tr>
-
+                                            <th></th>
+                                            <th>Project Name</th>
                                             <th>Task Description</th>
-                                            <th>Old due Date</th>
-                                            <th>New due Date</th>
-                                            <th>Comment</th>
-                                            <th>Impact On Result</th>
-                                            <th>TimeStamp</th>
-{#                                            <th>Action</th>#}
+                                            <th>Assign to</th>
+                                            <th>Assigned By</th>
+                                            <th>Due Date</th>
+                                            <th style="width: 13%">revised due date</th>
+                                            <th>Completed at</th>
+                                            <th>Task Status</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    {% for update in updates %}
+                                    {% for task in all_tasks %}
                                         <tr>
+                                            <td>
+                                                <button class="btn btn-secondary btn-sm" style="background-color: transparent; border: none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ task.id }}" aria-expanded="false" aria-controls="collapse{{ task.id }}">
+                                                    <i class="fas fa-chevron-right" style="color: black;"></i> <!-- Arrow icon -->
+                                                </button>
+                                            </td>
+                                            <td>{{ task.project.project_name }}</td>
+                                            <td>{{ task.task_description }}</td>
+                                            <td>
+                                                {% with user=task.assign_to %}
+                                                {% if user %}
+                                                {{ user }}
+                                                {% else %}
+                                                Unknown
+                                                {% endif %}
+                                                {% endwith %}
+                                            </td>
+                                            <td>{{ task.assigned_by }}</td>
+                                            <td>
+                                                {{ task.deadline }}
+                                            </td>
+                                            <td>{{ task.revised_due_date }}</td>
+                                            <td>{{ task.completion_date }}</td>
 
-                                            <td>{{ update.task.task_description }}</td>
-                                            <td>{{ update.old_deadline }}</td>
-                                            <td>{{ update.new_deadline }}</td>
-                                            <td>{{ update.comment }}</td>
-                                            <td>{{ update.impact_on_result }}</td>
-                                            <td>{{ update.timestamp }}</td>
+                                            <td>{{ task.get_status_display }}</td>
+                                          <td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: transparent; border: none">
+                                                      <i class="fas fa-ellipsis-v" style="color: blueviolet"></i> <!-- Three vertical dots icon -->
+                                                    </button>
+                                                    <ul class="dropdown-menu"  aria-labelledby="dropdownMenuButton">
+                                                      <li><a class="dropdown-item" href="{% url 'edit_task' task.id %}">Edit</a></li>
+                                                      <li><a class="dropdown-item delete-task" data-task-id="{{ task.id }}" href="#">Delete</a></li>
+                                                      <li><a class="dropdown-item" href="{% url 'update_task_deadline' task.id %}" > Update deadline
+                                                          </a></li>
+                                                    </ul>
+                                                  </div>
+                                                <!-- Hidden modal for confirmation -->
+                                                <div id="deleteTaskModal" class="modal">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Confirm Delete</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p>Are you sure you want to delete this Task?</p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: blueviolet">Cancel</button>
+                                                                <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </td>
                                         </tr>
                                     {% endfor %}
                                     </tbody>

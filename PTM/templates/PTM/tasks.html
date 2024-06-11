@@ -4,6 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Add Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- Add jQuery (required for Select2) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Add Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <title>Simple Admin Dashbaord</title>
     {% load static %}
     {% load sweetify %}
@@ -13,9 +19,49 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/dataTables.bootstrap5.min.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
 <style>
+
+    /* Styles for the dropdown */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 460px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    max-height: 200px;
+    overflow-y: auto;
+    border-radius: 2px;
+  }
+
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  .dropdown-content a:hover {
+    background-color: #f1f1f1;
+  }
+
+  .show {
+    display: block;
+  }
   .action-column {
     width: 150px; /* Adjust the width as needed */
+    }
+
+  .dropdown-toggle::after {
+      border-top-color: blueviolet; /* Changes the color of the dropdown arrow */
     }
   [data-toggle="tooltip"] {
         position: relative;
@@ -43,6 +89,8 @@
         visibility: visible;
         opacity: 1;
     }
+
+
 </style>
 </head>
 
@@ -137,10 +185,32 @@
                     </li>
 
                     <li class="nav-link bordered px-3">
-                        <a href="{% url 'tasks' %}" class="nav-link px-3 active">
+                        <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#collapseTask"
+                            role="button" aria-expanded="false" aria-controls="collapseExample">
                             <span class="me-2"><i class="bi bi-journal-text"></i></span>
                             <span>Tasks</span>
+                            <span class="right-icon ms-auto">
+                                <i class="bi bi-chevron-down"></i>
+                            </span>
                         </a>
+                        <div class="collapse" id="collapseTask">
+                            <div>
+                                <ul class="navbar-nav ps-3">
+                                    <li>
+                                        <a href="{% url 'tasks' %}" class="nav-link px-3">
+                                            <span class="me-2"><i class="bi bi-1-circle"></i></span>
+                                            <span>New Task</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'allTasks' %}" class="nav-link px-3">
+                                            <span class="me-2"><i class="bi bi-2-circle"></i></span>
+                                            <span>All Task</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </li>
 
                     <li class="nav-link bordered px-3">
@@ -186,194 +256,106 @@
     </div>
     <!-- sidebar end -->
 
-    <!-- main content -->
     <main class="mt-3 p-2">
-        <div class="container">
-            <div class="page-title">
-                <div style="font-weight: 500;" class="fs-3">Tasks</div>
-            </div>
-            <nav class="mt-2 mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Tasks</li>
-                </ol>
-            </nav>
-            <div class="row">
-                <div class="col-md-7">
-                    <div class="add-dept mt-5">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-body">
-                                <div class="page-title fs-5 fw-bold mb-4">
-                                    Add Tasks
-                                </div>
-                                <form action="/tasks" method="post">
-                                    {% csrf_token %}
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="mb-3 px-2">
+    <div class="container">
+        <div class="page-title">
+            <div style="font-weight: 500;" class="fs-3">Tasks</div>
+        </div>
+        <nav class="mt-2 mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Tasks</li>
+            </ol>
+        </nav>
+        <div class="row">
+            <div class="col-md-7">
+                <div class="add-dept mt-5">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="page-title fs-5 fw-bold mb-4">
+                                Add Tasks
+                            </div>
+                            <form action="/tasks" method="post">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="mb-3 px-2">
 
-                                                 <label for="project" class="form-label">Project_Name</label>
+                                             <label for="project" class="form-label">Project_Name</label>
 
-                                                     <select id="project" class="form-select" name="project">
-                                                        {% for project in all_projects %}
-                                                            <option value="{{ project.id }}">{{ project.project_name }}</option>
-                                                        {% endfor %}
-                                                     </select>
+                                                 <select id="project" class="form-select" name="project">
+                                                    {% for project in all_projects %}
+                                                        <option value="{{ project.id }}">{{ project.project_name }}</option>
+                                                    {% endfor %}
+                                                 </select>
 
+                                        </div>
+
+                                        <div class="mb-3 px-2">
+                                            <label for="pg_code" class="form-label">Task Description</label>
+                                            <input class="form-control" placeholder="ABC" type="text" id="pg_code"
+                                                name="task_description">
+                                        </div>
+                                        <div class="mb-3 px-2 dropdown">
+                                            <div class="dropdown">
+                                             <label for="pg_code" class="form-label">Assign to</label>
+                                              <input type="text" placeholder="Search.." id="myInput" class="form-control">
+                                              <div class="dropdown-content" id="myDropdown" class="form-control">
+                                                  {% for user in all_users %}
+                                                <a href="#">{{ user.username }}</a>
+                                                  {% endfor %}
+                                              </div>
                                             </div>
 
+                                        </div>
+                                        <div class="mb-3 px-2">
                                             <div class="mb-3 px-2">
-                                                <label for="pg_code" class="form-label">Task Description</label>
-                                                <input class="form-control" placeholder="ABC" type="text" id="pg_code"
-                                                    name="task_description">
+                                                <label for="st_admsn" class="form-label">Deadline</label>
+                                                <input class="form-control" type="date" id="st_admsn" name="deadline">
                                             </div>
+                                        </div>
+
+                                        <div class="mb-3 px-2">
                                             <div class="mb-3 px-2">
-                                                <label for="pg_code" class="form-label">Assign to</label>
-                                                <input class="form-control" placeholder="Assign to" type="text" id="pg_code"
-                                                    name="assign_to">
-                                                <div id="user_search_results"></div><br>
+                                                <label for="st_admsn" class="form-label">Assigned_by</label>
+                                                <input class="form-control" type="text" id="st_admsn" name="assigned_by">
                                             </div>
+                                        </div>
+
+                                        <div class="mb-3 px-2">
                                             <div class="mb-3 px-2">
-                                                <div class="mb-3 px-2">
-                                                    <label for="st_admsn" class="form-label">Deadline</label>
-                                                    <input class="form-control" type="date" id="st_admsn" name="deadline">
-                                                </div>
+                                                <label for="st_dept" class="form-label">Status</label>
+                                                <select class="form-select" name="status" id="status">
+                                                    <option class="text-muted" selected disabled>Select task status</option>
+                                                    <option value="1">Not Started</option>
+                                                    <option value="2">Completed</option>
+                                                    <option value="3">In Progress</option>
+                                                    <option value="4">Overdue</option>
+                                                </select>
                                             </div>
 
+                                        </div>
+                                    <input type="hidden" name="completion_date" id="completion_date">
+
+
+                                        <div class="col-12 mt-md-4">
                                             <div class="mb-3 px-2">
-                                                <div class="mb-3 px-2">
-                                                    <label for="st_admsn" class="form-label">Assigned_by</label>
-                                                    <input class="form-control" type="text" id="st_admsn" name="assigned_by">
-                                                </div>
-                                            </div>
-
-                                            <div class="mb-3 px-2">
-                                                <div class="mb-3 px-2">
-                                                    <label for="st_dept" class="form-label">Status</label>
-                                                    <select class="form-select" name="status" id="status">
-                                                        <option class="text-muted" selected disabled>Select task status</option>
-                                                        <option value="1">Open</option>
-                                                        <option value="2">Completed</option>
-                                                        <option value="3">In Progress</option>
-                                                        <option value="4">Overdue</option>
-                                                    </select>
-                                                </div>
-
-                                            </div>
-                                        <input type="hidden" name="completion_date" id="completion_date">
-
-
-                                            <div class="col-12 mt-md-4">
-                                                <div class="mb-3 px-2">
-                                                    <button type="submit" class="btn btn-success"> Submit </button>
-                                                    <!-- <button type="reset" class="btn btn-warning"> Reset </button> -->
-                                                </div>
+                                                <button type="submit" class="btn btn-success"> Submit </button>
+                                                <!-- <button type="reset" class="btn btn-warning"> Reset </button> -->
                                             </div>
                                         </div>
                                     </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="all-student mt-5">
-                        <div class="card border-0 shadow-sm w">
-                            <div class="card-body">
-                                <div class="page-title fs-5 fw-bold mb-4">
-                                    All Tasks
                                 </div>
-                                <div class="page-title fs-7 fw-bold mb-4">
-                                    <a href="/task_update_list/" > Deadline Changes
-                                                    <i class="bi bi-info-circle"></i>
-                                    </a>
-                                </div>
-                                <table id="datatable" class="table table-striped table-bordered" style="width:100%">
-                                    <thead>
-                                        <tr>
+                            </form>
 
-                                            <th>Project Name</th>
-                                            <th>Task Description</th>
-                                            <th>Assign to</th>
-                                            <th style="width: 13%">Task Deadline</th>
-                                            <th>Completed at</th>
-                                            <th>Assigned By</th>
-                                            <th>Task Status</th>
-{#                                            <th class="action-column">In Progress</th>#}
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for task in all_tasks %}
-                                        <tr>
-
-                                            <td>{{ task.project.project_name }}</td>
-                                            <td>{{ task.task_description }}</td>
-{#                                            <td>{{ task.assign_to }}</td>#}
-                                            <td>
-                                                {% with user=task.assign_to %}
-                                                {% if user %}
-                                                {{ user }}
-                                                {% else %}
-                                                Unknown
-                                                {% endif %}
-                                                {% endwith %}
-                                            </td>
-                                            <td>
-                                                <a href="{% url 'update_task_deadline' task.id %}" class="btn btn-sm btn-warning float-end">
-                                                    <i class="bi bi-pencil-square"></i>
-                                                </a>
-                                                {{ task.deadline }}
-                                            </td>
-                                            <td>{{ task.completion_date }}</td>
-                                            <td>{{ task.assigned_by }}</td>
-                                            <td>{{ task.get_status_display }}</td>
-{#                                             <td>{{ task.get_progress_display }}</td>#}
-
-                                            <td>
-
-
-{#                                                <a href=href="{% url 'task_update_list' task.id %}" class="btn btn-sm btn-info" data-toggle="tooltip" title="View Details">#}
-{#                                                    <i class="bi bi-eye"></i>#}
-{#                                                </a>#}
-                                                <a href="edit_task/{{ task.id }}" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Edit Task">
-                                                    <i class="bi bi-pencil-square"></i>
-                                                </a>
-                                                <!-- Hidden modal for confirmation -->
-                                                <div id="deleteTaskModal" class="modal">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title">Confirm Delete</h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <p>Are you sure you want to delete this task?</p>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: blueviolet">Cancel</button>
-                                                                <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <a href="#" class="btn btn-sm btn-danger delete-task" data-task-id="{{ task.id }}" data-toggle="tooltip" title="Delete Task">
-                                                    <i class="bi bi-trash-fill"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+    </div>
+    </div>
 
-        </div>
-    </main>
-    <!-- main content end-->
+</main>
 
     <script src="{% static 'js/jquery-3.5.1.js' %}"></script>
     <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
@@ -382,6 +364,46 @@
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="{% static 'js/script.js' %}"></script>
+
+   <script>
+// JavaScript to make the dropdown searchable
+document.getElementById("myInput").addEventListener("keyup", function() {
+  var input, filter, dropdown, items, a, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  dropdown = document.getElementById("myDropdown");
+  items = dropdown.getElementsByTagName("a");
+  for (i = 0; i < items.length; i++) {
+    a = items[i];
+    txtValue = a.textContent || a.innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      items[i].style.display = "";
+    } else {
+      items[i].style.display = "none";
+    }
+  }
+});
+
+// JavaScript to show/hide the dropdown
+document.addEventListener("click", function(event) {
+  if (!event.target.matches('.dropdown input')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    for (var i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+});
+
+document.querySelector('.dropdown input').addEventListener("click", function(event) {
+  document.getElementById("myDropdown").classList.toggle("show");
+});
+</script>
+
+
+
     <script>
         document.querySelectorAll('.delete-task').forEach(button => {
     button.addEventListener('click', function(event) {

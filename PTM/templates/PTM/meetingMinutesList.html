@@ -112,10 +112,32 @@
                     </li>
 
                     <li class="nav-link bordered px-3">
-                        <a href="{% url 'tasks' %}" class="nav-link px-3 active">
+                        <a class="nav-link px-3 sidebar-link" data-bs-toggle="collapse" href="#collapseTask"
+                            role="button" aria-expanded="false" aria-controls="collapseExample">
                             <span class="me-2"><i class="bi bi-journal-text"></i></span>
                             <span>Tasks</span>
+                            <span class="right-icon ms-auto">
+                                <i class="bi bi-chevron-down"></i>
+                            </span>
                         </a>
+                        <div class="collapse" id="collapseTask">
+                            <div>
+                                <ul class="navbar-nav ps-3">
+                                    <li>
+                                        <a href="{% url 'tasks' %}" class="nav-link px-3">
+                                            <span class="me-2"><i class="bi bi-1-circle"></i></span>
+                                            <span>New Task</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'allTasks' %}" class="nav-link px-3">
+                                            <span class="me-2"><i class="bi bi-2-circle"></i></span>
+                                            <span>All Task</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </li>
 
                     <li class="nav-link bordered px-3">
@@ -182,14 +204,28 @@
             {% for meeting in meetings %}
             <div class="col">
                 <div class="card">
-                    <div class="card-header bg-{{ meeting.meeting.id|modulo_plus_one:10 }} text-white fw-bold">Meeting_id: {{ meeting.meeting.id }}</div>
+                    <div class="card-header bg-{{ meeting.meeting.id|modulo_plus_one:10 }} text-white fw-bold">
+                        Meeting_id: {{ meeting.meeting.id }}
+                    </div>
                     <div class="card-body">
                         <p class="card-text fw-bold">Note type: {{ meeting.note_type }}</p>
                         <p class="card-text fw-bold">Note Content: {{ meeting.note_content }}</p>
+
+                        <!-- Conditionally hide/show fields based on 'Note Type' -->
+                        {% if meeting.note_type == 'action' %}
+                        <p class="card-text fw-bold">Assigned To: {{ meeting.assigned_to }}</p>
+                        <p class="card-text fw-bold">Assigned By: {{ meeting.assigned_by }}</p>
+                        <p class="card-text fw-bold">Deadline: {{ meeting.deadline_date }}</p>
+                        {% elif meeting.note_type == 'decision' %}
+                        <p class="card-text fw-bold">Decided By: {{ meeting.decided_by }}</p>
+                        {% elif meeting.note_type == 'note' %}
+                        <!-- No additional fields to show for 'Note' type -->
+                        {% else %}
                         <p class="card-text fw-bold">Decided By: {{ meeting.decided_by }}</p>
                         <p class="card-text fw-bold">Assigned To: {{ meeting.assigned_to }}</p>
                         <p class="card-text fw-bold">Assigned By: {{ meeting.assigned_by }}</p>
                         <p class="card-text fw-bold">Deadline: {{ meeting.deadline_date }}</p>
+                        {% endif %}
                     </div>
                     <div class="card-footer">
                         <small class="text-muted">Created at: {% if meeting.timestamp %}{{ meeting.timestamp|date:"Y-m-d H:i:s" }}{% else %}N/A{% endif %}</small>

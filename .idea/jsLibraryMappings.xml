@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="file://$PROJECT_DIR$" libraries="{@yaireo, @yaireo/tagify, bootstrap, bootstrap-icons, boxicons, chart.js, jquery-3.6.0, jquery.dataTables, quill, quill.snow, select2, sweetalert, sweetalert2, tinymce}" />
+    <file url="file://$PROJECT_DIR$" libraries="{@popperjs/core, @yaireo, @yaireo/tagify, bootstrap, bootstrap-icons, boxicons, chart.js, font-awesome, jquery-3.5.1, jquery-3.6.0, jquery-3.7.1, jquery-ui, jquery.dataTables, quill, quill.snow, select2, sweetalert, sweetalert2, tinymce}" />
   </component>
 </project>

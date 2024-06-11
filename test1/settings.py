@@ -106,6 +106,8 @@ ACCOUNT_FORMS = {
     'signup': 'PTM.forms.CustomSignupForm',
 }
 
+# APPEND_SLASH = False
+
 # MESSAGE_TAGS = {
 #     messages.DEBUG: 'alert-info',
 #     messages.INFO: 'alert-info',

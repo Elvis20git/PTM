@@ -34,10 +34,11 @@ class MeetingNoteForm(forms.ModelForm):
 class TaskDeadlineUpdateForm(forms.ModelForm):
     class Meta:
         model = TaskDeadlineUpdate
-        fields = ['old_deadline', 'new_deadline', 'comment',]
+        fields = ['old_deadline', 'new_deadline', 'impact_on_result', 'comment']
         widgets = {
-            'old_deadline': forms.DateInput(attrs={'readonly': 'readonly', 'class': 'form-control'}),
+            'old_deadline': forms.DateInput( attrs={'readonly': 'readonly', 'class': 'form-control'}),
             'new_deadline': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'impact_on_result': forms.Select(attrs={'id': 'impact_on_result', 'class': 'form-control'}),
             'comment': forms.Textarea(attrs={'id': 'editor', 'class': 'form-control', 'rows': 3, 'required': 'required'}),
 
         }

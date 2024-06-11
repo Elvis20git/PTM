@@ -26,11 +26,14 @@ from django.views.generic import RedirectView
 from PTM.models import CustomUser
 from .utils import send_project_email
 from .utils import send_task_email
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 # from .forms import CustomSignupForm
 
 
 # from .models import Project
 
+@login_required
 def homepage(request):
 
     return render(request, 'PTM/index.html')
@@ -69,12 +72,14 @@ def user_login(request):
                 return render(request, "PTM/dashboard.html")
             else:
                 messages.error(request, 'Your account needs to be activated to proceed.')
-                return redirect('user_login')
+                return redirect('/')
         else:
             messages.error(request, 'Invalid username or password')
-            return redirect('user_login')
+            return redirect('/')
 
     return render(request, 'PTM/user_login.html')
+
+@login_required
 def dashboard(request):
 
     return render(request, 'PTM/dashboard.html',{'user': request.user})
@@ -83,10 +88,17 @@ def logout(request):
 
     return render(request, 'PTM/logout.html')
 
+@login_required
 
 def projects(request):
         projects = Allprojects.objects.all()
         return render(request, 'PTM/projects.html', {'projects': projects})
+
+
+def get_custom_users(request):
+    # Query the CustomUser table to get the usernames
+    users = CustomUser.objects.values_list('username', flat=True)
+    return JsonResponse({'users': list(users)})
 
 
 def add_project(request):
@@ -98,33 +110,32 @@ def add_project(request):
         try:
             # Attempt to load JSON from string to ensure it's properly formatted and stored
             ProjectM_tags = json.loads(ProjectM_tags)
+            # Check if the project manager exists in the CustomUser table
+            if not CustomUser.objects.filter(username=project_manager).exists():
+                return JsonResponse({'error': 'Project manager does not exist'}, status=400)
+
+            # Check if each tagged member exists in the CustomUser table
+            for member in ProjectM_tags:
+                if not CustomUser.objects.filter(username=member['value']).exists():
+                    messages.error(request, f'Tagged member {member["value"]} does not exist')
+                    # return JsonResponse({'error': f'Tagged member {member["value"]} does not exist'}, status=400)
+
+            allprojects = Allprojects.objects.create(
+                project_name=project_name,
+                project_manager=project_manager,
+                ProjectM_tags=ProjectM_tags
+            )
+            # allprojects.save()
+            messages.success(request, 'The project has been added.')
+
+            # Extracting emails from tagged members
+            member_emails = [member['value'] for member in ProjectM_tags]
+            # member_emails = [CustomUser.objects.get(username=member['value']).email for member in ProjectM_tags]
+            send_project_email(member_emails, project_name)
+
+            return redirect('projects')
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON data'}, status=400)
-
-        # Check if the project manager exists in the CustomUser table
-        if not CustomUser.objects.filter(username=project_manager).exists():
-            return JsonResponse({'error': 'Project manager does not exist'}, status=400)
-
-        # Check if each tagged member exists in the CustomUser table
-        for member in ProjectM_tags:
-            if not CustomUser.objects.filter(username=member['value']).exists():
-                messages.error(request, f'Tagged member {member["value"]} does not exist')
-                return JsonResponse({'error': f'Tagged member {member["value"]} does not exist'}, status=400)
-
-        allprojects = Allprojects.objects.create(
-            project_name=project_name,
-            project_manager=project_manager,
-            ProjectM_tags=ProjectM_tags
-        )
-        allprojects.save()
-        messages.success(request, 'The project has been added.')
-
-        # Extracting emails from tagged members
-        member_emails = [member['value'] for member in ProjectM_tags]
-        # member_emails = [CustomUser.objects.get(username=member['value']).email for member in ProjectM_tags]
-        send_project_email(member_emails, project_name)
-
-        return redirect('projects')
 
 def edit_project(request, id):
     # project = Allprojects.objects.get(id=id)
@@ -179,6 +190,12 @@ def delete_project(request, project_id):
         return JsonResponse({'error': 'Project not found'}, status=404)
 
 
+def project_detail(request, project_id):
+    project = get_object_or_404(Allprojects, pk=project_id)
+    tasks = Task.objects.filter(project=project)
+    return render(request, 'project_detail.html', {'project': project, 'tasks': tasks})
+
+
 def create_task(project_id, task_description, assign_to, deadline, assigned_by, status=1):
     project = Allprojects.objects.get(pk=project_id)
     task = Task.objects.create(
@@ -198,6 +215,8 @@ def search_users(request):
         users = CustomUser.objects.filter(username__icontains=query).values('username')
         return JsonResponse(list(users), safe=False)
     return JsonResponse([], safe=False)
+
+@login_required
 def tasks(request):
     if request.method == "POST":
         project_id = request.POST['project']
@@ -228,15 +247,19 @@ def tasks(request):
         )
         task.save()
         messages.success(request, 'The Task has been added.')
-        send_task_email([assign_to_username], project.project_name, task_description)
-        return redirect('tasks')
+        send_task_email([assign_to.username], project.project_name, task_description)
+        return redirect('allTasks')
 
     else:
         all_projects = Allprojects.objects.all()
+        all_users = CustomUser.objects.all()
         all_tasks = Task.objects.all()
+        task_details = TaskDeadlineUpdate.objects.all()
         context = {
             'all_projects': all_projects,
-            'all_tasks': all_tasks
+            'all_users': all_users,
+            'all_tasks': all_tasks,
+            'task_details': task_details
         }
         return render(request, 'PTM/tasks.html', context)
 def edit_task(request, task_id):
@@ -255,7 +278,7 @@ def edit_task(request, task_id):
         task.save()
 
 
-        return redirect('tasks')
+        return redirect('allTasks')
 
     else:
         task = get_object_or_404(Task, pk=task_id)
@@ -266,35 +289,84 @@ def edit_task(request, task_id):
         }
         return render(request, 'PTM/updateTask.html', context)
 
+def allTasks(request):
+    all_projects = Allprojects.objects.all()
+    all_tasks = Task.objects.all()
+
+    paginator = Paginator(all_tasks, 10)
+    page_number = request.GET.get('page')
+    all_tasks = paginator.get_page(page_number)
+
+    context = {
+        'all_projects': all_projects,
+        'all_tasks': all_tasks
+
+    }
+
+    return render(request, 'PTM/alltasks.html', context)
+# def update_task_deadline(request, task_id):
+#     task = get_object_or_404(Task, pk=task_id)
+#
+#     if request.method == "POST":
+#         form = TaskDeadlineUpdateForm(request.POST)
+#         if form.is_valid():
+#             task_update = form.save(commit=False)
+#             task_update.task = task
+#             task_update.old_deadline = task.deadline
+#             task_update.save()
+#             print("Task update saved successfully.")
+#             task.deadline = task_update.new_deadline
+#             task.save()
+#             print("Task deadline updated successfully.")
+#             messages.success(request, 'The task deadline has been updated.')
+#             return redirect('tasks')
+#         else:
+#             print("Form is invalid:", form.errors)
+#     else:
+#         form = TaskDeadlineUpdateForm(initial={'task': task, 'old_deadline': task.deadline})
+#
+#     context = {
+#         'form': form,
+#         'task': task
+#     }
+#     return render(request, 'PTM/UpdateDeadline.html', context)
 
 def update_task_deadline(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
-
     if request.method == "POST":
         form = TaskDeadlineUpdateForm(request.POST)
         if form.is_valid():
-            task_update = form.save(commit=False)
-            task_update.task = task
-            task_update.old_deadline = task.deadline
-            task_update.save()
-            print("Task update saved successfully.")
-            task.deadline = task_update.new_deadline
+            new_deadline = form.cleaned_data['new_deadline']
+            impact_on_result = form.cleaned_data['impact_on_result']
+            comment = form.cleaned_data['comment']
+
+            # Update the task's deadline
+            task.revised_due_date = new_deadline
+            task.old_deadline = task.deadline
             task.save()
-            print("Task deadline updated successfully.")
+
+            # Create an instance of TaskDeadlineUpdate and save it
+            task_deadline_update = TaskDeadlineUpdate(
+                task=task,
+                old_deadline=task.deadline,
+                new_deadline=new_deadline,
+                impact_on_result=impact_on_result,
+                comment=comment
+            )
+            task_deadline_update.save()
+
             messages.success(request, 'The task deadline has been updated.')
-            return redirect('tasks')
+            return redirect('allTasks')
         else:
             print("Form is invalid:", form.errors)
     else:
-        form = TaskDeadlineUpdateForm(initial={'task': task, 'old_deadline': task.deadline})
+        form = TaskDeadlineUpdateForm(initial={'new_deadline': task.revised_due_date and task.deadline, 'old_deadline': task.deadline})
 
     context = {
         'form': form,
         'task': task
     }
     return render(request, 'PTM/UpdateDeadline.html', context)
-
-
 def task_update_list(request):
     updates = TaskDeadlineUpdate.objects.all()
 
@@ -308,7 +380,7 @@ def delete_task(request, task_id):
     try:
         task = Task.objects.get(pk=task_id)
         task.delete()
-        return redirect('tasks')
+        return redirect('allTasks')
     except Task.DoesNotExist:
         return JsonResponse({'error': 'Task not found'}, status=404)
 
@@ -333,7 +405,7 @@ def addUser(request):
         messages.success(request, 'Your account has been created!')
         return redirect('user_login')
     return render(request, 'PTM/addUser.html', {'user': request.user})
-
+@login_required
 def dashboard(request):
     # Retrieve the count of projects from the database
     project_count = Allprojects.objects.count()
@@ -359,7 +431,7 @@ def dashboard(request):
 def allUser(request):
     return render(request, 'PTM/allUser.html')
 
-
+@login_required
 def create_meeting(request):
     MeetingNoteFormSet = modelformset_factory(MeetingNote, form=MeetingNoteForm, extra=1)
 
@@ -399,9 +471,22 @@ def create_meeting(request):
     }
     return render(request, 'PTM/meetingMinutes.html', context)
 
+# def meeting_list(request):
+#     meetings = MeetingNote.objects.all()
+#     return render(request, 'PTM/meetingMinutesList.html', {'meetings': meetings})
+
 def meeting_list(request):
+    # Get all meeting notes
     meetings = MeetingNote.objects.all()
-    return render(request, 'PTM/meetingMinutesList.html', {'meetings': meetings})
+
+    # Filter meetings where Note Type is 'action'
+    action_meetings = meetings.filter(note_type='action')
+
+    # Pass meetings and a flag to hide 'Decided By' to the template
+    return render(request, 'PTM/meetingMinutesList.html', {
+        'meetings': meetings,
+        'hide_decided_by': True if action_meetings.exists() else False
+    })
 
 def meeting_detail(request, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id)
