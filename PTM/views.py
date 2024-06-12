@@ -219,21 +219,39 @@ def search_users(request):
 @login_required
 def tasks(request):
     if request.method == "POST":
-        project_id = request.POST['project']
-        task_description = request.POST['task_description']
-        assign_to_username = request.POST['assign_to']
-        deadline = request.POST['deadline']
-        assigned_by = request.POST['assigned_by']
-        status = int(request.POST['status'])
+        print(request.POST)  # Debugging: Print the POST data to see what is being submitted
+
+        project_id = request.POST.get('project')
+        task_description = request.POST.get('task_description')
+        assign_to_username = request.POST.get('assign_to')
+        deadline = request.POST.get('deadline')
+        assigned_by = request.POST.get('assigned_by')
+        status = request.POST.get('status')
+
+        # Check if all required fields are provided
+        if not all([project_id, task_description, assign_to_username, deadline, assigned_by, status]):
+            messages.error(request, 'Please provide all required fields.')
+            return redirect('tasks')
+
+        try:
+            status = int(status)
+        except ValueError:
+            messages.error(request, 'Invalid status value.')
+            return redirect('tasks')
 
         # Ensure assigned user exists
         try:
             assign_to = CustomUser.objects.get(username=assign_to_username)
         except CustomUser.DoesNotExist:
-            messages.error(request, 'Assigned user does not exist')
+            messages.error(request, 'Assigned user does not exist.')
             return redirect('tasks')
 
-        project = Allprojects.objects.get(pk=project_id)
+        try:
+            project = Allprojects.objects.get(pk=project_id)
+        except Allprojects.DoesNotExist:
+            messages.error(request, 'Project does not exist.')
+            return redirect('tasks')
+
         completion_date = timezone.now().date() if status == 2 else None
 
         task = Task.objects.create(
@@ -246,6 +264,7 @@ def tasks(request):
             completion_date=completion_date
         )
         task.save()
+
         messages.success(request, 'The Task has been added.')
         send_task_email([assign_to.username], project.project_name, task_description)
         return redirect('allTasks')
@@ -293,9 +312,9 @@ def allTasks(request):
     all_projects = Allprojects.objects.all()
     all_tasks = Task.objects.all()
 
-    paginator = Paginator(all_tasks, 10)
-    page_number = request.GET.get('page')
-    all_tasks = paginator.get_page(page_number)
+    # paginator = Paginator(all_tasks, 10)
+    # page_number = request.GET.get('page')
+    # all_tasks = paginator.get_page(page_number)
 
     context = {
         'all_projects': all_projects,

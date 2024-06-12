@@ -298,7 +298,7 @@
                                                     </button>
                                                     <ul class="dropdown-menu"  aria-labelledby="dropdownMenuButton">
                                                       <li><a class="dropdown-item" href="{% url 'edit_task' task.id %}">Edit</a></li>
-                                                      <li><a class="dropdown-item delete-task" data-task-id="{{ task.id }}" href="#">Delete</a></li>
+                                                      <li><a class="dropdown-item delete-task" data-task-id="{{ task.id }}" href="{% url 'delete_task' task.id %}">Delete</a></li>
                                                       <li><a class="dropdown-item" href="{% url 'update_task_deadline' task.id %}" > Update deadline
                                                           </a></li>
                                                     </ul>

@@ -51,28 +51,7 @@ class TaskDeadlineUpdateForm(forms.ModelForm):
             instance.save()
         return instance
 
-# class CustomSignupForm(SignupForm):
-#     first_name = forms.CharField(max_length=30, label='First Name')
-#     last_name = forms.CharField(max_length=30, label='Last Name')
-#     activate = forms.BooleanField(label='Activate Account', required=False)
-#
-#     def __init__(self, *args, **kwargs):
-#         super(CustomSignupForm, self).__init__(*args, **kwargs)
-#         self.fields['username'].widget.attrs.update({'class': 'form-control'})
-#         self.fields['email'].widget.attrs.update({'class': 'form-control'})
-#         self.fields['password1'].widget.attrs.update({'class': 'form-control'})
-#         self.fields['password2'].widget.attrs.update({'class': 'form-control'})
-#         self.fields['first_name'].widget.attrs.update({'class': 'form-control'})
-#         self.fields['last_name'].widget.attrs.update({'class': 'form-control'})
-#         self.fields['activate'].widget.attrs.update({'class': 'form-check-input'})
-#
-#     def save(self, request):
-#         user = super(CustomSignupForm, self).save(request)
-#         user.first_name = self.cleaned_data['first_name']
-#         user.last_name = self.cleaned_data['last_name']
-#         user.is_active = False  # Deactivate account until it is activated by an admin
-#         user.save()
-#         return user
+
 
 class CustomUserCreationForm(UserCreationForm):
     full_name = forms.CharField(max_length=30, label='First Name')
@@ -100,3 +79,5 @@ class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
         fields = ('username', 'full_name', 'phone_number', 'email', 'account_activation')
+
+

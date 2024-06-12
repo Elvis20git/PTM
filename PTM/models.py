@@ -80,6 +80,8 @@ class Task(models.Model):
     def __str__(self):
         return self.task_description
 
+    # class Meta:
+    #     db_table = 'CustomUser'
 class TaskDeadlineUpdate(models.Model):
     IMPACT_CHOICES = [
         ('overdue_no_impact', 'Overdue - No impact on final result'),
