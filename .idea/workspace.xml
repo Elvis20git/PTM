@@ -8,14 +8,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3936afda-4ee2-4e2c-a9e7-570940ba2cd0" name="Changes" comment="ok">
-      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/test1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/test1.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PTM/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/allTasks.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/allTasks.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/meetingMinutes.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/meetingMinutes.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/tasks.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/tasks.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PTM/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -170,7 +167,8 @@
       <workItem from="1717663745389" duration="279000" />
       <workItem from="1717664043184" duration="3677000" />
       <workItem from="1718013007245" duration="46715000" />
-      <workItem from="1718124615873" duration="25723000" />
+      <workItem from="1718124615873" duration="26053000" />
+      <workItem from="1718263474105" duration="14230000" />
     </task>
     <task id="LOCAL-00001" summary="ok">
       <option name="closed" value="true" />
@@ -252,7 +250,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718124510607</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="ok">
+      <option name="closed" value="true" />
+      <created>1718221228050</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1718221228050</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

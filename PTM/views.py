@@ -451,11 +451,52 @@ def allUser(request):
     return render(request, 'PTM/allUser.html')
 
 @login_required
+# def create_meeting(request):
+#     MeetingNoteFormSet = modelformset_factory(MeetingNote, form=MeetingNoteForm, extra=1)
+#
+#     if request.method == 'POST':
+#         meeting_form = MeetingForm(request.POST)
+#         meeting_note_formset = MeetingNoteFormSet(request.POST, queryset=MeetingNote.objects.none())
+#
+#         if meeting_form.is_valid() and meeting_note_formset.is_valid():
+#             meeting = meeting_form.save()
+#
+#             for form in meeting_note_formset:
+#                 meeting_note = form.save(commit=False)
+#                 meeting_note.meeting = meeting
+#                 meeting_note.save()
+#
+#                 if meeting_note.note_type == 'action':
+#                     create_task(
+#                         project_id=meeting.project.id,
+#                         task_description=meeting_note.note_content,
+#                         assign_to=meeting_note.assigned_to,
+#                         deadline=meeting_note.deadline_date,
+#                         assigned_by=meeting_note.assigned_by
+#                     )
+#
+#             return redirect('dashboard')
+#         else:
+#             print(f'Meeting Form Error {meeting_form.errors}')
+#             print(f'Note Formset Error {meeting_note_formset.errors}')
+#     else:
+#         meeting_form = MeetingForm()
+#         meeting_note_formset = MeetingNoteFormSet(queryset=MeetingNote.objects.none())
+#
+#     context = {
+#         'meeting_form': meeting_form,
+#         'meeting_note_formset': meeting_note_formset,
+#         'all_projects': Allprojects.objects.all(),
+#     }
+#     return render(request, 'PTM/meetingMinutes.html', context)
+
 def create_meeting(request):
     MeetingNoteFormSet = modelformset_factory(MeetingNote, form=MeetingNoteForm, extra=1)
 
+    projects = Allprojects.objects.all()
+
     if request.method == 'POST':
-        meeting_form = MeetingForm(request.POST)
+        meeting_form = MeetingForm(request.POST, projects=projects)
         meeting_note_formset = MeetingNoteFormSet(request.POST, queryset=MeetingNote.objects.none())
 
         if meeting_form.is_valid() and meeting_note_formset.is_valid():
@@ -480,13 +521,13 @@ def create_meeting(request):
             print(f'Meeting Form Error {meeting_form.errors}')
             print(f'Note Formset Error {meeting_note_formset.errors}')
     else:
-        meeting_form = MeetingForm()
+        meeting_form = MeetingForm(projects=projects)
         meeting_note_formset = MeetingNoteFormSet(queryset=MeetingNote.objects.none())
 
     context = {
         'meeting_form': meeting_form,
         'meeting_note_formset': meeting_note_formset,
-        'all_projects': Allprojects.objects.all(),
+        'all_projects': projects,
     }
     return render(request, 'PTM/meetingMinutes.html', context)
 
@@ -580,3 +621,14 @@ def register(request):
     else:
         form = CustomUserCreationForm()
     return render(request, 'PTM/register.html', {'form': form})
+
+def manager_list(request):
+    all_users = CustomUser.objects.all()
+    managers = all_users.filter(role='manager')
+    context = {
+        'all_users': all_users,
+        'managers': managers,
+    }
+    return render(request, 'PTM/tasks.html', context)
+
+#

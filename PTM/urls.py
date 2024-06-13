@@ -27,6 +27,9 @@ urlpatterns = [
     path('delete_task/<int:task_id>/', views.delete_task, name='delete_task'),
     path('edit_task/<int:task_id>/', views.edit_task, name='edit_task'),
     path('update_task_deadline/<int:task_id>/', update_task_deadline, name='update_task_deadline'),
+    path('managers/', views.manager_list, name='manager_list'),
+    path('register/', views.register, name='register'),
+
 
     # Users Management
     path('addUser/', views.addUser, name='addUser'),

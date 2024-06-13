@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import UserManager
 from django.db import models
 from django import forms
-from .models import Meeting, MeetingNote, TaskDeadlineUpdate, CustomUser
+from .models import Meeting, MeetingNote, TaskDeadlineUpdate, CustomUser, Allprojects
 from django.utils import timezone
 from django.contrib.auth.forms import UserChangeForm
 
@@ -16,8 +16,15 @@ class MeetingForm(forms.ModelForm):
             'project': forms.Select(attrs={'class': 'form-select'}),
             'meeting_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'meeting_time': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
-            # 'notes': forms.Textarea(attrs={'id': 'meeting-notes'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        projects = kwargs.pop('projects', None)
+        super().__init__(*args, **kwargs)  # Corrected this line
+        if projects is not None:
+            self.fields['project'].queryset = projects
+        else:
+            self.fields['project'].queryset = Allprojects.objects.none()
 
 class MeetingNoteForm(forms.ModelForm):
     class Meta:
