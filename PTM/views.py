@@ -266,7 +266,13 @@ def tasks(request):
         task.save()
 
         messages.success(request, 'The Task has been added.')
-        send_task_email([assign_to.username], project.project_name, task_description)
+        send_task_email(
+            usernames=[assign_to.username],
+            project_name=project.project_name,
+            task_description=task_description,
+            assigned_by=assigned_by,
+            deadline=deadline
+        )
         return redirect('allTasks')
 
     else:
