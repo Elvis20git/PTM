@@ -111,7 +111,7 @@
                     <li class="nav-item dropdown d-flex text-light">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            <i class="fa-regular fa-user"></i> {{ user.username }}
+                            <i class="fa fa-user" aria-hidden="true" style="color: blueviolet"></i> {{ user.username }}
                         </a>
                         <ul class="dropdown-menu border-0 bg-light ms-auto">
                             <li><a class="dropdown-item" href="#">Edit Profile</a></li>
@@ -302,12 +302,19 @@
                                             <input class="form-control" type="hidden" id="st_admsn" name="assign_to">
                                         </div>
                                         <div class="mb-3 px-2">
-                                            <label for="st_admsn" class="form-label">Deadline</label>
+                                            <label for="st_admsn" class="form-label">Baseline Due Date</label>
                                             <input class="form-control" type="date" id="st_admsn" name="deadline">
                                         </div>
                                         <div class="mb-3 px-2">
                                             <label for="st_admsn" class="form-label">Assigned_by</label>
-                                            <input class="form-control" type="text" id="st_admsn" name="assigned_by" autocomplete="off">
+                                            <div class="search_select_box">
+                                                <select id="userDropdown" class="selectpicker w-100" data-live-search="true">
+                                                    {% for user in all_users %}
+                                                    <option>{{ user.username }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <input class="form-control" type="hidden" id="st_admsnb" name="assigned_by">
                                         </div>
                                         <div class="mb-3 px-2">
                                             <label for="st_dept" class="form-label">Status</label>
@@ -362,6 +369,13 @@
     document.getElementById('userDropdown').addEventListener('change', function() {
         var selectedValue = this.value;
         document.getElementById('st_admsn').value = selectedValue;
+    });
+</script>
+    <script>
+    // JavaScript to update the hidden input field with the selected value from the dropdown
+    document.getElementById('userDropdown').addEventListener('change', function() {
+        var selectedValue = this.value;
+        document.getElementById('st_admsnb').value = selectedValue;
     });
 </script>
 

@@ -34,7 +34,7 @@
                     <li class="nav-item dropdown d-flex text-light">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            <i class="fa-regular fa-user"></i> {{ user.username }}
+                            <i class="fa fa-user" aria-hidden="true" style="color: blueviolet"></i> {{ user.username }}
                         </a>
                         <ul class="dropdown-menu border-0 bg-light ms-auto">
                             <li><a class="dropdown-item" href="#">Edit Profile</a></li>
@@ -143,21 +143,21 @@
                         </a>
                       <div class="collapse" id="collapseMeeting">
 
-              <ul class="navbar-nav ps-3">
-                  <li>
-                      <a href="{% url 'meeting_list' %}" class="nav-link px-3">
-                          <span class="me-2"><i class="bi bi-1-circle"></i></span>
-                          <span>Meeting List</span>
-                      </a>
-                  </li>
-                  <li>
-                      <a href="{% url 'create_meeting' %}" class="nav-link px-3">
-                          <span class="me-2"><i class="bi bi-2-circle"></i></span>
-                          <span>New Meeting</span>
-                      </a>
-                  </li>
-              </ul>
-          </div>
+                              <ul class="navbar-nav ps-3">
+                                  <li>
+                                      <a href="{% url 'meeting_list' %}" class="nav-link px-3">
+                                          <span class="me-2"><i class="bi bi-1-circle"></i></span>
+                                          <span>Meeting List</span>
+                                      </a>
+                                  </li>
+                                  <li>
+                                      <a href="{% url 'create_meeting' %}" class="nav-link px-3">
+                                          <span class="me-2"><i class="bi bi-2-circle"></i></span>
+                                          <span>New Meeting</span>
+                                      </a>
+                                  </li>
+                              </ul>
+                          </div>
                       </li>
                     <li class="nav-link bordered px-3">
                         <a href="{% url 'profile' %}" class="nav-link px-3">
@@ -197,53 +197,35 @@
                                     {{ form.non_field_errors }}
                                     <div class="row">
                                         <div class="col-md-12">
-
-
                                             <div class="mb-3 px-2">
                                                 <div class="mb-3 px-2">
-                                                    <label for="{{ form.old_deadline.id_for_label }}" class="form-label">Old Deadline</label>
+                                                    <label for="{{ form.old_deadline.id_for_label }}" class="form-label">Baseline Due Date</label>
                                                     {{ form.old_deadline }}
-{#                                                    <input class="form-control" value="{{ task.deadline }}" id="st_admsn" name="deadline" readonly>#}
                                                 </div>
                                             </div>
-
-{#                                            <div class="mb-3 px-2">#}
-{#                                                <label for="{{ form.impact_on_result.id_for_label }}" class="form-label">Impact on Result</label>#}
-{#                                                <select class="form-select" id="{{ form.impact_on_result.id_for_label }}" name="{{ form.impact_on_result.name }}">#}
-{#                                                    {% for value, label in form.impact_on_result.field.choices %}#}
-{#                                                        <option value="{{ value }}">{{ label }}</option>#}
-{#                                                    {% endfor %}#}
-{#                                                </select>#}
-{#                                            </div>#}
-
                                             <div class="row">
                                                 <div class="col-md-6 mb-3 px-4">
-    <label for="{{ form.new_deadline.id_for_label }}" class="form-label">New Deadline</label>
-    {{ form.new_deadline }}
-</div>
-<div class="col-md-6 mb-3 px-4" id="impact-on-result-wrapper" style="display: none;">
-    <label for="{{ form.impact_on_result.id_for_label }}" class="form-label">Impact on Result</label>
-    <select class="form-select" id="{{ form.impact_on_result.id_for_label }}" name="{{ form.impact_on_result.name }}">
-        <option value="" selected disabled>Select Impact on Result</option>
-        {% for value, label in form.impact_on_result.field.choices %}
-            <option value="{{ value }}">{{ label }}</option>
-        {% endfor %}
-    </select>
-</div>
+                                                    <label for="{{ form.new_deadline.id_for_label }}" class="form-label">New Deadline</label>
+                                                    {{ form.new_deadline }}
+                                                </div>
+                                                <div class="col-md-6 mb-3 px-4" id="impact-on-result-wrapper" style="display: none;">
+                                                    <label for="{{ form.impact_on_result.id_for_label }}" class="form-label">Impact on Result</label>
+                                                    <select class="form-select" id="{{ form.impact_on_result.id_for_label }}" name="{{ form.impact_on_result.name }}">
+                                                        <option value="" selected disabled>Select Impact on Result</option>
+                                                        {% for value, label in form.impact_on_result.field.choices %}
+                                                            <option value="{{ value }}">{{ label }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
 
                                                 <div class="col-md-6 mb-3 px-4">
                                                     <label for="{{ form.comment.id_for_label }}" class="form-label">Comment</label>
                                                     {{ form.comment }}
-{#                                                    <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>#}
                                                 </div>
                                             </div>
-
-
-
                                             <div class="col-12 mt-md-4">
                                                 <div class="mb-3 px-2">
                                                     <button type="submit" class="btn btn-success"> Update </button>
-                                                    <!-- <button type="reset" class="btn btn-warning"> Reset </button> -->
                                                 </div>
                                             </div>
                                         </div>

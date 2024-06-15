@@ -311,14 +311,10 @@ def edit_task(request, task_id):
 def allTasks(request):
     all_projects = Allprojects.objects.all()
     all_tasks = Task.objects.all()
-
-    # paginator = Paginator(all_tasks, 10)
-    # page_number = request.GET.get('page')
-    # all_tasks = paginator.get_page(page_number)
-
     context = {
         'all_projects': all_projects,
-        'all_tasks': all_tasks
+        'all_tasks': all_tasks,
+
 
     }
 
