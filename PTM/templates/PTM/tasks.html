@@ -308,13 +308,13 @@
                                         <div class="mb-3 px-2">
                                             <label for="st_admsn" class="form-label">Assigned_by</label>
                                             <div class="search_select_box">
-                                                <select id="userDropdown" class="selectpicker w-100" data-live-search="true">
+                                                <select id="userDropdowns" class="selectpicker w-100" data-live-search="true">
                                                     {% for user in all_users %}
                                                     <option>{{ user.username }}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
-                                            <input class="form-control" type="hidden" id="st_admsnb" name="assigned_by">
+                                            <input class="form-control" type="hidden" id="assignedBy" name="assigned_by">
                                         </div>
                                         <div class="mb-3 px-2">
                                             <label for="st_dept" class="form-label">Status</label>
@@ -373,9 +373,9 @@
 </script>
     <script>
     // JavaScript to update the hidden input field with the selected value from the dropdown
-    document.getElementById('userDropdown').addEventListener('change', function() {
+    document.getElementById('userDropdowns').addEventListener('change', function() {
         var selectedValue = this.value;
-        document.getElementById('st_admsnb').value = selectedValue;
+        document.getElementById('assignedBy').value = selectedValue;
     });
 </script>
 
