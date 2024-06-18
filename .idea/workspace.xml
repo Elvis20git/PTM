@@ -9,11 +9,8 @@
   <component name="ChangeListManager">
     <list default="true" id="3936afda-4ee2-4e2c-a9e7-570940ba2cd0" name="Changes" comment="ok">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/migrations/0002_taskdeadlineupdate_impact_on_result.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/migrations/0003_task_revised_due_date.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/projects.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/projects.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PTM/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test1/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/test1/settings.py" afterDir="false" />
     </list>
@@ -174,7 +171,8 @@
       <workItem from="1718374062761" duration="4911000" />
       <workItem from="1718486716652" duration="860000" />
       <workItem from="1718526503365" duration="2079000" />
-      <workItem from="1718694016123" duration="10555000" />
+      <workItem from="1718694016123" duration="15424000" />
+      <workItem from="1718727639570" duration="4714000" />
     </task>
     <task id="LOCAL-00001" summary="ok">
       <option name="closed" value="true" />
@@ -304,7 +302,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718487545932</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="ok">
+      <option name="closed" value="true" />
+      <created>1718714718650</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1718714718650</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

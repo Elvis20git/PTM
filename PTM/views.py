@@ -58,9 +58,9 @@ def user_login(request):
     return render(request, 'PTM/user_login.html')
 
 @login_required
-def dashboard(request):
-
-    return render(request, 'PTM/dashboard.html',{'user': request.user})
+# def dashboard(request):
+#
+#     return render(request, 'PTM/dashboard.html',{'user': request.user})
 
 def logout(request):
 
@@ -116,16 +116,12 @@ def add_project(request):
             return JsonResponse({'error': 'Invalid JSON data'}, status=400)
 
 def edit_project(request, id):
-    # project = Allprojects.objects.get(id=id)
+    try:
+        project = get_object_or_404(Allprojects, id=id)
+    except Allprojects.DoesNotExist:
+        return JsonResponse({'error': 'Project not found'}, status=404)
 
     if request.method == "POST":
-        # Fetch the project instance to update
-        try:
-            project = Allprojects.objects.get(id=id)
-        except Allprojects.DoesNotExist:
-            return JsonResponse({'error': 'Project not found'}, status=404)
-
-        # Update project fields based on the form data
         project_name = request.POST.get('project_name')
         project_manager = request.POST.get('project_manager')
         ProjectM_tags = request.POST.get('ProjectM_tags')
@@ -141,19 +137,11 @@ def edit_project(request, id):
                 return JsonResponse({'error': 'Invalid JSON data'}, status=400)
             project.ProjectM_tags = ProjectM_tags
 
-        # Save the updated project instance
         project.save()
         sweetify.toast(request, 'The project has been updated.', icon='success', duration=3000)
         return redirect('projects')
     else:
-        # If it's a GET request, fetch the project instance and render the edit form
-        try:
-            project = Allprojects.objects.get(id=id)
-        except Allprojects.DoesNotExist:
-            return JsonResponse({'error': 'Project not found'}, status=404)
-
-        print(f'Project Tags: {[tag for tag in project.ProjectM_tags]}')
-        # Render the edit form with the project instance
+        print(f'Project Tags: {project.ProjectM_tags}')
         return render(request, 'PTM/UpdateP.html', {'project': project})
 
 def delete_project(request, project_id):

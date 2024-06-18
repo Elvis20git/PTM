@@ -99,11 +99,11 @@ WSGI_APPLICATION = 'test1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'PTM',
+        'NAME': 'PTMdb',
         'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'PASSWORD': 'andromeda',
         'HOST': 'localhost',
-        'PORT': '5432',
+        # 'PORT': '5434',
     }
 }
 

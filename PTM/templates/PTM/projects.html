@@ -360,7 +360,7 @@
                                                       <i class="fas fa-ellipsis-v" style="color: blueviolet"></i> <!-- Three vertical dots icon -->
                                                     </button>
                                                     <ul class="dropdown-menu"  aria-labelledby="dropdownMenuButton">
-                                                      <li><a class="dropdown-item" href="edit_project/{{ project.id }}">Edit</a></li>
+                                                      <li><a class="dropdown-item" href="{% url 'edit_project' project.id %}">Edit</a></li>
                                                       <li><a class="dropdown-item delete-project" data-project-id="{{ project.id }}" href="#">Delete</a></li>
                                                     </ul>
                                                   </div>
