@@ -38,28 +38,6 @@ def homepage(request):
 
     return render(request, 'PTM/index.html')
 
-# def register(request):
-#     if request.method == "POST":
-#         first_name = request.POST['first_name']
-#         last_name = request.POST['last_name']
-#         phone_number = request.POST['phone']
-#         email = request.POST['email']
-#         department = request.POST['department']
-#         password = request.POST['password']
-#
-#         myuser = User.objects.create_user(email=email, password=password)
-#         myuser.first_name = first_name
-#         myuser.last_name = last_name
-#         myuser.phone_number = phone_number
-#         myuser.department = department
-#
-#         myuser.save()
-#         messages.success(request, 'Your account has been created!')
-#         return redirect('user_login')
-#
-#
-#     return render(request, 'PTM/register.html')
-
 def user_login(request):
     if request.method == "POST":
         username = request.POST['username']
@@ -325,32 +303,7 @@ def allTasks(request):
     }
 
     return render(request, 'PTM/alltasks.html', context)
-# def update_task_deadline(request, task_id):
-#     task = get_object_or_404(Task, pk=task_id)
-#
-#     if request.method == "POST":
-#         form = TaskDeadlineUpdateForm(request.POST)
-#         if form.is_valid():
-#             task_update = form.save(commit=False)
-#             task_update.task = task
-#             task_update.old_deadline = task.deadline
-#             task_update.save()
-#             print("Task update saved successfully.")
-#             task.deadline = task_update.new_deadline
-#             task.save()
-#             print("Task deadline updated successfully.")
-#             messages.success(request, 'The task deadline has been updated.')
-#             return redirect('tasks')
-#         else:
-#             print("Form is invalid:", form.errors)
-#     else:
-#         form = TaskDeadlineUpdateForm(initial={'task': task, 'old_deadline': task.deadline})
-#
-#     context = {
-#         'form': form,
-#         'task': task
-#     }
-#     return render(request, 'PTM/UpdateDeadline.html', context)
+
 
 def update_task_deadline(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
@@ -426,7 +379,7 @@ def addUser(request):
         messages.success(request, 'Your account has been created!')
         return redirect('user_login')
     return render(request, 'PTM/addUser.html', {'user': request.user})
-@login_required
+# @login_required
 def dashboard(request):
     # Retrieve the count of projects from the database
     project_count = Allprojects.objects.count()
@@ -453,45 +406,6 @@ def allUser(request):
     return render(request, 'PTM/allUser.html')
 
 @login_required
-# def create_meeting(request):
-#     MeetingNoteFormSet = modelformset_factory(MeetingNote, form=MeetingNoteForm, extra=1)
-#
-#     if request.method == 'POST':
-#         meeting_form = MeetingForm(request.POST)
-#         meeting_note_formset = MeetingNoteFormSet(request.POST, queryset=MeetingNote.objects.none())
-#
-#         if meeting_form.is_valid() and meeting_note_formset.is_valid():
-#             meeting = meeting_form.save()
-#
-#             for form in meeting_note_formset:
-#                 meeting_note = form.save(commit=False)
-#                 meeting_note.meeting = meeting
-#                 meeting_note.save()
-#
-#                 if meeting_note.note_type == 'action':
-#                     create_task(
-#                         project_id=meeting.project.id,
-#                         task_description=meeting_note.note_content,
-#                         assign_to=meeting_note.assigned_to,
-#                         deadline=meeting_note.deadline_date,
-#                         assigned_by=meeting_note.assigned_by
-#                     )
-#
-#             return redirect('dashboard')
-#         else:
-#             print(f'Meeting Form Error {meeting_form.errors}')
-#             print(f'Note Formset Error {meeting_note_formset.errors}')
-#     else:
-#         meeting_form = MeetingForm()
-#         meeting_note_formset = MeetingNoteFormSet(queryset=MeetingNote.objects.none())
-#
-#     context = {
-#         'meeting_form': meeting_form,
-#         'meeting_note_formset': meeting_note_formset,
-#         'all_projects': Allprojects.objects.all(),
-#     }
-#     return render(request, 'PTM/meetingMinutes.html', context)
-
 def create_meeting(request):
     MeetingNoteFormSet = modelformset_factory(MeetingNote, form=MeetingNoteForm, extra=1)
 
@@ -533,9 +447,7 @@ def create_meeting(request):
     }
     return render(request, 'PTM/meetingMinutes.html', context)
 
-# def meeting_list(request):
-#     meetings = MeetingNote.objects.all()
-#     return render(request, 'PTM/meetingMinutesList.html', {'meetings': meetings})
+
 
 def meeting_list(request):
     # Get all meeting notes
@@ -601,25 +513,15 @@ class CustomPasswordChangeView(PasswordChangeView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        logout(self.request)  # Log out the user
+        logout(self.request)
         return response
-# class CustomSignupView(SignupView):
-#     form_class = CustomSignupForm
-#
-#     def form_valid(self, form):
-#         response = super().form_valid(form)
-#         # Additional logic after form is successfully validated
-#         # For example, send a notification to the admin about the new user
-#         return response
-#
-# custom_signup_view = CustomSignupView.as_view()
 
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('user_login')  # Redirect to a login page or success page
+            return redirect('user_login')
     else:
         form = CustomUserCreationForm()
     return render(request, 'PTM/register.html', {'form': form})

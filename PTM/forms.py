@@ -1,11 +1,15 @@
 from allauth.account.forms import SignupForm
+from django.conf import settings
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import UserManager
+from django.core.mail import send_mail
 from django.db import models
 from django import forms
 from .models import Meeting, MeetingNote, TaskDeadlineUpdate, CustomUser, Allprojects
 from django.utils import timezone
 from django.contrib.auth.forms import UserChangeForm
+import secrets
+import string
 
 
 class MeetingForm(forms.ModelForm):
@@ -73,14 +77,39 @@ class CustomUserCreationForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        random_password = self.generate_random_password()
+        self.random_password = random_password  # Store the generated password
+        self.fields['password1'].initial = random_password
+        self.fields['password2'].initial = random_password
+
         self.fields['username'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Username'})
         self.fields['full_name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Full Name'})
         self.fields['phone_number'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Phone Number'})
         self.fields['email'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Email'})
-        self.fields['password1'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Password'})
-        self.fields['password2'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Confirm Password'})
+        self.fields['password1'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Password', 'value': random_password})
+        self.fields['password2'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Confirm Password', 'value': random_password})
         self.fields['account_activation'].widget.attrs.update({'class': 'form-check-input'})
         self.fields['role'].widget.attrs.update({'class': 'form-select'})
+
+    @staticmethod
+    def generate_random_password(length=12):
+        characters = string.ascii_letters + string.digits + string.punctuation
+        return ''.join(secrets.choice(characters) for _ in range(length))
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.random_password)  # Set the user's password to the generated one
+        if commit:
+            user.save()
+            self.send_password_email(user)
+        return user
+
+    def send_password_email(self, user):
+        subject = 'Your Account Credentials'
+        message = f'Hello {user.username},\n\nYour account has been created. Your login credentials are:\nUsername: {user.username}\nPassword: {self.random_password}\n\nPlease change your password after logging in.'
+        from_email = 'dev.team@africaimprovedfoods.com'
+        recipient_list = [user.email]
+        send_mail(subject, message, from_email, recipient_list)
 
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
