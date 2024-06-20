@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
+
+from decouple import config
 from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
 
@@ -50,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'crispy_forms',
     'crispy_bootstrap5',
+    'import_export',
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
@@ -98,12 +101,12 @@ WSGI_APPLICATION = 'test1.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'PTMdb',
-        'USER': 'postgres',
-        'PASSWORD': 'andromeda',
-        'HOST': 'localhost',
-        # 'PORT': '5434',
+        'ENGINE': config('DATABASE_ENGINE'),
+        'NAME': config('DATABASE_NAME'),
+        'USER': config('DATABASE_USER'),
+        'PASSWORD': config('DATABASE_PASSWORD'),
+        'HOST': config('DATABASE_HOST'),
+        'PORT': config('DATABASE_PORT'),
     }
 }
 

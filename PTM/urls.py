@@ -36,6 +36,8 @@ urlpatterns = [
     path('User/', views.addUser, name='User'),
     path('allUser/', views.allUser, name='allUser'),
     path('get_custom_users/', get_custom_users, name='get_custom_users'),
+    path('profile/change_password/', views.change_password, name='change_password'),
+    path('password_change/', CustomPasswordChangeView.as_view(), name='password_change'),
 
     # Meetings
     path('create_meeting/', views.create_meeting, name='create_meeting'),

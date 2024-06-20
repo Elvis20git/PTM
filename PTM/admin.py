@@ -2,11 +2,19 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import Meeting, MeetingNote, Allprojects, CustomUser
+from import_export.admin import ImportExportModelAdmin
+from .models import MyModel
+from .resources import MyModelResource
+
 
 # Register your models here.
 admin.site.register(Meeting)
 admin.site.register(MeetingNote)
 admin.site.register(Allprojects)
+
+@admin.register(MyModel)
+class MyModelAdmin(ImportExportModelAdmin):
+    resource_class = MyModelResource
 
 # Define a custom UserAdmin to handle CustomUser
 class CustomUserAdmin(UserAdmin):

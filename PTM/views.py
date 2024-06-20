@@ -253,6 +253,8 @@ def tasks(request):
             'task_details': task_details
         }
         return render(request, 'PTM/tasks.html', context)
+
+@login_required
 def edit_task(request, task_id):
     if request.method == "POST":
         task = get_object_or_404(Task, pk=task_id)
@@ -279,7 +281,7 @@ def edit_task(request, task_id):
             'all_projects': all_projects,
         }
         return render(request, 'PTM/updateTask.html', context)
-
+@login_required
 def allTasks(request):
     all_projects = Allprojects.objects.all()
     all_tasks = Task.objects.all()
@@ -292,7 +294,7 @@ def allTasks(request):
 
     return render(request, 'PTM/alltasks.html', context)
 
-
+@login_required
 def update_task_deadline(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
     if request.method == "POST":
@@ -367,7 +369,7 @@ def addUser(request):
         messages.success(request, 'Your account has been created!')
         return redirect('user_login')
     return render(request, 'PTM/addUser.html', {'user': request.user})
-# @login_required
+@login_required
 def dashboard(request):
     # Retrieve the count of projects from the database
     project_count = Allprojects.objects.count()
@@ -420,7 +422,7 @@ def create_meeting(request):
                         assigned_by=meeting_note.assigned_by
                     )
 
-            return redirect('dashboard')
+            return redirect('meeting_list')
         else:
             print(f'Meeting Form Error {meeting_form.errors}')
             print(f'Note Formset Error {meeting_note_formset.errors}')
