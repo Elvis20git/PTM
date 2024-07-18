@@ -27,7 +27,15 @@
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
+            <div style="padding-left:175px; height: 28.5px">
+                <nav class="mt-2 mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+                        <li class="breadcrumb-item active"><a href="{% url 'create_meeting' %}">Meeting Minutes</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Meeting List</li>
+                    </ol>
+                </nav>
+            </div>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto me-md-4 mb-2 mb-lg-0">
                     <li class="nav-item dropdown d-flex text-light">
@@ -50,8 +58,8 @@
     <div class="sidebar-nav">
         <div class="offcanvas">
     <div class="offcanvas offcanvas-start bg-purple text-white sidebar-nav" tabindex="-1" id="offcanvasExample"
-        aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header shadow-sm d-block text-center">
+        aria-labelledby="offcanvasExampleLabel" style="background-color: #281749">
+        <div class="offcanvas-header shadow-sm d-block text-center" style="background-color: #281749">
             <div class="offcanvas-title" id="offcanvasExampleLabel">
                 <a class="navbar-brand fw-bold" href="{% url 'dashboard' %}">Dashboard</a>
             </div>
@@ -176,16 +184,8 @@
 
     <main class="mt-3 p-2">
     <div class="container">
-        <div class="page-title">
-            <div style="font-weight: 500;" class="fs-3">Meeting List</div>
-        </div>
-        <nav class="mt-2 mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
-                <li class="breadcrumb-item active"><a href="{% url 'create_meeting' %}">Meeting Minutes</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Meeting List</li>
-            </ol>
-        </nav>
+
+
         <div class="row">
             <div class="col-md-12">
                 <div class="all-meetings mt-5">

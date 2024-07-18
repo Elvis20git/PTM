@@ -8,8 +8,46 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3936afda-4ee2-4e2c-a9e7-570940ba2cd0" name="Changes" comment="ok">
-      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/dist/js/script.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/dist/js/tailwind.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/management/_init_.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/management/commands/_init_.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/management/commands/check_tasks.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/migrations/0003_notification.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/src/css/input.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/css/user.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/images/4DX9-eTI_32x32 (2).jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/images/4DX9-eTI_400x400.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/images/download.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/js/notifications.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/static/js/scripts.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/notifications.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/userPage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/test1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/test1.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/migrations/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/decorators.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/static/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/static/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/static/css/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/Dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/Dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/UpdateDeadline.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/UpdateDeadline.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/UpdateP.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/UpdateP.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/allTasks.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/allTasks.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/change_password.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/change_password.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/edit_profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/edit_profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/meetingMinutes.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/meetingMinutes.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/meetingMinutesList.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/meetingMinutesList.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/projects.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/projects.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/tasks.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/tasks.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/updateTask.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/updateTask.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/updatedDeadlineList.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/updatedDeadlineList.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PTM/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,10 +60,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JavaScript File" />
-        <option value="CSS File" />
         <option value="Python Script" />
+        <option value="CSS File" />
         <option value="HTML File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -61,27 +99,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.pycharm.django.structure.promotion.once.per.project&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;http.proxy&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.pycharm.django.structure.promotion.once.per.project": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "C:/Users/100123/PycharmProjects/test1/PTM/static/images",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "http.proxy",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\100123\PycharmProjects\test1\PTM\static\images" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\100123\PycharmProjects\test1\PTM\static\css" />
+      <recent name="C:\Users\100123\PycharmProjects\test1\PTM\static\js" />
+      <recent name="C:\Users\100123\PycharmProjects\test1\PTM\dist\js" />
       <recent name="C:\Users\100123\PycharmProjects\test1\PTM\templatetags" />
       <recent name="C:\Users\100123\PycharmProjects\test1\PTM\static" />
     </key>
@@ -171,7 +216,15 @@
       <workItem from="1718694016123" duration="15424000" />
       <workItem from="1718727639570" duration="4973000" />
       <workItem from="1718792185379" duration="9306000" />
-      <workItem from="1718870673628" duration="9358000" />
+      <workItem from="1718870673628" duration="12780000" />
+      <workItem from="1718957440909" duration="7844000" />
+      <workItem from="1719907136332" duration="13617000" />
+      <workItem from="1720166209099" duration="15383000" />
+      <workItem from="1720430321587" duration="19829000" />
+      <workItem from="1720508696183" duration="46106000" />
+      <workItem from="1721202217922" duration="25157000" />
+      <workItem from="1721289638851" duration="46000" />
+      <workItem from="1721289703194" duration="7256000" />
     </task>
     <task id="LOCAL-00001" summary="ok">
       <option name="closed" value="true" />
@@ -333,7 +386,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718871370654</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="ok">
+      <option name="closed" value="true" />
+      <created>1718880694202</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1718880694202</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

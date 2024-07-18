@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
-from .views import update_task_deadline, register, CustomPasswordChangeView, get_custom_users
+from .views import update_task_deadline, register, CustomPasswordChangeView, get_custom_users, task_count
 
 urlpatterns = [
     # User Authentication
@@ -19,6 +19,7 @@ urlpatterns = [
     # Projects and Tasks
     path('projects/', views.projects, name='projects'),
     path('tasks', views.tasks, name='tasks'),
+    path('user_tasks', views.user_tasks, name='user_tasks'),
     path('allTasks', views.allTasks, name='allTasks'),
     path('add_project', views.add_project, name='add_project'),
     path('delete_project/<int:project_id>/', views.delete_project, name='delete_project'),
@@ -29,6 +30,13 @@ urlpatterns = [
     path('update_task_deadline/<int:task_id>/', update_task_deadline, name='update_task_deadline'),
     path('managers/', views.manager_list, name='manager_list'),
     path('register/', views.register, name='register'),
+    # path('tasks/count/<int:user_id>/', views.task_count, name='task_count'),
+    path('user/', task_count, name='task_count'),
+    path('completed_tasks/', views.completed_tasks, name='completed_tasks'),
+    path('in_progress_tasks/', views.in_progress_tasks, name='in_progress_tasks'),
+    path('overdue_tasks/', views.overdue_tasks, name='overdue_tasks'),
+    path('notifications/', views.notifications, name='notifications'),
+    path('get-notifications/', views.get_notifications, name='get_notifications'),
 
 
     # Users Management

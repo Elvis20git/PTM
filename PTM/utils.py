@@ -2,7 +2,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.html import strip_tags
 
-from .models import CustomUser
+from .models import CustomUser, Notification
 from django.template.loader import render_to_string
 def send_project_email(usernames, project_name):
     subject = f'New Project Assigned: {project_name}'
@@ -35,3 +35,5 @@ def send_task_email(usernames, project_name, task_description, assigned_by, dead
         plain_message = strip_tags(html_message)  # Convert HTML to plain text
         send_mail(subject, plain_message, email_from, [recipient], html_message=html_message, fail_silently=False)
 
+def send_notification(user, message):
+    Notification.objects.create(user=user, message=message)

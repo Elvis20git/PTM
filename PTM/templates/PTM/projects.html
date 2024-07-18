@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css">
     <style>
         [data-toggle="tooltip"] {
         position: relative;
@@ -49,6 +50,30 @@
     .dropdown-toggle::after {
       border-top-color: blueviolet; /* Changes the color of the dropdown arrow */
     }
+    .tag {
+            display: inline-block;
+            padding: 0.5em 1em;
+            margin: 0.2em;
+            background-color: #007bff;
+            color: white;
+            border-radius: 20px;
+        }
+    .tag .remove-tag {
+            margin-left: 0.5em;
+            cursor: pointer;
+        }
+
+    .custom-tag{
+        background-color: #063970;  /* Light green background */
+        color: whitesmoke;            /* Medium green text */
+        border-radius: 0.5rem;     /* Rounded corners */
+        padding: 0.25rem 1rem;     /* Padding */
+        font-weight: 600;
+        {#text-decoration-color: #38A169/* Semibold text */#}
+
+    }
+
+
     </style>
 </head>
 
@@ -68,7 +93,14 @@
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
+            <div style="padding-left: 45px; height: 28.5px">
+            <nav class="mt-2 mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Projects</li>
+                </ol>
+            </nav>
+            </div>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto me-md-4 mb-2 mb-lg-0">
                     <li class="nav-item dropdown d-flex text-light">
@@ -80,8 +112,8 @@
                             <li><a class="dropdown-item" href="{% url 'profile' %}">Edit Profile</a></li>
                             <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                         </ul>
+                    </li>
                 </ul>
-                </li>
             </div>
         </div>
     </nav>
@@ -89,8 +121,8 @@
 
     <!-- sidebar -->
     <div class="offcanvas offcanvas-start bg-purple text-white sidebar-nav" tabindex="-1" id="offcanvasExample"
-        aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header shadow-sm d-block text-center">
+        aria-labelledby="offcanvasExampleLabel" style="background-color: #281749">
+        <div class="offcanvas-header shadow-sm d-block text-center" style="background-color: #281749">
             <div class="offcanvas-title" id="offcanvasExampleLabel">
                 <a class="navbar-brand fw-bold" href="{% url 'dashboard' %}">Dashboard</a>
             </div>
@@ -214,15 +246,10 @@
     <!-- main content -->
     <main class="mt-3 p-2">
         <div class="container">
-            <div class="page-title">
-                <div style="font-weight: 500;" class="page-title fs-5 fw-bold mb-4">Projects</div>
-            </div>
-            <nav class="mt-2 mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Projects</li>
-                </ol>
-            </nav>
+{#            <div class="page-title">#}
+{#                <div style="font-weight: 500;" class="page-title fs-5 fw-bold mb-4">Projects</div>#}
+{#            </div>#}
+
             <div class="row">
                 <div class="col-md-5">
                     <div class="add-dept mt-5">
@@ -239,19 +266,35 @@
 
 
                                             <div class="mb-3 px-2">
-                                                <label for="pg_name" class="form-label">Project_Nane</label>
-                                                <input class="form-control" placeholder="BSc" type="text" id="pg_name"
+                                                <label for="pg_name" class="form-label">Project_Name</label>
+                                                <input class="form-control" placeholder="project Name" type="text" id="pg_name"
                                                     name="project_name" required>
                                             </div>
+
                                             <div class="mb-3 px-2">
                                                 <label for="cat_code" class="form-label">Project Manager</label>
-                                                <input class="form-control" placeholder="XYZ" type="text" id="cat_code"
-                                                    name="project_manager" autocomplete="off" required>
+                                                <div class="search_select_box">
+                                                    <select id="userDropdown" class="selectpicker w-100" data-live-search="true">
+                                                        {% for user in all_users %}
+                                                        <option>{{ user.username }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <input class="form-control" type="hidden" id="assignedTo" name="project_manager">
                                             </div>
+
                                             <div class="mb-3 px-2">
-                                                <label for="cat_name" class="form-label">Project_Members</label>
-                                                <input class="form-control" placeholder="Members" required id="cat_name"
-                                                    name="ProjectM_tags">
+                                                <label for="projectMembersDropdown" class="form-label">Project Members</label>
+                                                <div class="search_select_box">
+                                                    <select id="projectMembersDropdown" class="selectpicker w-100" data-live-search="true">
+                                                        <option value="" disabled selected>Select members</option>
+                                                        {% for user in all_users %}
+                                                            <option value="{{ user.username }}">{{ user.username }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div id="taggedMembers" class="mt-2"></div>
+                                                <input class="form-control" type="hidden" id="projectMembers" name="ProjectM_tags">
                                             </div>
 
                                             <div class="col-12 mt-md-4">
@@ -274,33 +317,6 @@
                                 <div class="page-title fs-5 fw-bold mb-4">
                                     All Projects
                                 </div>
-{#                                <div class="row" >#}
-{#                                    <div class="col-sm-12 col-md-6">#}
-{#                                        <div class="dataTables_length" id="datatable_length">#}
-{#                                            <div class="me-2" style="display: inline-block;">#}
-{#                                                <label>Show</label>#}
-{#                                            </div>#}
-{##}
-{#                                                <select name="datatable_length" aria-controls="datatable" class="form-select form-select-sm" style="display: inline-block; width: 15%;">#}
-{#                                                    <option value="10">5</option>#}
-{#                                                    <option value="25">10</option>#}
-{#                                                    <option value="50">15</option>#}
-{#                                                    <option value="100">100</option>#}
-{#                                                </select>#}
-{##}
-{##}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                    <div class="col-sm-12 col-md-6">#}
-{#                                        <div id="datatable_filter" class="dataTables_filter" style="margin-left: 30%">#}
-{#                                            <div class="me-2" style="display: inline-block;">#}
-{#                                                <label>Search</label>#}
-{#                                            </div>#}
-{#                                            <input type="" class="form-control form-control-sm" placeholder="" aria-controls="datatable" style="display: inline-block; width: 60%;">#}
-{##}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                </div></br>#}
                                 <table id="datatable" class="table table-striped table-bordered" style="width:100%">
                                     <thead>
                                         <tr>
@@ -321,39 +337,10 @@
                                             <td>
 
                                             {% for tag in project.ProjectM_tags %}
-                                                <span class="tagify__tag" style="color: #000000;background-color: rgba(25,115,135,0.4);border-radius: 10px;padding: 5px;font-weight: 700">{{tag.value}}</span>
+                                                <span class="custom-tag">{{tag.value}}</span>
+
                                             {% endfor %}
                                             </td>
-
-{#                                            <td>#}
-{#                                                <a href="#" class="btn btn-sm btn-info">#}
-{#                                                    <i class="bi bi-eye"></i>#}
-{#                                                </a>#}
-{#                                                <a href="edit_project/{{ project.id }}" class="btn btn-sm btn-warning" data-toggle="tooltip" title="Edit Task">#}
-{#                                                    <i class="bi bi-pencil-square"></i>#}
-{#                                                </a>#}
-{#                                                <!-- Hidden modal for confirmation -->#}
-{#                                                <div id="deleteProjectModal" class="modal">#}
-{#                                                    <div class="modal-dialog">#}
-{#                                                        <div class="modal-content">#}
-{#                                                            <div class="modal-header">#}
-{#                                                                <h5 class="modal-title">Confirm Delete</h5>#}
-{#                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>#}
-{#                                                            </div>#}
-{#                                                            <div class="modal-body">#}
-{#                                                                <p>Are you sure you want to delete this project?</p>#}
-{#                                                            </div>#}
-{#                                                            <div class="modal-footer">#}
-{#                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: blueviolet">Cancel</button>#}
-{#                                                                <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>#}
-{#                                                            </div>#}
-{#                                                        </div>#}
-{#                                                    </div>#}
-{#                                                </div>#}
-{#                                                <a href="#" class="btn btn-sm btn-danger delete-project" data-project-id="{{ project.id }}" data-toggle="tooltip" title="Delete Project">#}
-{#                                                    <i class="bi bi-trash-fill"></i>#}
-{#                                                </a>#}
-{#                                            </td>#}
                                             <td>
                                                 <div class="dropdown">
                                                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: transparent; border: none">
@@ -404,11 +391,72 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {#    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>#}
 {#    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>#}
+    <script src="{% static 'js/jquery-3.5.1.js' %}"></script>
+    <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'js/dataTables.bootstrap5.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
 
 
 
 <script>
     jQuery.noConflict();
+</script>
+
+<script>
+        $(document).ready(function (){
+            $('.search_select_box').selectpicker();
+        })
+    </script>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const projectMembersDropdown = document.getElementById('projectMembersDropdown');
+            const taggedMembers = document.getElementById('taggedMembers');
+            const projectMembersInput = document.getElementById('projectMembers');
+            let selectedMembers = [];
+
+            projectMembersDropdown.addEventListener('change', function() {
+                const selectedValue = this.value;
+                if (selectedValue && !selectedMembers.includes(selectedValue)) {
+                    selectedMembers.push(selectedValue);
+                    updateTaggedMembers();
+                }
+                this.value = ''; // Reset dropdown
+            });
+
+            function updateTaggedMembers() {
+                taggedMembers.innerHTML = '';
+                selectedMembers.forEach(member => {
+                    const tag = document.createElement('span');
+                    tag.classList.add('tag');
+                    tag.textContent = member;
+
+                    const removeTag = document.createElement('span');
+                    removeTag.classList.add('remove-tag');
+                    removeTag.textContent = 'x';
+                    removeTag.addEventListener('click', function() {
+                        selectedMembers = selectedMembers.filter(m => m !== member);
+                        updateTaggedMembers();
+                    });
+
+                    tag.appendChild(removeTag);
+                    taggedMembers.appendChild(tag);
+                });
+                projectMembersInput.value = JSON.stringify(selectedMembers);
+            }
+        });
+    </script>
+<script>
+    document.getElementById('userDropdown').addEventListener('change', function() {
+        const selectedOptions = Array.from(this.selectedOptions).map(option => option.value);
+        document.getElementById('assignedTo').value = selectedOptions.join(',');
+    });
 </script>
 <script>
     jQuery(document).ready(function($) {

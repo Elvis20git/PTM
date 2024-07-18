@@ -26,7 +26,15 @@
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
+            <div style="padding-left: 50px; height: 25px">
+                <nav class="mt-2 mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'dashboard'%}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'task_count'%}">User_Page</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Profile</li>
+                </ol>
+            </nav>
+            </div>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto me-md-4 mb-2 mb-lg-0">
                     <li class="nav-item dropdown d-flex text-light">
@@ -47,8 +55,8 @@
 
     <!-- sidebar -->
     <div class="offcanvas offcanvas-start bg-purple text-white sidebar-nav" tabindex="-1" id="offcanvasExample"
-        aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header shadow-sm d-block text-center">
+        aria-labelledby="offcanvasExampleLabel" style="background-color: #281749">
+        <div class="offcanvas-header shadow-sm d-block text-center" style="background-color: #281749">
             <div class="offcanvas-title" id="offcanvasExampleLabel">
                 <a class="navbar-brand fw-bold" href="{% url 'dashboard' %}">Dashboard</a>
             </div>
@@ -140,21 +148,21 @@
                         </a>
                       <div class="collapse" id="collapseMeeting">
 
-              <ul class="navbar-nav ps-3">
-                  <li>
-                      <a href="{% url 'meeting_list' %}" class="nav-link px-3">
-                          <span class="me-2"><i class="bi bi-1-circle"></i></span>
-                          <span>Meeting List</span>
-                      </a>
-                  </li>
-                  <li>
-                      <a href="{% url 'create_meeting' %}" class="nav-link px-3">
-                          <span class="me-2"><i class="bi bi-2-circle"></i></span>
-                          <span>New Meeting</span>
-                      </a>
-                  </li>
-              </ul>
-          </div>
+                          <ul class="navbar-nav ps-3">
+                              <li>
+                                  <a href="{% url 'meeting_list' %}" class="nav-link px-3">
+                                      <span class="me-2"><i class="bi bi-1-circle"></i></span>
+                                      <span>Meeting List</span>
+                                  </a>
+                              </li>
+                              <li>
+                                  <a href="{% url 'create_meeting' %}" class="nav-link px-3">
+                                      <span class="me-2"><i class="bi bi-2-circle"></i></span>
+                                      <span>New Meeting</span>
+                                  </a>
+                              </li>
+                          </ul>
+                      </div>
                       </li>
                     <li class="nav-link bordered px-3">
                         <a href="{% url 'profile' %}" class="nav-link px-3 active">
@@ -171,21 +179,16 @@
     <!-- main content -->
     <main class="mt-3 p-2">
         <div class="container">
-            <div class="page-title">
-                <div style="font-weight: 500;" class="fs-3">Profile</div>
-            </div>
-            <nav class="mt-2 mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'dashboard'%}">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Profile</li>
-                </ol>
-            </nav>
+{#            <div class="page-title">#}
+{#                <div style="font-weight: 500;" class="fs-3">Profile</div>#}
+{#            </div>#}
+
 
             <div class="profile">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
                         <div class="page-title fs-5 fw-bold mb-4">
-                            Admin Profile
+                           {{ user.username }} Profile
                         </div>
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item" role="presentation">

@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
 import json
 from django.contrib.auth.views import PasswordChangeView
 from PTM.models import User, Allprojects, Task
@@ -28,6 +29,8 @@ from .utils import send_project_email
 from .utils import send_task_email
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from datetime import datetime
+from .decorators import role_required
 # from .forms import CustomSignupForm
 
 
@@ -42,12 +45,19 @@ def user_login(request):
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
-
         user = authenticate(username=username, password=password)
         if user is not None:
             if user.account_activation:
                 login(request, user)
-                return render(request, "PTM/dashboard.html")
+                if user.role == 'user':
+                    print(f'Reached as user')
+                    # return render(request, 'PTM/userPage.html')
+                    return redirect('task_count')
+                elif user.role in ['manager', 'admin']:
+                    return render(request, 'PTM/dashboard.html')
+                else:
+                    messages.error(request, 'Role not recognized. Contact support.')
+                    return redirect('/')
             else:
                 messages.error(request, 'Your account needs to be activated to proceed.')
                 return redirect('/')
@@ -56,7 +66,6 @@ def user_login(request):
             return redirect('/')
 
     return render(request, 'PTM/user_login.html')
-
 @login_required
 # def dashboard(request):
 #
@@ -66,19 +75,19 @@ def logout(request):
 
     return render(request, 'PTM/logout.html')
 
+@role_required('admin', 'manager')
 @login_required
 
 def projects(request):
         projects = Allprojects.objects.all()
-        return render(request, 'PTM/projects.html', {'projects': projects})
+        all_users = CustomUser.objects.all()
+        return render(request, 'PTM/projects.html', context = {'projects': projects, 'all_users': all_users})
 
 
 def get_custom_users(request):
     # Query the CustomUser table to get the usernames
     users = CustomUser.objects.values_list('username', flat=True)
     return JsonResponse({'users': list(users)})
-
-
 def add_project(request):
     if request.method == "POST":
         project_name = request.POST.get('project_name')
@@ -86,34 +95,35 @@ def add_project(request):
         ProjectM_tags = request.POST.get('ProjectM_tags')
 
         try:
-            # Attempt to load JSON from string to ensure it's properly formatted and stored
+            # Convert project_members from JSON string to Python list
             ProjectM_tags = json.loads(ProjectM_tags)
+
             # Check if the project manager exists in the CustomUser table
             if not CustomUser.objects.filter(username=project_manager).exists():
                 return JsonResponse({'error': 'Project manager does not exist'}, status=400)
 
-            # Check if each tagged member exists in the CustomUser table
-            for member in ProjectM_tags:
-                if not CustomUser.objects.filter(username=member['value']).exists():
-                    messages.error(request, f'Tagged member {member["value"]} does not exist')
-                    # return JsonResponse({'error': f'Tagged member {member["value"]} does not exist'}, status=400)
+            # Check if each project member exists in the CustomUser table
+            for member_username in ProjectM_tags:
+                if not CustomUser.objects.filter(username=member_username['value']).exists():
+                    messages.error(request, f'Tagged member {member_username["value"]} does not exist')
+                    return JsonResponse({'error': f'Tagged member {member_username["value"]} does not exist'}, status=400)
 
             allprojects = Allprojects.objects.create(
                 project_name=project_name,
                 project_manager=project_manager,
-                ProjectM_tags=ProjectM_tags
+                ProjectM_tags=ProjectM_tags  # Assuming your model can handle a list directly
             )
-            # allprojects.save()
             messages.success(request, 'The project has been added.')
 
             # Extracting emails from tagged members
-            member_emails = [member['value'] for member in ProjectM_tags]
-            # member_emails = [CustomUser.objects.get(username=member['value']).email for member in ProjectM_tags]
+            member_emails = [member_username['value'] for member_username in ProjectM_tags]
             send_project_email(member_emails, project_name)
 
+            # return JsonResponse({'success': 'The project has been added successfully.'})
             return redirect('projects')
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+
 
 def edit_project(request, id):
     try:
@@ -182,20 +192,22 @@ def search_users(request):
         return JsonResponse(list(users), safe=False)
     return JsonResponse([], safe=False)
 
+# @login_required
 @login_required
+@role_required('admin', 'manager')
 def tasks(request):
     if request.method == "POST":
         print(request.POST)  # Debugging: Print the POST data to see what is being submitted
 
         project_id = request.POST.get('project')
         task_description = request.POST.get('task_description')
-        assign_to_username = request.POST.get('assign_to')
+        assigned_to_username = request.POST.get('assigned_to')
         deadline = request.POST.get('deadline')
-        assigned_by = request.POST.get('assigned_by')
+        assigned_by_username = request.POST.get('assigned_by')
         status = request.POST.get('status')
 
         # Check if all required fields are provided
-        if not all([project_id, task_description, assign_to_username, deadline, assigned_by, status]):
+        if not all([project_id, task_description, assigned_to_username, deadline, assigned_by_username, status]):
             messages.error(request, 'Please provide all required fields.')
             return redirect('tasks')
 
@@ -205,17 +217,24 @@ def tasks(request):
             messages.error(request, 'Invalid status value.')
             return redirect('tasks')
 
-        # Ensure assigned user exists
-        try:
-            assign_to = CustomUser.objects.get(username=assign_to_username)
-        except CustomUser.DoesNotExist:
-            messages.error(request, 'Assigned user does not exist.')
-            return redirect('tasks')
-
         try:
             project = Allprojects.objects.get(pk=project_id)
         except Allprojects.DoesNotExist:
             messages.error(request, 'Project does not exist.')
+            return redirect('tasks')
+
+        # Ensure assigning user exists
+        try:
+            assigned_by = CustomUser.objects.get(username=assigned_by_username)
+        except CustomUser.DoesNotExist:
+            messages.error(request, 'Assigning user does not exist.')
+            return redirect('tasks')
+
+        # Ensure assigned user exists
+        try:
+            assigned_to = CustomUser.objects.get(username=assigned_to_username)
+        except CustomUser.DoesNotExist:
+            messages.error(request, 'Assigned user does not exist.')
             return redirect('tasks')
 
         completion_date = timezone.now().date() if status == 2 else None
@@ -223,22 +242,24 @@ def tasks(request):
         task = Task.objects.create(
             project=project,
             task_description=task_description,
-            assign_to=assign_to.username,
+            assigned_to=assigned_to,
             deadline=deadline,
             assigned_by=assigned_by,
             status=status,
             completion_date=completion_date
         )
+
         task.save()
 
         messages.success(request, 'The Task has been added.')
         send_task_email(
-            usernames=[assign_to.username],
+            usernames=[assigned_to.username],
             project_name=project.project_name,
             task_description=task_description,
-            assigned_by=assigned_by,
+            assigned_by=assigned_by_username,
             deadline=deadline
         )
+
         return redirect('allTasks')
 
     else:
@@ -246,41 +267,243 @@ def tasks(request):
         all_users = CustomUser.objects.all()
         all_tasks = Task.objects.all()
         task_details = TaskDeadlineUpdate.objects.all()
+
+
         context = {
             'all_projects': all_projects,
             'all_users': all_users,
             'all_tasks': all_tasks,
-            'task_details': task_details
+            'task_details': task_details,
+            # 'completed_tasks_count': completed_tasks_count,
+            # 'InProgress_tasks_count': InProgress_tasks_count
         }
         return render(request, 'PTM/tasks.html', context)
 
+
+def task_count(request):
+    user = request.user
+    task_count = Task.objects.filter(assigned_to=user).count()
+    completed_tasks_count = Task.objects.filter(assigned_to=user, status=2).count()
+    in_progress_tasks_count = Task.objects.filter(assigned_to=user, status=3).count()
+    overdue_tasks_count = Task.objects.filter(assigned_to=user, status=4).count()
+    pending_tasks_count = Task.objects.filter(assigned_to=user, status__in=[1, 4]).count()  # Assuming 1 and 4 are pending statuses
+
+    all_projects = Allprojects.objects.all()
+    all_users = CustomUser.objects.all()
+    user_tasks = Task.objects.filter(assigned_to=user)
+    completed_tasks = user_tasks.filter(status=2)
+    in_progress_tasks = user_tasks.filter(status=3)
+    overdue_tasks = user_tasks.filter(status=4)
+    pending_tasks = user_tasks.filter(status__in=[1, 4])
+
+    context = {
+        'task_count': task_count,
+        'completed_tasks_count': completed_tasks_count,
+        'in_progress_tasks_count': in_progress_tasks_count,
+        'pending_tasks_count': pending_tasks_count,
+        'user_tasks': user_tasks,
+        'completed_tasks': completed_tasks,
+        'in_progress_tasks': in_progress_tasks,
+        'pending_tasks': pending_tasks,
+        'all_projects': all_projects,
+        'all_users': all_users,
+        'overdue_tasks': overdue_tasks,
+        # 'task_details': task_details,
+    }
+    return render(request, 'PTM/userPage.html', context)
+
+
+def completed_tasks(request):
+    # Get the current logged-in user
+    current_user = request.user
+
+    # Filter tasks with status=2 (Completed) assigned to the current user
+    completed_tasks = Task.objects.filter(assigned_to=current_user, status=2)
+
+    context = {
+        'completed_tasks': completed_tasks,
+    }
+    return render(request, 'PTM/userPage.html', context)
+
+def in_progress_tasks(request):
+    # Get the current logged-in user
+    current_user = request.user
+
+    # Filter tasks with status=3 (In Progress) assigned to the current user
+    In_Progress_tasks= Task.objects.filter(assigned_to=current_user, status=3)
+
+
+    context = {
+        'in_progress_tasks': in_progress_tasks,
+    }
+    return render(request, 'PTM/userPage.html', context)
+
+
+def overdue_tasks(request):
+    # Get the current logged-in user
+    current_user = request.user
+    print("View called")
+
+    # Filter tasks with status indicating overdue (assuming status=4 for Overdue)
+    overdue_tasks = Task.objects.filter(assigned_to=current_user, status=4)
+
+    for task in overdue_tasks:
+        print(f"Task: {task.task_description}, Project: {task.project.project_name}, Deadline: {task.deadline}")
+
+    context = {
+        'overdue_tasks': overdue_tasks,
+    }
+    return render(request, 'PTM/userPage.html', context)
+# @login_required
+
 @login_required
 def edit_task(request, task_id):
+    task = get_object_or_404(Task, pk=task_id)
+    user_role = request.user.role  # Assuming you have a role attribute in your CustomUser model
+
     if request.method == "POST":
-        task = get_object_or_404(Task, pk=task_id)
-        task.project_id = request.POST['project']
-        task.task_description = request.POST['task_description']
-        task.assign_to = request.POST['assign_to']
-        task.deadline = request.POST['deadline']
-        task.assigned_by = request.POST['assigned_by']
-        task.status = request.POST['status']
+        # Debugging: Print the POST data
+        print(request.POST)
 
-        if int(task.status) == 2:  # Completed
-            task.completion_date = timezone.now().date()
-        # Trackchanges.objects.create(task = task, new_deadline=request.POST['deadline'],comment = )
-        task.save()
+        project_id = request.POST.get('project')
+        task_description = request.POST.get('task_description')
+        assigned_to_username = request.POST.get('assigned_to')
+        assigned_by_username = request.POST.get('assigned_by')
+        deadline = request.POST.get('deadline')
+        status = request.POST.get('status')
 
+        # Check if all required fields are provided
+        if not status:
+            messages.error(request, 'Please provide all required fields.')
+            return redirect('edit_task', task_id=task_id)
 
-        return redirect('allTasks')
+        try:
+            if user_role in ['manager', 'admin']:
+                task.project_id = project_id
+                task.task_description = task_description
+
+                # Ensure assigned user exists
+                try:
+                    assigned_to = CustomUser.objects.get(username=assigned_to_username)
+                except CustomUser.DoesNotExist:
+                    messages.error(request, 'Assigned user does not exist.')
+                    return redirect('edit_task', task_id=task_id)
+
+                # Ensure assigning user exists
+                try:
+                    assigned_by = CustomUser.objects.get(username=assigned_by_username)
+                except CustomUser.DoesNotExist:
+                    messages.error(request, 'Assigning user does not exist.')
+                    return redirect('edit_task', task_id=task_id)
+
+                task.assigned_to = assigned_to
+                task.assigned_by = assigned_by
+
+                # Parse the deadline date
+                try:
+                    task.deadline = datetime.strptime(deadline, '%B %d, %Y').date()
+                except ValueError:
+                    messages.error(request, 'Invalid deadline date format. It must be in "Month DD, YYYY" format.')
+                    return redirect('edit_task', task_id=task_id)
+
+            task.status = status
+
+            if int(task.status) == 2:  # Completed
+                task.completion_date = timezone.now().date()
+
+            task.save()
+
+            messages.success(request, 'The Task has been updated.')
+            return redirect('allTasks')
+
+        except Exception as e:
+            messages.error(request, f'An error occurred: {e}')
+            return redirect('edit_task', task_id=task_id)
 
     else:
-        task = get_object_or_404(Task, pk=task_id)
         all_projects = Allprojects.objects.all()
+        read_only = user_role == 'user'
         context = {
             'task': task,
             'all_projects': all_projects,
+            'read_only': read_only,
         }
         return render(request, 'PTM/updateTask.html', context)
+
+
+
+
+# def edit_task(request, task_id):
+#     if request.method == "POST":
+#         task = get_object_or_404(Task, pk=task_id)
+#
+#         # Debugging: Print the POST data
+#         print(request.POST)
+#
+#         project_id = request.POST.get('project')
+#         task_description = request.POST.get('task_description')
+#         assigned_to_username = request.POST.get('assigned_to')
+#         assigned_by_username = request.POST.get('assigned_by')
+#         deadline = request.POST.get('deadline')
+#         status = request.POST.get('status')
+#
+#         # Check if all required fields are provided
+#         if not all([project_id, task_description, assigned_to_username, assigned_by_username, deadline, status]):
+#             messages.error(request, 'Please provide all required fields.')
+#             return redirect('edit_task', task_id=task_id)
+#
+#         try:
+#             task.project_id = project_id
+#             task.task_description = task_description
+#
+#             # Ensure assigned user exists
+#             try:
+#                 assigned_to = CustomUser.objects.get(username=assigned_to_username)
+#             except CustomUser.DoesNotExist:
+#                 messages.error(request, 'Assigned user does not exist.')
+#                 return redirect('edit_task', task_id=task_id)
+#
+#             # Ensure assigning user exists
+#             try:
+#                 assigned_by = CustomUser.objects.get(username=assigned_by_username)
+#             except CustomUser.DoesNotExist:
+#                 messages.error(request, 'Assigning user does not exist.')
+#                 return redirect('edit_task', task_id=task_id)
+#
+#             task.assigned_to = assigned_to
+#             task.assigned_by = assigned_by
+#
+#             # Parse the deadline date
+#             try:
+#                 task.deadline = datetime.strptime(deadline, '%B %d, %Y').date()
+#             except ValueError:
+#                 messages.error(request, 'Invalid deadline date format. It must be in "Month DD, YYYY" format.')
+#                 return redirect('edit_task', task_id=task_id)
+#
+#             task.status = status
+#
+#             if int(task.status) == 2:  # Completed
+#                 task.completion_date = timezone.now().date()
+#
+#             task.save()
+#
+#             messages.success(request, 'The Task has been updated.')
+#             return redirect('allTasks')
+#
+#         except Exception as e:
+#             messages.error(request, f'An error occurred: {e}')
+#             return redirect('edit_task', task_id=task_id)
+#
+#     else:
+#         task = get_object_or_404(Task, pk=task_id)
+#         all_projects = Allprojects.objects.all()
+#         context = {
+#             'task': task,
+#             'all_projects': all_projects,
+#         }
+#         return render(request, 'PTM/updateTask.html', context)
+
+@role_required('admin', 'manager')
 @login_required
 def allTasks(request):
     all_projects = Allprojects.objects.all()
@@ -294,6 +517,7 @@ def allTasks(request):
 
     return render(request, 'PTM/alltasks.html', context)
 
+@role_required('admin', 'manager')
 @login_required
 def update_task_deadline(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
@@ -348,6 +572,7 @@ def delete_task(request, task_id):
     except Task.DoesNotExist:
         return JsonResponse({'error': 'Task not found'}, status=404)
 
+@role_required('admin', 'manager')
 def addUser(request):
 
     if request.method == "POST":
@@ -369,7 +594,9 @@ def addUser(request):
         messages.success(request, 'Your account has been created!')
         return redirect('user_login')
     return render(request, 'PTM/addUser.html', {'user': request.user})
-@login_required
+# @login_required
+
+@role_required('admin', 'manager')
 def dashboard(request):
     # Retrieve the count of projects from the database
     project_count = Allprojects.objects.count()
@@ -380,6 +607,7 @@ def dashboard(request):
     overDue_tasks_count = Task.objects.filter(status=4).count()
     open_tasks_count = Task.objects.filter(status=1).count()
     # Pass the project count to the template context
+
     context = {
         'project_count': project_count,
         'task_count': task_count,
@@ -392,6 +620,7 @@ def dashboard(request):
     return render(request, 'PTM/Dashboard.html', context)
 
 
+@role_required('admin', 'manager')
 def allUser(request):
     return render(request, 'PTM/allUser.html')
 
@@ -467,6 +696,7 @@ def update_meeting(request, meeting_id):
         form = MeetingForm(instance=meeting)
     return render(request, 'update_meeting.html', {'form': form})
 
+@role_required('admin', 'manager')
 def delete_meeting(request, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id)
     if request.method == 'POST':
@@ -506,6 +736,7 @@ class CustomPasswordChangeView(PasswordChangeView):
         logout(self.request)
         return response
 
+@role_required('admin', 'manager')
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -525,4 +756,34 @@ def manager_list(request):
     }
     return render(request, 'PTM/tasks.html', context)
 
-#
+def is_user(user):
+    return user.role == 'user'
+
+@login_required
+@user_passes_test(is_user)
+def user_tasks(request):
+    user = request.user
+    tasks = Task.objects.filter(assign_to=user)
+    return render(request, 'PTM/user_tasks.html', {'tasks': tasks})
+
+@login_required
+def notifications(request):
+    current_user = request.user
+    notifications = Notification.objects.filter(user=current_user).order_by('-created_at')
+    context = {
+        'notifications': notifications,
+    }
+    return render(request, 'PTM/notifications.html', context)
+
+@login_required
+def get_notifications(request):
+    current_user = request.user
+    notifications = Notification.objects.filter(user=current_user, is_read=False).order_by('-created_at')
+    notifications_list = [
+        {
+            'message': notification.message,
+            'created_at': notification.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+        }
+    for notification in notifications]
+    notifications.update(is_read=True)
+    return JsonResponse({'notifications': notifications_list})

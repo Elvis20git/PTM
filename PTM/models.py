@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models import JSONField
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
+from django.conf import settings
 # Create your models here.
 
 class MyModel(models.Model):
@@ -54,34 +55,27 @@ class Allprojects(models.Model):
 class Task(models.Model):
     project = models.ForeignKey(Allprojects, on_delete=models.CASCADE)
     task_description = models.CharField(max_length=255)
-    assign_to = models.CharField(max_length=100)
+    assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='assigned_tasks')
+    # assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     deadline = models.DateField()
     revised_due_date = models.DateField(null=True, blank=True)
     completion_date = models.DateField(blank=True, null=True)
-    assigned_by = models.CharField(max_length=100)
-    status = models.IntegerField(choices=[(1, 'Not Started'), (2, 'Completed'), (3, 'In Progress'), (4, 'Overdue')], default=1)
-    # progress = models.IntegerField(choices=[(0, '0%'), (10, '10%'), (20, '20%'), (30, '30%'), (40, '40%'), (50, '50%'), (60, '60%'), (70, '70%'), (80, '80%'), (90, '90%'), (100, '100%')])
-    PROGRESS_CHOICES = [
-        (0, '0% progress'),
-        (10, '10% progress'),
-        (20, '20% progress'),
-        (30, '30% progress'),
-        (40, '40% progress'),
-        (50, '50% progress'),
-        (60, '60% progress'),
-        (70, '70% progress'),
-        (80, '80% progress'),
-        (90, '90% progress'),
-        (100, '100% completed')
-    ]
-
-
+    assigned_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='tasks_assigned')
+    status = models.IntegerField(choices=[(1, 'Not Started'), (2, 'Completed'), (3, 'In Progress'), (4, 'Overdue')],
+                                 default=1)
 
     def __str__(self):
         return self.task_description
 
-    # class Meta:
-    #     db_table = 'CustomUser'
+# class Tasks(models.Model):
+#     title = models.CharField(max_length=200)
+#     description = models.TextField()
+#     # assigned_to = models.ForeignKey(User, on_delete=models.CASCADE)
+#     assigned_to = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+#     def __str__(self):
+#         return self.title
+
+
 class TaskDeadlineUpdate(models.Model):
     IMPACT_CHOICES = [
         ('overdue_no_impact', 'Overdue - No impact on final result'),
@@ -131,4 +125,11 @@ class MeetingNote(models.Model):
         return f"{self.get_note_type_display()} for {self.meeting}"
 
 
+class Notification(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f'Notification for {self.user.username}: {self.message}'

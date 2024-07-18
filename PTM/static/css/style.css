@@ -52,11 +52,14 @@ a {
 }
 
 .bg-purple {
-  background-color: #3445B4;
+  /*background-color: #3445B4;*/
+  background-color: rgb(0 0 0 / 0.5);
+
 }
 
 .offcanvas-header {
-  background-color: #1a2fbe;
+  /*background-color: #1a2fbe;*/
+  background-color: rgb(0 0 0 / 0.5);
   font-size: 25px;
   padding: 10px;
 }
