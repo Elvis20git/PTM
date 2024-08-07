@@ -8,70 +8,38 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3936afda-4ee2-4e2c-a9e7-570940ba2cd0" name="Changes" comment="ok">
-      <change afterPath="$PROJECT_DIR$/PTM/migrations/0004_allprojects_project_life_stage_and_more.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/migrations/0005_allprojects_project_file.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/static/doc_template/template.docx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/tasks.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PTM/templates/PTM/update_meeting_note.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/debug.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/31_SLA_Document (1).docx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/32_SLA_Document (1).docx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/33_AIF-DEV-2024-001.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/34_SLA_Document (1).docx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/35_DEPOSIT PLEDGE Q2 (1).xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/36_AIF-DEV-2024-001.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/37_SLA_Document (1).docx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/38_SLA_Document (1).docx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/39_AIF-DEV-2024-001.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/40_SLA_Document (1).docx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/41_AIF-DEV-2024-001.pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/42_note-content (13).pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/43_note-content (13).pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/44_20_SLA_Document (1).docx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/45_note-content (13).pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/46_note-content (13).pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/47_note-content (13).pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/48_note-content (13).pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/49_note-content (13).pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/50_note-content (13).pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/51_note-content (11).pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/52_note-content (13).pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/53_note-content (13).pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/54_note-content (13).pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/55_beneficiary_data.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/56_beneficiary_data.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/57_Inventory PCs.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/59_note-content (13).pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/60_note-content (12).pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/project_files/61_note-content (12).pdf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/task_files/38_58_beneficiary_data.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/media/task_files/39_note-content (13).pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/test1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/test1.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/Dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/Dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/UpdateP.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/UpdateP.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/allTasks.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/allTasks.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/allUser.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/allUser.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/meetingMinutes.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/meetingMinutes.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/meetingMinutesList.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/meetingMinutesList.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/projects.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/projects.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/register.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/task_email_template.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/task_email_template.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/tasks.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/tasks.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/updateTask.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/updateTask.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/userPage.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/userPage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/templates/PTM/user_login.html" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templates/PTM/user_login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/templatetags/custom_filters.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/templatetags/custom_filters.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PTM/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/PTM/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test1/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/test1/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test1/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/test1/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/31_SLA_Document (1).docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/32_SLA_Document (1).docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/33_AIF-DEV-2024-001.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/34_SLA_Document (1).docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/35_DEPOSIT PLEDGE Q2 (1).xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/36_AIF-DEV-2024-001.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/37_SLA_Document (1).docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/38_SLA_Document (1).docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/39_AIF-DEV-2024-001.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/40_SLA_Document (1).docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/41_AIF-DEV-2024-001.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/42_note-content (13).pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/43_note-content (13).pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/44_20_SLA_Document (1).docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/45_note-content (13).pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/46_note-content (13).pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/47_note-content (13).pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/48_note-content (13).pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/49_note-content (13).pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/50_note-content (13).pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/51_note-content (11).pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/52_note-content (13).pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/53_note-content (13).pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/54_note-content (13).pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/55_beneficiary_data.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/56_beneficiary_data.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/57_Inventory PCs.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/59_note-content (13).pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/60_note-content (12).pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/project_files/61_note-content (12).pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/task_files/38_58_beneficiary_data.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/media/task_files/39_note-content (13).pdf" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -260,7 +228,7 @@
       <workItem from="1722842219783" duration="27762000" />
       <workItem from="1722938735481" duration="11196000" />
       <workItem from="1722972179501" duration="5072000" />
-      <workItem from="1723014198012" duration="1818000" />
+      <workItem from="1723014198012" duration="1963000" />
     </task>
     <task id="LOCAL-00001" summary="ok">
       <option name="closed" value="true" />
@@ -438,7 +406,15 @@
       <option name="project" value="LOCAL" />
       <updated>1721297181318</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="ok">
+      <option name="closed" value="true" />
+      <created>1723017107675</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1723017107675</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
