@@ -86,7 +86,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{% url 'User' %}" class="nav-link px-3">
+                                        <a href="{% url 'allUser' %}" class="nav-link px-3">
                                             <span class="me-2"><i class="bi bi-2-circle"></i></span>
                                             <span>All Users</span>
                                         </a>
@@ -202,6 +202,10 @@
                     {{ form.email }}
                 </div>
                 <div class="col-md-4 mb-3">
+                    <label for="{{ form.department.id_for_label }}" class="form-label">Department</label>
+                    {{ form.department }}
+                </div>
+                <div class="col-md-4 mb-3">
                     <label for="{{ form.password1.id_for_label }}" class="form-label">Password</label>
                     {{ form.password1 }}
                 </div>
@@ -226,6 +230,40 @@
                 </div>
             </div>
         </form>
+
+
+<h2>Registered Users</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Department</th>
+            <th>Role</th>
+            <th>Account Activation</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.full_name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.phone_number }}</td>
+            <td>{{ user.department }}</td>
+            <td>{{ user.role }}</td>
+            <td>{{ user.account_activation|yesno:"Active,Inactive" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7">No users registered yet.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
        </div>
      </div>
     </div>

@@ -211,10 +211,15 @@
                                             <label for="pg_code" class="form-label">Assign to</label>
                                             <input class="form-control" value="{{ task.assigned_to.username }}" type="text" id="pg_code" name="assigned_to" {% if read_only %}readonly{% endif %}>
                                         </div>
-                                        <div class="mb-3 px-2">
-                                            <label for="st_admsn" class="form-label">Deadline</label>
-                                            <input class="form-control" value="{{ task.deadline }}" type="text" id="st_admsn" name="deadline" {% if read_only %}readonly{% endif %}>
-                                        </div>
+                                    <div class="mb-3 px-2">
+                                        <label for="st_admsn" class="form-label">Deadline</label>
+                                        <input class="form-control"
+                                               value="{{ task.deadline|date:'F j, Y' }}"
+                                               type="text"
+                                               id="st_admsn"
+                                               name="deadline"
+                                               {% if read_only %}readonly{% endif %}>
+                                    </div>
                                         <div class="mb-3 px-2">
                                             <label for="st_admsn" class="form-label">Assigned by</label>
                                             <input class="form-control" value="{{ task.assigned_by.username }}" type="text" id="st_admsn" name="assigned_by" {% if read_only %}readonly{% endif %}>

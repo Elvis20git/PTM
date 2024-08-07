@@ -44,6 +44,8 @@
     <orderEntry type="library" name="remixicon" level="application" />
     <orderEntry type="library" name="@popperjs" level="application" />
     <orderEntry type="library" name="bootstrap.bundle" level="application" />
+    <orderEntry type="library" name="tagify" level="application" />
+    <orderEntry type="library" name="jspdf" level="application" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />

@@ -10,6 +10,11 @@ from django.utils import timezone
 from django.contrib.auth.forms import UserChangeForm
 import secrets
 import string
+from django.forms.widgets import Select
+from django.utils.safestring import mark_safe
+from django.contrib.auth import get_user_model
+from ckeditor.widgets import CKEditorWidget
+
 
 
 class MeetingForm(forms.ModelForm):
@@ -30,7 +35,44 @@ class MeetingForm(forms.ModelForm):
         else:
             self.fields['project'].queryset = Allprojects.objects.none()
 
+# class MeetingNoteForm(forms.ModelForm):
+#     class Meta:
+#         model = MeetingNote
+#         fields = ['note_type', 'note_content', 'decided_by', 'assigned_to', 'assigned_by', 'deadline_date']
+#         widgets = {
+#             'note_type': forms.Select(attrs={'id': 'note-type-dropdown', 'class': 'form-select'}),
+#             'note_content': forms.Textarea(attrs={'id': 'editor', 'class': 'form-control'}),
+#             'decided_by': forms.TextInput(attrs={'id': 'decided-by', 'class': 'form-control'}),
+#             'assigned_to': forms.TextInput(attrs={'id': 'assigned-to', 'class': 'form-control'}),
+#             'assigned_by': forms.TextInput(attrs={'id': 'assigned-by', 'class': 'form-control'}),
+#             'deadline_date': forms.DateInput(attrs={'type': 'date', 'id': 'deadline-date', 'class': 'form-control'}),
+#         }
+
+class SearchableSelect(Select):
+    def __init__(self, attrs=None, choices=()):
+        super().__init__(attrs, choices)
+
+    def render(self, name, value, attrs=None, renderer=None):
+        if attrs is None:
+            attrs = {}
+        attrs['class'] = 'selectpicker form-control'
+        attrs['data-live-search'] = 'true'
+        output = super().render(name, value, attrs, renderer)
+        return mark_safe(f'<div class="search_select_box">{output}</div>')
+User = get_user_model()
+
 class MeetingNoteForm(forms.ModelForm):
+    assigned_to = forms.ModelChoiceField(
+        queryset=User.objects.all(),
+        widget=SearchableSelect(attrs={'id': 'assigned-to-dropdown'}),
+        required=False
+    )
+    assigned_by = forms.ModelChoiceField(
+        queryset=User.objects.all(),
+        widget=SearchableSelect(attrs={'id': 'assigned-by-dropdown'}),
+        required=False
+    )
+
     class Meta:
         model = MeetingNote
         fields = ['note_type', 'note_content', 'decided_by', 'assigned_to', 'assigned_by', 'deadline_date']
@@ -38,10 +80,13 @@ class MeetingNoteForm(forms.ModelForm):
             'note_type': forms.Select(attrs={'id': 'note-type-dropdown', 'class': 'form-select'}),
             'note_content': forms.Textarea(attrs={'id': 'editor', 'class': 'form-control'}),
             'decided_by': forms.TextInput(attrs={'id': 'decided-by', 'class': 'form-control'}),
-            'assigned_to': forms.TextInput(attrs={'id': 'assigned-to', 'class': 'form-control'}),
-            'assigned_by': forms.TextInput(attrs={'id': 'assigned-by', 'class': 'form-control'}),
             'deadline_date': forms.DateInput(attrs={'type': 'date', 'id': 'deadline-date', 'class': 'form-control'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['assigned_to'].label_from_instance = lambda obj: obj.username
+        self.fields['assigned_by'].label_from_instance = lambda obj: obj.username
 class TaskDeadlineUpdateForm(forms.ModelForm):
     class Meta:
         model = TaskDeadlineUpdate
@@ -68,12 +113,13 @@ class CustomUserCreationForm(UserCreationForm):
     full_name = forms.CharField(max_length=30, label='First Name')
     phone_number = forms.CharField(max_length=30, label='Phone Number')
     email = forms.EmailField(label='Email')
+    department = forms.CharField(max_length=30, label='Department')
     account_activation = forms.BooleanField(required=False, label='Account Activation')
     role = forms.ChoiceField(choices=[('admin', 'Admin'), ('manager', 'Manager'), ('user', 'User')], label='Role')
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'full_name', 'phone_number', 'email', 'password1', 'password2', 'account_activation', 'role']
+        fields = ['username', 'full_name', 'phone_number', 'email', 'department', 'password1', 'password2', 'account_activation', 'role']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -86,6 +132,7 @@ class CustomUserCreationForm(UserCreationForm):
         self.fields['full_name'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Full Name'})
         self.fields['phone_number'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Phone Number'})
         self.fields['email'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Email'})
+        self.fields['department'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Department'})
         self.fields['password1'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Password', 'value': random_password})
         self.fields['password2'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Confirm Password', 'value': random_password})
         self.fields['account_activation'].widget.attrs.update({'class': 'form-check-input'})
@@ -114,6 +161,6 @@ class CustomUserCreationForm(UserCreationForm):
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
-        fields = ('username', 'full_name', 'phone_number', 'email', 'account_activation')
+        fields = ('username', 'full_name', 'phone_number', 'email', 'department', 'account_activation')
 
 

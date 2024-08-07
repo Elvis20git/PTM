@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     {% load static %}
+    {% load custom_filters %}
     <link rel="stylesheet" href="{% static 'css/user.css' %}">
     <title>Dashboard</title>
 </head>
@@ -34,17 +35,8 @@
                     <li class="mb-4">
                         <a href="{% url 'profile' %}" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3">Profile</a>
                     </li>
-{#                    <li class="mb-4">#}
-{#                        <a href="#" class="text-gray-300 text-sm flex items-center hover:text-gray-100 before:contents-[''] before:w-1 before:h-1 before:rounded-full before:bg-gray-300 before:mr-3"></a>#}
-{#                    </li>#}
                 </ul>
             </li>
-{#            <li class="mb-1 group">#}
-{#                <a href="#" class="flex items-center py-2 px-4 text-gray-300 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">#}
-{#                    <i class="ri-settings-2-line mr-3 text-lg"></i>#}
-{#                    <span class="text-sm">Settings</span>#}
-{#                </a>#}
-{#            </li>#}
         </ul>
     </div>
     <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay"></div>
@@ -132,7 +124,6 @@
                                     <th class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left rounded-tl-md rounded-bl-md">Project Name</th>
                                     <th class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left">Task Description</th>
                                     <th class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left">Due Date</th>
-{#                                    <th class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left">Budget</th>#}
                                     <th class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left rounded-tr-md rounded-br-md">Status</th>
                                 </tr>
                             </thead>
@@ -141,7 +132,6 @@
                                 <tr>
                                     <td class="py-2 px-4 border-b border-b-gray-50">
                                         <div class="flex items-center">
-{#                                            <img src="https://placehold.co/32x32" alt="" class="w-8 h-8 rounded object-cover block">#}
                                             <a href="#" class="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate">{{ task.project.project_name }}</a>
                                         </div>
                                     </td>
@@ -252,20 +242,28 @@
                         </table>
                     </div>
                 </div>
-{#    </form>#}
 
             <div class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md">
                     <div class="flex justify-between mb-4 items-start">
                         <div class="font-medium">All Tasks</div>
                     </div>
                     <form action="" class="flex items-center mb-4">
+                        {% block content %}
                         <div class="relative w-full mr-2">
-                            <input type="text" class="py-2 pr-4 pl-10 bg-gray-50 w-full outline-none border border-gray-100 rounded-md text-sm focus:border-blue-500" placeholder="Search...">
-                            <i class="ri-search-line absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"></i>
+                            <form action="{% url 'search_tasks' %}" method="get">
+                                <input type="text" name="q" class="py-2 pr-4 pl-10 bg-gray-50 w-full outline-none border border-gray-100 rounded-md text-sm focus:border-blue-500" placeholder="Search..." value="{{ query }}">
+                                <i class="ri-search-line absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"></i>
+                            </form>
                         </div>
-                        <select class="text-sm py-2 pl-4 pr-10 bg-gray-50 border border-gray-100 rounded-md focus:border-blue-500 outline-none appearance-none bg-select-arrow bg-no-repeat bg-[length:16px_16px] bg-[right_16px_center]">
-                            <option value="">All</option>
-                        </select>
+
+                        {% if tasks %}
+                            <ul>
+                                {% for task in tasks %}
+                                    <li>{{ task.task_description }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% endblock %}
                     </form>
                     <div class="overflow-x-auto">
                         <table class="w-full min-w-[540px]">
@@ -274,45 +272,48 @@
                                     <th class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left rounded-tl-md rounded-bl-md">Project Name</th>
                                     <th class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left">Task description</th>
                                     <th class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left">Due Date</th>
+                                    <th class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left">Files</th>
                                     <th class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left rounded-tr-md rounded-br-md">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for task in user_tasks %}
-                                <tr>
-                                    <tr>
-                                    <td class="py-2 px-4 border-b border-b-gray-50">
-                                        <div class="flex items-center">
-                                            <a href="#" class="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate">{{ task.project.project_name }}</a>
-                                        </div>
-                                    </td>
-                                    <td class="py-2 px-4 border-b border-b-gray-50">
-                                        <span class="text-[13px] font-medium text-gray-400">{{ task.task_description }}</span>
-                                    </td>
-                                    <td class="py-2 px-4 border-b border-b-gray-50">
-                                        <span class="text-[13px] font-medium text-gray-400">{{ task.deadline }}</span>
-                                    </td>
-                                    <td class="py-2 px-4 border-b border-b-gray-50">
-                                        <div class="dropdown">
-                                            <button type="button" class="dropdown-toggle text-gray-400 hover:text-gray-600 text-sm w-6 h-6 rounded flex items-center justify-center bg-gray-50"><i class="ri-more-2-fill"></i></button>
-                                            <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
-                                                <li>
-                                                    <a href="{% url 'edit_task' task.id %}" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">update</a>
-                                                </li>
-{#                                                <li>#}
-{#                                                    <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Settings</a>#}
-{#                                                </li>#}
-{#                                                <li>#}
-{#                                                    <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Logout</a>#}
-{#                                                </li>#}
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-
-
+                            {% for task in user_tasks %}
+                            <tr>
+                                <td class="py-2 px-4 border-b border-b-gray-50">
+                                    <div class="flex items-center">
+                                        <a href="#" class="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate">{{ task.project.project_name }}</a>
+                                    </div>
+                                </td>
+                                <td class="py-2 px-4 border-b border-b-gray-50">
+                                    <span class="text-[13px] font-medium text-gray-400">{{ task.task_description }}</span>
+                                </td>
+                                <td class="py-2 px-4 border-b border-b-gray-50">
+                                    <span class="text-[13px] font-medium text-gray-400">{{ task.deadline }}</span>
+                                </td>
+                                <td class="py-2 px-4 border-b border-b-gray-50">
+                                    {% if task.task_file %}
+                                          <a href="{{ request|absolute_url:task.task_file.url }}" class="text-[13px] font-medium text-gray-400 hover:text-blue-500 hover:bg-gray-50" download>Download</a>
+                                    {% else %}
+                                        <span class="text-[13px] font-medium text-gray-400">No file</span>
+                                    {% endif %}
+                                </td>
+                                <td class="py-2 px-4 border-b border-b-gray-50">
+                                    <div class="dropdown">
+                                        <button type="button" class="dropdown-toggle text-gray-400 hover:text-gray-600 text-sm w-6 h-6 rounded flex items-center justify-center bg-gray-50"><i class="ri-more-2-fill"></i></button>
+                                        <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
+                                            <li>
+                                                <a href="{% url 'edit_task' task.id %}" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50">Update</a>
+                                            </li>
+                                            <li>
+                                            <li>
+                                                <a href="{{ request|absolute_url:task.task_file.url }}" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50" download>Download</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
                             {% endfor %}
-                            </tbody>
+                        </tbody>
                         </table>
                     </div>
                 </div>
@@ -320,11 +321,6 @@
                 <div class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md">
                     <div class="flex justify-between mb-4 items-start">
                         <div class="font-medium">Over Due Tasks</div>
-{#                        <div class="dropdown">#}
-{#                            <button type="button" class="dropdown-toggle text-gray-400 hover:text-gray-600"><i class="ri-more-fill"></i></button>#}
-{#                            <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">#}
-{#                                #}
-{#                            </ul>#}
                         </div>
                     </div>
                     <div class="overflow-x-auto">
@@ -370,6 +366,26 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{% static 'js/scripts.js' %}"></script>
     <script src="{% static 'js/notifications.js' %}"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInputs = document.querySelectorAll('input[type="file"][name="user_task_upload"]');
+    const uploadFileLink = document.getElementById('upload-file-link');
+
+    fileInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                this.closest('form').submit();
+            }
+        });
+    });
+
+    uploadFileLink.addEventListener('click', function(event) {
+        event.preventDefault();
+        fileInputs[0].click();
+    });
+});
+</script>
 </body>
 </html>
 

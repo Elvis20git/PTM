@@ -31,6 +31,15 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from datetime import datetime
 from .decorators import role_required
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+import os
+from django.conf import settings
+from django.db.models import Q
+from django.contrib.auth import get_user_model
+import logging
+from django.views.generic.edit import DeleteView
+# from .tasks import create_task
 # from .forms import CustomSignupForm
 
 
@@ -88,71 +97,177 @@ def get_custom_users(request):
     # Query the CustomUser table to get the usernames
     users = CustomUser.objects.values_list('username', flat=True)
     return JsonResponse({'users': list(users)})
+
+
+# def add_project(request):
+#     if request.method == "POST":
+#         project_name = request.POST.get('project_name')
+#         project_manager = request.POST.get('project_manager')
+#         ProjectM_tags = request.POST.get('ProjectM_tags')
+#         project_file = request.FILES.get('project_file')  # Get the uploaded file
+#
+#         try:
+#             # Convert project_members from JSON string to Python list
+#             ProjectM_tags = json.loads(ProjectM_tags)
+#
+#             # Check if the project manager exists in the CustomUser table
+#             if not CustomUser.objects.filter(username=project_manager).exists():
+#                 return JsonResponse({'error': 'Project manager does not exist'}, status=400)
+#
+#             # Check if each project member exists in the CustomUser table
+#             for member_username in ProjectM_tags:
+#                 if not CustomUser.objects.filter(username=member_username['value']).exists():
+#                     messages.error(request, f'Tagged member {member_username["value"]} does not exist')
+#                     return JsonResponse({'error': f'Tagged member {member_username["value"]} does not exist'},
+#                                         status=400)
+#
+#             # Create the project
+#             allprojects = Allprojects.objects.create(
+#                 project_name=project_name,
+#                 project_manager=project_manager,
+#                 ProjectM_tags=ProjectM_tags
+#             )
+#
+#             # Handle file upload
+#             if project_file:
+#                 # Check file extension
+#                 allowed_extensions = ['xlsx', 'xls', 'pdf', 'doc', 'docx']
+#                 file_extension = project_file.name.split('.')[-1].lower()
+#                 if file_extension not in allowed_extensions:
+#                     return JsonResponse({'error': 'Invalid file type. Allowed types are xlsx, xls, pdf, doc, docx.'},
+#                                         status=400)
+#
+#                 # Save the file
+#                 file_path = f'project_files/{allprojects.id}_{project_file.name}'
+#                 file_name = default_storage.save(file_path, ContentFile(project_file.read()))
+#                 allprojects.project_file = file_name
+#                 allprojects.save()
+#
+#             messages.success(request, 'The project has been added.')
+#
+#             # Extracting emails from tagged members
+#             member_emails = [member_username['value'] for member_username in ProjectM_tags]
+#             send_project_email(member_emails, project_name)
+#
+#             return redirect('projects')
+#         except json.JSONDecodeError:
+#             return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+#
+#     # If it's a GET request, render the form
+#     return render(request, 'PTM/projects.html')  # Replace with your actual template
+#
+
+
 def add_project(request):
     if request.method == "POST":
         project_name = request.POST.get('project_name')
         project_manager = request.POST.get('project_manager')
         ProjectM_tags = request.POST.get('ProjectM_tags')
+        project_file = request.FILES.get('project_file')  # Get the uploaded file
 
         try:
-            # Convert project_members from JSON string to Python list
             ProjectM_tags = json.loads(ProjectM_tags)
+
+            if not CustomUser.objects.filter(username=project_manager).exists():
+                return JsonResponse({'error': 'Project manager does not exist'}, status=400)
+
+            for member_username in ProjectM_tags:
+                if not CustomUser.objects.filter(username=member_username['value']).exists():
+                    messages.error(request, f'Tagged member {member_username["value"]} does not exist')
+                    return JsonResponse({'error': f'Tagged member {member_username["value"]} does not exist'},
+                                        status=400)
+
+            allprojects = Allprojects.objects.create(
+                project_name=project_name,
+                project_manager=project_manager,
+                ProjectM_tags=ProjectM_tags
+            )
+
+            project_file_path = None
+            if project_file:
+                allowed_extensions = ['xlsx', 'xls', 'pdf', 'doc', 'docx']
+                file_extension = project_file.name.split('.')[-1].lower()
+                if file_extension not in allowed_extensions:
+                    return JsonResponse({'error': 'Invalid file type. Allowed types are xlsx, xls, pdf, doc, docx.'},
+                                        status=400)
+
+                file_path = f'project_files/{allprojects.id}_{project_file.name}'
+                project_file_path = default_storage.save(file_path, ContentFile(project_file.read()))
+                print(f"File saved at: {project_file_path}")  # Add this print statement
+                allprojects.project_file = project_file_path
+                allprojects.save()
+
+            messages.success(request, 'The project has been added.')
+
+            member_emails = [member_username['value'] for member_username in ProjectM_tags]
+            send_project_email(member_emails, project_name, project_file_path)
+
+            return redirect('projects')
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+
+    return render(request, 'PTM/projects.html')
+def edit_project(request, id):
+    project = get_object_or_404(Allprojects, id=id)
+
+    if request.method == "POST":
+        project_name = request.POST.get('project_name')
+        project_manager = request.POST.get('project_manager')
+        ProjectM_tags = request.POST.get('ProjectM_tags')
+        project_status = request.POST.get('project_status')
+        project_life_stage = request.POST.get('project_life_stage')
+
+        try:
+            # Ensure ProjectM_tags is a Python list, not a string representation
+            if isinstance(ProjectM_tags, str):
+                ProjectM_tags = json.loads(ProjectM_tags)
+
+            # Further validate that it's a list of dictionaries with 'value' keys
+            if not all(isinstance(item, dict) and 'value' in item for item in ProjectM_tags):
+                raise ValueError("Invalid format for ProjectM_tags")
 
             # Check if the project manager exists in the CustomUser table
             if not CustomUser.objects.filter(username=project_manager).exists():
                 return JsonResponse({'error': 'Project manager does not exist'}, status=400)
 
             # Check if each project member exists in the CustomUser table
-            for member_username in ProjectM_tags:
-                if not CustomUser.objects.filter(username=member_username['value']).exists():
-                    messages.error(request, f'Tagged member {member_username["value"]} does not exist')
-                    return JsonResponse({'error': f'Tagged member {member_username["value"]} does not exist'}, status=400)
+            for member in ProjectM_tags:
+                if not CustomUser.objects.filter(username=member['value']).exists():
+                    return JsonResponse({'error': f'Tagged member {member["value"]} does not exist'}, status=400)
 
-            allprojects = Allprojects.objects.create(
-                project_name=project_name,
-                project_manager=project_manager,
-                ProjectM_tags=ProjectM_tags  # Assuming your model can handle a list directly
-            )
-            messages.success(request, 'The project has been added.')
+            # Update project fields
+            project.project_name = project_name
+            project.project_manager = project_manager
+            project.ProjectM_tags = ProjectM_tags  # This should now be a Python list
+            if project_status:
+                project.project_status = project_status
+            if project_life_stage:
+                project.project_life_stage = project_life_stage
 
-            # Extracting emails from tagged members
-            member_emails = [member_username['value'] for member_username in ProjectM_tags]
-            send_project_email(member_emails, project_name)
-
-            # return JsonResponse({'success': 'The project has been added successfully.'})
+            project.save()
+            messages.success(request, 'The project has been updated.')
             return redirect('projects')
         except json.JSONDecodeError:
-            return JsonResponse({'error': 'Invalid JSON data'}, status=400)
+            return JsonResponse({'error': 'Invalid JSON data for ProjectM_tags'}, status=400)
+        except ValueError as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+    # Prepare project tags for frontend
+    project_tags = json.dumps(project.ProjectM_tags) if project.ProjectM_tags else '[]'
+
+    context = {
+        'project': project,
+        'all_users': CustomUser.objects.all(),
+        'statuses': ['Not started', 'In progress', 'Completed', 'Overdue'],
+        'life_stages': ['Starting', 'Organize and Prepare', 'Execution', 'Ending', 'Closed'],
+        'project_tags': project_tags,
+    }
+
+    return render(request, 'PTM/UpdateP.html', context)
 
 
-def edit_project(request, id):
-    try:
-        project = get_object_or_404(Allprojects, id=id)
-    except Allprojects.DoesNotExist:
-        return JsonResponse({'error': 'Project not found'}, status=404)
 
-    if request.method == "POST":
-        project_name = request.POST.get('project_name')
-        project_manager = request.POST.get('project_manager')
-        ProjectM_tags = request.POST.get('ProjectM_tags')
 
-        if project_name:
-            project.project_name = project_name
-        if project_manager:
-            project.project_manager = project_manager
-        if ProjectM_tags:
-            try:
-                ProjectM_tags = json.loads(ProjectM_tags)
-            except json.JSONDecodeError:
-                return JsonResponse({'error': 'Invalid JSON data'}, status=400)
-            project.ProjectM_tags = ProjectM_tags
-
-        project.save()
-        sweetify.toast(request, 'The project has been updated.', icon='success', duration=3000)
-        return redirect('projects')
-    else:
-        print(f'Project Tags: {project.ProjectM_tags}')
-        return render(request, 'PTM/UpdateP.html', {'project': project})
 
 def delete_project(request, project_id):
     # if request.method == "POST":
@@ -192,12 +307,26 @@ def search_users(request):
         return JsonResponse(list(users), safe=False)
     return JsonResponse([], safe=False)
 
+def search_tasks(request):
+    query = request.GET.get('q', '')
+    tasks = Task.objects.all.filter(
+        Q(task_description__icontains=query)
+        # Q(assigned_by__username__icontains=query)
+    ) if query else Task.objects.none()
+
+    context = {
+        'tasks': tasks,
+        'query': query,
+    }
+    return render(request, 'PTM/userPage.html', context)
+
 # @login_required
 @login_required
 @role_required('admin', 'manager')
 def tasks(request):
     if request.method == "POST":
         print(request.POST)  # Debugging: Print the POST data to see what is being submitted
+        print(request.FILES)  # Debugging: Print the FILES data to see what is being uploaded
 
         project_id = request.POST.get('project')
         task_description = request.POST.get('task_description')
@@ -205,6 +334,7 @@ def tasks(request):
         deadline = request.POST.get('deadline')
         assigned_by_username = request.POST.get('assigned_by')
         status = request.POST.get('status')
+        task_file = request.FILES.get('task_file')  # Get the uploaded file
 
         # Check if all required fields are provided
         if not all([project_id, task_description, assigned_to_username, deadline, assigned_by_username, status]):
@@ -249,7 +379,28 @@ def tasks(request):
             completion_date=completion_date
         )
 
-        task.save()
+        if task_file:
+            print(f"Received file: {task_file.name}")  # Debugging: Confirm file receipt
+            allowed_extensions = ['xlsx', 'xls', 'pdf', 'doc', 'docx']
+            file_extension = task_file.name.split('.')[-1].lower()
+            if file_extension not in allowed_extensions:
+                return JsonResponse({'error': 'Invalid file type. Allowed types are xlsx, xls, pdf, doc, docx.'}, status=400)
+
+            # Ensure task_files directory exists
+            task_files_dir = os.path.join(settings.MEDIA_ROOT, 'task_files')
+            if not os.path.exists(task_files_dir):
+                os.makedirs(task_files_dir)
+                print(f"Created directory: {task_files_dir}")  # Debugging: Confirm directory creation
+
+            file_path = f'task_files/{task.id}_{task_file.name}'
+            try:
+                task_file_path = default_storage.save(file_path, ContentFile(task_file.read()))
+                print(f"File saved at: {task_file_path}")  # Debugging: Confirm file save
+                task.task_file = task_file_path
+                task.save()  # Save the task after setting the file
+            except Exception as e:
+                print(f"Error saving file: {e}")  # Debugging: Print any errors encountered during file save
+                return JsonResponse({'error': 'Failed to save the file.'}, status=500)
 
         messages.success(request, 'The Task has been added.')
         send_task_email(
@@ -268,17 +419,14 @@ def tasks(request):
         all_tasks = Task.objects.all()
         task_details = TaskDeadlineUpdate.objects.all()
 
-
         context = {
             'all_projects': all_projects,
             'all_users': all_users,
             'all_tasks': all_tasks,
             'task_details': task_details,
-            # 'completed_tasks_count': completed_tasks_count,
-            # 'InProgress_tasks_count': InProgress_tasks_count
+            'request': request,
         }
         return render(request, 'PTM/tasks.html', context)
-
 
 def task_count(request):
     user = request.user
@@ -430,88 +578,16 @@ def edit_task(request, task_id):
         }
         return render(request, 'PTM/updateTask.html', context)
 
-
-
-
-# def edit_task(request, task_id):
-#     if request.method == "POST":
-#         task = get_object_or_404(Task, pk=task_id)
-#
-#         # Debugging: Print the POST data
-#         print(request.POST)
-#
-#         project_id = request.POST.get('project')
-#         task_description = request.POST.get('task_description')
-#         assigned_to_username = request.POST.get('assigned_to')
-#         assigned_by_username = request.POST.get('assigned_by')
-#         deadline = request.POST.get('deadline')
-#         status = request.POST.get('status')
-#
-#         # Check if all required fields are provided
-#         if not all([project_id, task_description, assigned_to_username, assigned_by_username, deadline, status]):
-#             messages.error(request, 'Please provide all required fields.')
-#             return redirect('edit_task', task_id=task_id)
-#
-#         try:
-#             task.project_id = project_id
-#             task.task_description = task_description
-#
-#             # Ensure assigned user exists
-#             try:
-#                 assigned_to = CustomUser.objects.get(username=assigned_to_username)
-#             except CustomUser.DoesNotExist:
-#                 messages.error(request, 'Assigned user does not exist.')
-#                 return redirect('edit_task', task_id=task_id)
-#
-#             # Ensure assigning user exists
-#             try:
-#                 assigned_by = CustomUser.objects.get(username=assigned_by_username)
-#             except CustomUser.DoesNotExist:
-#                 messages.error(request, 'Assigning user does not exist.')
-#                 return redirect('edit_task', task_id=task_id)
-#
-#             task.assigned_to = assigned_to
-#             task.assigned_by = assigned_by
-#
-#             # Parse the deadline date
-#             try:
-#                 task.deadline = datetime.strptime(deadline, '%B %d, %Y').date()
-#             except ValueError:
-#                 messages.error(request, 'Invalid deadline date format. It must be in "Month DD, YYYY" format.')
-#                 return redirect('edit_task', task_id=task_id)
-#
-#             task.status = status
-#
-#             if int(task.status) == 2:  # Completed
-#                 task.completion_date = timezone.now().date()
-#
-#             task.save()
-#
-#             messages.success(request, 'The Task has been updated.')
-#             return redirect('allTasks')
-#
-#         except Exception as e:
-#             messages.error(request, f'An error occurred: {e}')
-#             return redirect('edit_task', task_id=task_id)
-#
-#     else:
-#         task = get_object_or_404(Task, pk=task_id)
-#         all_projects = Allprojects.objects.all()
-#         context = {
-#             'task': task,
-#             'all_projects': all_projects,
-#         }
-#         return render(request, 'PTM/updateTask.html', context)
-
 @role_required('admin', 'manager')
 @login_required
 def allTasks(request):
     all_projects = Allprojects.objects.all()
     all_tasks = Task.objects.all()
+    users = CustomUser.objects.all()
     context = {
         'all_projects': all_projects,
         'all_tasks': all_tasks,
-
+        'users': users,
 
     }
 
@@ -571,7 +647,6 @@ def delete_task(request, task_id):
         return redirect('allTasks')
     except Task.DoesNotExist:
         return JsonResponse({'error': 'Task not found'}, status=404)
-
 @role_required('admin', 'manager')
 def addUser(request):
 
@@ -606,28 +681,61 @@ def dashboard(request):
     in_progress_tasks_count = Task.objects.filter(status=3).count()
     overDue_tasks_count = Task.objects.filter(status=4).count()
     open_tasks_count = Task.objects.filter(status=1).count()
-    # Pass the project count to the template context
+
+    # Filter projects with non-null project_status and project_life_stage
+    projects = Allprojects.objects.exclude(project_status__isnull=True).exclude(project_life_stage__isnull=True)
 
     context = {
+        'projects': projects,
         'project_count': project_count,
         'task_count': task_count,
         'user_count': user_count,
         'completed_tasks_count': completed_tasks_count,
         'in_progress_tasks_count': in_progress_tasks_count,
         'overDue_tasks_count': overDue_tasks_count,
-        'open_tasks_count': open_tasks_count
+        'open_tasks_count': open_tasks_count,
     }
+
     return render(request, 'PTM/Dashboard.html', context)
 
 
 @role_required('admin', 'manager')
 def allUser(request):
-    return render(request, 'PTM/allUser.html')
+    # Fetch all users
+    CustomUser = get_user_model()
+    users = CustomUser.objects.all()
+    context = {
+        'users': users
+    }
+    return render(request, 'PTM/allUser.html', context)
 
-@login_required
+
+User = get_user_model()
+
+def create_tasks(project_id, task_description, assigned_to, deadline, assigned_by):
+    try:
+        project = Allprojects.objects.get(pk=project_id)
+    except Allprojects.DoesNotExist:
+        raise ValueError("Project does not exist.")
+
+    # Ensure assigned_to and assigned_by are instances of CustomUser
+    if not isinstance(assigned_to, CustomUser):
+        raise ValueError("assigned_to must be a CustomUser instance.")
+    if not isinstance(assigned_by, CustomUser):
+        raise ValueError("assigned_by must be a CustomUser instance.")
+
+    task = Task.objects.create(
+        project=project,
+        task_description=task_description,
+        assigned_to=assigned_to,
+        deadline=deadline,
+        assigned_by=assigned_by,
+        status=1  # Assuming 1 is the default status for a new task
+    )
+
+# @login_required
 def create_meeting(request):
     MeetingNoteFormSet = modelformset_factory(MeetingNote, form=MeetingNoteForm, extra=1)
-
     projects = Allprojects.objects.all()
 
     if request.method == 'POST':
@@ -640,13 +748,28 @@ def create_meeting(request):
             for form in meeting_note_formset:
                 meeting_note = form.save(commit=False)
                 meeting_note.meeting = meeting
+
+                assigned_by = form.cleaned_data.get('assigned_by')
+                assigned_to = form.cleaned_data.get('assigned_to')
+
+                if assigned_by:
+                    meeting_note.assigned_by = assigned_by
+                if assigned_to:
+                    meeting_note.assigned_to = assigned_to
+
+                # Debugging statements
+                print(f'Assigned By: {assigned_by}')
+                print(f'Assigned To: {assigned_to}')
+                print(f'Assigned By Instance: {meeting_note.assigned_by}')
+                print(f'Assigned To Instance: {meeting_note.assigned_to}')
+
                 meeting_note.save()
 
                 if meeting_note.note_type == 'action':
-                    create_task(
+                    create_tasks(
                         project_id=meeting.project.id,
                         task_description=meeting_note.note_content,
-                        assign_to=meeting_note.assigned_to,
+                        assigned_to=meeting_note.assigned_to,
                         deadline=meeting_note.deadline_date,
                         assigned_by=meeting_note.assigned_by
                     )
@@ -665,9 +788,6 @@ def create_meeting(request):
         'all_projects': projects,
     }
     return render(request, 'PTM/meetingMinutes.html', context)
-
-
-
 def meeting_list(request):
     # Get all meeting notes
     meetings = MeetingNote.objects.all()
@@ -745,7 +865,8 @@ def register(request):
             return redirect('user_login')
     else:
         form = CustomUserCreationForm()
-    return render(request, 'PTM/register.html', {'form': form})
+        users = CustomUser.objects.all()
+    return render(request, 'PTM/register.html', {'form': form, 'users': users})
 
 def manager_list(request):
     all_users = CustomUser.objects.all()
@@ -787,3 +908,56 @@ def get_notifications(request):
     for notification in notifications]
     notifications.update(is_read=True)
     return JsonResponse({'notifications': notifications_list})
+
+def user_detail(request, id):
+    user = get_object_or_404(CustomUser, id=id)
+    return render(request, 'user_detail.html', {'user': user})
+
+def user_edit(request, id):
+    user = get_object_or_404(CustomUser, id=id)
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('user_list')
+    else:
+        form = CustomUserCreationForm(instance=user)
+    return render(request, 'user_edit.html', {'form': form})
+
+def user_delete(request, id):
+    user = get_object_or_404(CustomUser, id=id)
+    if request.method == 'POST':
+        user.delete()
+        return redirect('user_list')
+    return render(request, 'user_confirm_delete.html', {'user': user})
+
+def serve_docx_template(request):
+    file_path = os.path.join(settings.BASE_DIR, 'static', 'doc_templates', 'template.docx')
+    if os.path.exists(file_path):
+        return FileResponse(open(file_path, 'rb'), content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+    return HttpResponse("Template not found", status=404)
+
+
+def update_meeting_note(request, pk):
+    meeting_note = get_object_or_404(MeetingNote, pk=pk)
+
+    if request.method == 'POST':
+        form = MeetingNoteForm(request.POST, instance=meeting_note)
+        if form.is_valid():
+            form.save()
+            return redirect('meeting_list')  # Adjust the redirect as needed
+    else:
+        form = MeetingNoteForm(instance=meeting_note)
+
+    return render(request, 'PTM/update_meeting_note.html', {'form': form})
+
+def delete_meeting(request, pk):
+    meeting_note = get_object_or_404(MeetingNote, pk=pk)
+    meeting_note.delete()
+    return redirect('meeting_list')
+
+def serve_file(request, file_path):
+    file_path = os.path.join(settings.MEDIA_ROOT, file_path)
+    if os.path.exists(file_path):
+        return FileResponse(open(file_path, 'rb'))
+    return HttpResponse("File not found", status=404)

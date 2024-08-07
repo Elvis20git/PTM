@@ -22,7 +22,8 @@ load_dotenv(dotenv_path='.env')
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'import_export',
+    'ckeditor',
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
@@ -183,3 +185,41 @@ AUTH_USER_MODEL = 'PTM.CustomUser'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# # Celery settings
+# CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Use Redis as the broker
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'  # Use Redis to store task results
+# CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_TIMEZONE = 'UTC'
+#
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#         },
+#         'file': {
+#             'class': 'logging.FileHandler',
+#             'filename': 'debug.log',
+#         },
+#     },
+#     'root': {
+#         'handlers': ['console', 'file'],
+#         'level': 'DEBUG',
+#     },
+# }
+
+
+# Q_CLUSTER = {
+#     'name': 'DjangoQ',
+#     'workers': 4,
+#     'recycle': 500,
+#     'timeout': 60,
+#     'retry': 120,
+#     'queue_limit': 50,
+#     'bulk': 10,
+#     'orm': 'default',  # Use Django's ORM + database for broker
+# }

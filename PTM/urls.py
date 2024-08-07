@@ -1,7 +1,8 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
-from .views import update_task_deadline, register, CustomPasswordChangeView, get_custom_users, task_count
+from .views import update_task_deadline, register, CustomPasswordChangeView, get_custom_users, task_count, search_tasks, \
+    update_meeting_note, delete_meeting
 
 urlpatterns = [
     # User Authentication
@@ -37,6 +38,8 @@ urlpatterns = [
     path('overdue_tasks/', views.overdue_tasks, name='overdue_tasks'),
     path('notifications/', views.notifications, name='notifications'),
     path('get-notifications/', views.get_notifications, name='get_notifications'),
+    # path('upload-task-file/<int:task_id>/', views.user_task_upload, name='user_task_upload'),
+    path('search/', search_tasks, name='search_tasks'),
 
 
     # Users Management
@@ -46,15 +49,20 @@ urlpatterns = [
     path('get_custom_users/', get_custom_users, name='get_custom_users'),
     path('profile/change_password/', views.change_password, name='change_password'),
     path('password_change/', CustomPasswordChangeView.as_view(), name='password_change'),
-
+    path('user_edit/<int:id>', views.user_edit, name='edit_user'),
+    path('user_delete/<int:id>', views.user_delete, name='user_delete'),
+    path('user_detail/<int:id>', views.user_detail, name='user_detail'),
     # Meetings
     path('create_meeting/', views.create_meeting, name='create_meeting'),
     path('meeting_list/', views.meeting_list, name='meeting_list'),
     path('meeting_detail/<int:meeting_id>/', views.meeting_detail, name='meeting_detail'),
-
+    path('serve_docx_template/', views.serve_docx_template, name='serve_docx_template'),
+    path('meeting-note/update/<int:pk>/', update_meeting_note, name='update_meeting_note'),
+    path('meeting/delete/<int:pk>/', delete_meeting, name='delete_meeting'),
     # Miscellaneous
     path('task_update_list/', views.task_update_list, name='task_update_list'),
 
     # Home
     path('', views.user_login, name='user_login'),
 ]
+

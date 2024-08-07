@@ -4,6 +4,7 @@ from django.db.models import JSONField
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from django.conf import settings
+from django.core.validators import FileExtensionValidator
 # Create your models here.
 
 class MyModel(models.Model):
@@ -15,6 +16,7 @@ class CustomUser(AbstractUser):
     full_name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
+    department = models.CharField(max_length=100, blank=True, null=True)
     account_activation = models.BooleanField(default=False)
     ROLE_CHOICES = (
         ('admin', 'Admin'),
@@ -48,9 +50,40 @@ class Allprojects(models.Model):
     project_manager = models.CharField(max_length=100)
     ProjectM_tags = models.JSONField(default=list)  # Field to store member names
 
+    project_status = models.CharField(
+        max_length=20,
+        choices=[
+            ('Not started', 'Not started'),
+            ('In progress', 'In progress'),
+            ('Completed', 'Completed'),
+            ('Overdue', 'Overdue')
+        ],
+        blank=True,
+        null=True
+    )
+    project_life_stage = models.CharField(
+        max_length=30,
+        choices=[
+            ('Starting', 'Starting'),
+            ('Organize and Prepare', 'Organize and Prepare'),
+            ('Execution', 'Execution'),
+            ('Ending', 'Ending'),
+            ('Closed', 'Closed')
+        ],
+        blank=True,
+        null=True
+    )
+
+    # New field for file uploads
+    project_file = models.FileField(
+        upload_to='project_files/',
+        validators=[FileExtensionValidator(allowed_extensions=['xlsx', 'xls', 'pdf', 'doc', 'docx'])],
+        blank=True,
+        null=True
+    )
+
     def __str__(self):
         return self.project_name
-
 
 class Task(models.Model):
     project = models.ForeignKey(Allprojects, on_delete=models.CASCADE)
@@ -64,6 +97,13 @@ class Task(models.Model):
     status = models.IntegerField(choices=[(1, 'Not Started'), (2, 'Completed'), (3, 'In Progress'), (4, 'Overdue')],
                                  default=1)
 
+    task_file = models.FileField(
+        upload_to='task_files/',
+        validators=[FileExtensionValidator(allowed_extensions=['xlsx', 'xls', 'pdf', 'doc', 'docx'])],
+        blank=True,
+        null=True
+    )
+    user_task_file = models.FileField(upload_to='user_task_files/', null=True, blank=True)
     def __str__(self):
         return self.task_description
 
