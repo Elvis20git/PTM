@@ -7,8 +7,6 @@
     <title>Simple Admin Dashbaord</title>
     {% load static %}
     {% load sweetify %}
-{#    {% load sweetify_resources %}#}
-{#    {% sweetify_resources %}#}
     <link rel="stylesheet" href="{% static 'signup.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
@@ -244,7 +242,7 @@
     <!-- sidebar end -->
 
     <!-- main content -->
-    <main class="mt-3 p-2">
+<main class="mt-3 p-2">
         <div class="container">
             <div class="page-title">
                 <div style="font-weight: 500;" class="page-title fs-5 fw-bold mb-4">Projects</div>
@@ -256,74 +254,109 @@
                     <li class="breadcrumb-item active" aria-current="page">Update Project</li>
                 </ol>
             </nav>
-            <div class="row" style="margin-left: 10%">
-                <div class="col-md-9">
-                    <div class="add-dept mt-5">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-body">
-                                <div class="page-title fs-5 fw-bold mb-4">
-                                    Add New Project
-                                </div>
-                                <form method="POST" action="{% url 'edit_project' project.id %}">
-                                    {% csrf_token %}
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="mb-3 px-2">
-                                                <label for="pg_name" class="form-label">Project Name</label>
-                                                <input class="form-control" value="{{ project.project_name }}" type="text" id="pg_name" name="project_name" required>
-                                            </div>
-                                            <div class="mb-3 px-2">
-                                                <label for="cat_code" class="form-label">Project Manager</label>
-                                                <input class="form-control" value="{{ project.project_manager }}" type="text" id="cat_code" name="project_manager" required>
-                                            </div>
-                                            <div class="mb-3 px-2">
-                                                <label for="projectMembersDropdown" class="form-label">Project Members</label>
-                                                <div class="search_select_box">
-                                                    <select id="projectMembersDropdown" class="selectpicker w-100" data-live-search="true" multiple>
-                                                        {% for user in all_users %}
-                                                            <option value="{{ user.username }}" {% if user.username in project.ProjectM_tags %}selected{% endif %}>{{ user.username }}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                </div>
-                                                <div id="taggedMembers" class="mt-2"></div>
-                                                <input class="form-control" type="hidden" value="{{ project.ProjectM_tags }}" id="projectMembers" name="ProjectM_tags">
-                                            </div>
-                                            <div class="mb-3 px-2">
-                                                <label for="project_status" class="form-label">Project Status</label>
-                                                <select class="form-control" id="project_status" name="project_status" required>
-                                                    <option value="">Select Status</option>
-                                                    {% for status in statuses %}
-                                                        <option value="{{ status }}" {% if project.project_status == status %}selected{% endif %}>{{ status }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            <div class="mb-3 px-2">
-                                                <label for="project_life_stage" class="form-label">Project Life Stage</label>
-                                                <select class="form-control" id="project_life_stage" name="project_life_stage" required>
-                                                    <option value="">Select Life Stage</option>
-                                                    {% for stage in life_stages %}
-                                                        <option value="{{ stage }}" {% if project.project_life_stage == stage %}selected{% endif %}>{{ stage }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            <div class="col-12 mt-md-4">
-                                                <div class="mb-3 px-2">
-                                                    <button type="submit" class="btn btn-success" id="submit">Update</button><br>
-                                                    {#<br><button type="reset" class="btn btn-warning">Reset</button>#}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
+   <div class="row" style="margin-left: 10%">
+     <div class="col-md-9">
+       <div class="add-dept mt-5">
+         <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="page-title fs-5 fw-bold mb-4">
+                     Add New Project
                 </div>
-              </div>
+        <form method="POST" action="{% url 'edit_project' project.id %}">
+            {% csrf_token %}
+                    <div class="row">
+                    <div class="col-md-12">
+                    <div class="mb-3 px-2">
+                        <label for="pg_name" class="form-label">Project Name</label>
+                        <input class="form-control" value="{{ project.project_name }}" type="text" id="pg_name" name="project_name" required>
+                    </div>
+                    <div class="mb-3 px-2">
+                        <label for="cat_code" class="form-label">Project Manager</label>
+                        <input class="form-control" value="{{ project.project_manager }}" type="text" id="cat_code" name="project_manager" required>
+                    </div>
+                    <div class="mb-3 px-2">
+                        <label for="projectMembersDropdown" class="form-label">Project Members</label>
+                        <div class="search_select_box">
+                            <select id="projectMembersDropdown" class="selectpicker w-100" data-live-search="true" multiple>
+                                {% for user in all_users %}
+                                    <option value="{{ user.username }}" {% if user.username in project.ProjectM_tags %}selected{% endif %}>{{ user.username }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div id="taggedMembers" class="mt-2"></div>
+                        <input class="form-control" type="hidden" id="projectMembers" name="ProjectM_tags">
+                    </div>
+                    <div class="mb-3 px-2">
+                        <label for="project_status" class="form-label">Project Status</label>
+                        <select class="form-control" id="project_status" name="project_status" required>
+                            <option value="">Select Status</option>
+                            {% for status in statuses %}
+                            <option value="{{ status }}" {% if project.project_status == status %}selected{% endif %}>{{ status }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3 px-2">
+                            <label for="project_life_stage" class="form-label">Project Life Stage</label>
+                        <select class="form-control" id="project_life_stage" name="project_life_stage" required>
+                            <option value="">Select Life Stage</option>
+                            {% for stage in life_stages %}
+                            <option value="{{ stage }}" {% if project.project_life_stage == stage %}selected{% endif %}>{{ stage }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-12 mt-md-4">
+                    <div class="mb-3 px-2">
+                    <button type="submit" class="btn btn-success" id="submit">Update</button><br>
+                  </div>
+                </div>
+               </div>
+            </div>
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var projectMembersDropdown = document.getElementById('projectMembersDropdown');
+                    var taggedMembersDiv = document.getElementById('taggedMembers');
+                    var projectMembersInput = document.getElementById('projectMembers');
+
+                    // Parse the initial ProjectM_tags data
+                    var initialTags = {{ project.ProjectM_tags|safe|default:"[]" }};
+
+                    // Set initial selected options
+                    initialTags.forEach(function(tag) {
+                        var option = projectMembersDropdown.querySelector('option[value="' + tag.value + '"]');
+                        if (option) option.selected = true;
+                    });
+
+                    function updateTaggedMembers() {
+                        var selectedOptions = Array.from(projectMembersDropdown.selectedOptions);
+                        var taggedMembers = selectedOptions.map(option => option.value);
+                        taggedMembersDiv.innerHTML = 'Tagged Members: ' + taggedMembers.join(', ');
+
+                        // Update the hidden input with the JSON format
+                        var jsonMembers = taggedMembers.map(member => ({ value: member }));
+                        projectMembersInput.value = JSON.stringify(jsonMembers);
+                    }
+
+                    // Initialize Bootstrap-select
+                    $(projectMembersDropdown).selectpicker();
+
+                    // Bind the change event to both the native select and Bootstrap-select
+                    projectMembersDropdown.addEventListener('change', updateTaggedMembers);
+                    $(projectMembersDropdown).on('changed.bs.select', updateTaggedMembers);
+
+                    // Initial update
+                    updateTaggedMembers();
+                });
+                </script>
+        </form>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
 
 
-    </main>
+</main>
     {% sweetify %}
     <!-- main content end-->
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
@@ -360,164 +393,62 @@
             $('#datatable').DataTable();
         });
     </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const projectMembersDropdown = document.getElementById('projectMembersDropdown');
+    const taggedMembers = document.getElementById('taggedMembers');
+    const projectMembersInput = document.getElementById('projectMembers');
 
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const projectMembersDropdown = document.getElementById('projectMembersDropdown');
-        const taggedMembers = document.getElementById('taggedMembers');
-        const projectMembersInput = document.getElementById('projectMembers');
+    // Initialize selectedMembers with the existing project members
+    let selectedMembers = JSON.parse(projectMembersInput.value.replace(/'/g, '"'));
 
-        // Initialize selectedMembers with the existing project members
-        let selectedMembers = JSON.parse(projectMembersInput.value.replace(/'/g, '"')); // assuming project.ProjectM_tags is a JSON array in string format
+    function updateTaggedMembers() {
+        taggedMembers.innerHTML = '';
+        selectedMembers.forEach(member => {
+            const tag = document.createElement('span');
+            tag.classList.add('tag', 'badge', 'badge-secondary', 'mx-1');
+            tag.textContent = member.value; // Use member.value instead of member
 
-        // Function to update the displayed tags and the hidden input
-        function updateTaggedMembers() {
-            taggedMembers.innerHTML = '';
-            selectedMembers.forEach(member => {
-                const tag = document.createElement('span');
-                tag.classList.add('tag', 'badge', 'badge-secondary', 'mx-1');
-                tag.textContent = member;
-
-                const removeTag = document.createElement('span');
-                removeTag.classList.add('remove-tag', 'mx-1');
-                removeTag.style.cursor = 'pointer';
-                removeTag.textContent = 'x';
-                removeTag.addEventListener('click', function() {
-                    selectedMembers = selectedMembers.filter(m => m !== member);
-                    updateTaggedMembers();
-                });
-
-                tag.appendChild(removeTag);
-                taggedMembers.appendChild(tag);
+            const removeTag = document.createElement('span');
+            removeTag.classList.add('remove-tag', 'mx-1');
+            removeTag.style.cursor = 'pointer';
+            removeTag.textContent = 'x';
+            removeTag.addEventListener('click', function() {
+                selectedMembers = selectedMembers.filter(m => m.value !== member.value);
+                updateTaggedMembers();
+                $(projectMembersDropdown).selectpicker('val', selectedMembers.map(m => m.value));
             });
-            projectMembersInput.value = JSON.stringify(selectedMembers);
-        }
 
-        // Initial call to display the preloaded members
-        updateTaggedMembers();
-
-        // Event listener to handle new member selection
-        projectMembersDropdown.addEventListener('change', function() {
-            const selectedOptions = Array.from(this.selectedOptions);
-            selectedMembers = selectedOptions.map(option => option.value);
-            updateTaggedMembers();
+            tag.appendChild(removeTag);
+            taggedMembers.appendChild(tag);
         });
+        projectMembersInput.value = JSON.stringify(selectedMembers);
+    }
 
-        // Initialize selectpicker
-        $(projectMembersDropdown).selectpicker('refresh');
+    // Initial call to display the preloaded members
+    updateTaggedMembers();
+
+    // Event listener to handle new member selection
+    $(projectMembersDropdown).on('changed.bs.select', function(e, clickedIndex, isSelected, previousValue) {
+        const selectedOptions = Array.from(this.selectedOptions);
+        selectedMembers = selectedOptions.map(option => ({ value: option.value }));
+        updateTaggedMembers();
     });
+
+    // Initialize selectpicker with custom options
+    $(projectMembersDropdown).selectpicker({
+        tickIcon: '',
+        showTick: false,
+        template: {
+            caret: '<span class="caret"></span>',
+            li: '<li><a><span class="text"></span></a></li>'
+        }
+    });
+
+    // Set initial values
+    $(projectMembersDropdown).selectpicker('val', selectedMembers.map(m => m.value));
+});
 </script>
-
-
-{#    <script>#}
-{#    // Initialize Tagify on the Project Members input#}
-{#    var input = document.querySelector('input[name=ProjectM_tags]');#}
-{#    new Tagify(input);#}
-{#</script>#}
-{##}
-{#    <script>#}
-{#    // Initialize Tagify on the Project Members input#}
-{#    var input = document.querySelector('input[name=ProjectM_tags]');#}
-{#    new Tagify(input);#}
-{#</script>#}
-{##}
-{#    <script>#}
-{#        $(document).ready(function (){#}
-{#            $('.search_select_box').selectpicker();#}
-{#        })#}
-{#    </script>#}
-{#<script>#}
-{#        document.addEventListener('DOMContentLoaded', function() {#}
-{#            const projectMembersDropdown = document.getElementById('projectMembersDropdown');#}
-{#            const taggedMembers = document.getElementById('taggedMembers');#}
-{#            const projectMembersInput = document.getElementById('projectMembers');#}
-{#            let selectedMembers = [];#}
-{##}
-{#            projectMembersDropdown.addEventListener('change', function() {#}
-{#                const selectedValue = this.value;#}
-{#                if (selectedValue && !selectedMembers.includes(selectedValue)) {#}
-{#                    selectedMembers.push(selectedValue);#}
-{#                    updateTaggedMembers();#}
-{#                }#}
-{#                this.value = ''; // Reset dropdown#}
-{#            });#}
-{##}
-{#            function updateTaggedMembers() {#}
-{#                taggedMembers.innerHTML = '';#}
-{#                selectedMembers.forEach(member => {#}
-{#                    const tag = document.createElement('span');#}
-{#                    tag.classList.add('tag');#}
-{#                    tag.textContent = member;#}
-{##}
-{#                    const removeTag = document.createElement('span');#}
-{#                    removeTag.classList.add('remove-tag');#}
-{#                    removeTag.textContent = 'x';#}
-{#                    removeTag.addEventListener('click', function() {#}
-{#                        selectedMembers = selectedMembers.filter(m => m !== member);#}
-{#                        updateTaggedMembers();#}
-{#                    });#}
-{##}
-{#                    tag.appendChild(removeTag);#}
-{#                    taggedMembers.appendChild(tag);#}
-{#                });#}
-{#                projectMembersInput.value = JSON.stringify(selectedMembers);#}
-{#            }#}
-{#        });#}
-{#    </script>#}
-{##}
-{#    <script>#}
-{#        document.querySelectorAll('.delete-project-btn').forEach(button => {#}
-{#        button.addEventListener('click', function(event) {#}
-{#            event.preventDefault(); // Prevent default link behavior#}
-{##}
-{#            const projectId = this.getAttribute('data-project-id');#}
-{#            fetch(`/delete_project/${projectId}/`, {#}
-{#                method: 'POST',#}
-{#                headers: {#}
-{#                    'X-CSRFToken': '{{ csrf_token }}', // Include CSRF token#}
-{#                    'Content-Type': 'application/json'#}
-{#                },#}
-{#            })#}
-{#            .then(response => {#}
-{#                if (response.ok) {#}
-{#                    // Reload page or update UI as needed#}
-{#                    window.location.reload(); // Example: reload page#}
-{#                } else {#}
-{#                    console.error('Error deleting project:', response.statusText);#}
-{#                }#}
-{#            })#}
-{#            .catch(error => console.error('Error deleting project:', error));#}
-{#        });#}
-{#    });#}
-{#    </script>#}
-{#    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>#}
-{#    <script>#}
-{#        $("#submit").click(function(){#}
-            {#event.preventDefault();#}
-{#            var pg_name = $("#pg_name").val();#}
-{#            var cat_code = $("#cat_code").val();#}
-{#            var cat_name = $("#cat_name").val();#}
-{##}
-{#            if(pg_name == '' || cat_code == '' || cat_name == ''){#}
-{#                swal({#}
-{#                      title: "Empty Fields!!",#}
-{#                      text: "Please provide missing information!!",#}
-{#                      icon: "warning",#}
-{#                      button: "OK",#}
-{#                    });#}
-{#            }else{#}
-{#                swal({#}
-{#                      title: "Project creation!!",#}
-{#                      text: "Project Created Successfully.",#}
-{#                      icon: "success",#}
-{#                      button: "ok",#}
-{#                    });#}
-{#            }#}
-{##}
-{##}
-{#        })#}
-{#    </script>#}
-
 </body>
 
 </html>

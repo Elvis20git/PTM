@@ -39,6 +39,8 @@ from django.db.models import Q
 from django.contrib.auth import get_user_model
 import logging
 from django.views.generic.edit import DeleteView
+from django.utils.html import strip_tags
+
 # from .tasks import create_task
 # from .forms import CustomSignupForm
 
@@ -261,6 +263,7 @@ def edit_project(request, id):
         'statuses': ['Not started', 'In progress', 'Completed', 'Overdue'],
         'life_stages': ['Starting', 'Organize and Prepare', 'Execution', 'Ending', 'Closed'],
         'project_tags': project_tags,
+        'project_tags': json.dumps(project.ProjectM_tags) if project.ProjectM_tags else '[]',
     }
 
     return render(request, 'PTM/UpdateP.html', context)
@@ -712,7 +715,7 @@ def allUser(request):
 
 User = get_user_model()
 
-def create_tasks(project_id, task_description, assigned_to, deadline, assigned_by):
+def create_tasks(project_id, project_name, task_description, assigned_to, deadline, assigned_by):
     try:
         project = Allprojects.objects.get(pk=project_id)
     except Allprojects.DoesNotExist:
@@ -764,14 +767,22 @@ def create_meeting(request):
                 print(f'Assigned To Instance: {meeting_note.assigned_to}')
 
                 meeting_note.save()
-
                 if meeting_note.note_type == 'action':
                     create_tasks(
                         project_id=meeting.project.id,
-                        task_description=meeting_note.note_content,
+                        project_name=meeting.project.project_name,
+                        task_description=strip_tags(meeting_note.note_content),
                         assigned_to=meeting_note.assigned_to,
                         deadline=meeting_note.deadline_date,
                         assigned_by=meeting_note.assigned_by
+                    )
+                    messages.success(request, 'The Task has been added.')
+                    send_task_email(
+                        usernames=[assigned_to.username],
+                        project_name=meeting.project.project_name,
+                        task_description=strip_tags(meeting_note.note_content),
+                        assigned_by=meeting_note.assigned_by,
+                        deadline=meeting_note.deadline_date,
                     )
 
             return redirect('meeting_list')
