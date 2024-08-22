@@ -209,43 +209,36 @@ def add_project(request):
             return JsonResponse({'error': 'Invalid JSON data'}, status=400)
 
     return render(request, 'PTM/projects.html')
+
+
 def edit_project(request, id):
     project = get_object_or_404(Allprojects, id=id)
-
     if request.method == "POST":
         project_name = request.POST.get('project_name')
         project_manager = request.POST.get('project_manager')
         ProjectM_tags = request.POST.get('ProjectM_tags')
         project_status = request.POST.get('project_status')
         project_life_stage = request.POST.get('project_life_stage')
-
         try:
-            # Ensure ProjectM_tags is a Python list, not a string representation
             if isinstance(ProjectM_tags, str):
                 ProjectM_tags = json.loads(ProjectM_tags)
-
-            # Further validate that it's a list of dictionaries with 'value' keys
             if not all(isinstance(item, dict) and 'value' in item for item in ProjectM_tags):
                 raise ValueError("Invalid format for ProjectM_tags")
 
-            # Check if the project manager exists in the CustomUser table
             if not CustomUser.objects.filter(username=project_manager).exists():
                 return JsonResponse({'error': 'Project manager does not exist'}, status=400)
 
-            # Check if each project member exists in the CustomUser table
             for member in ProjectM_tags:
                 if not CustomUser.objects.filter(username=member['value']).exists():
                     return JsonResponse({'error': f'Tagged member {member["value"]} does not exist'}, status=400)
 
-            # Update project fields
             project.project_name = project_name
             project.project_manager = project_manager
-            project.ProjectM_tags = ProjectM_tags  # This should now be a Python list
+            project.ProjectM_tags = ProjectM_tags
             if project_status:
                 project.project_status = project_status
             if project_life_stage:
                 project.project_life_stage = project_life_stage
-
             project.save()
             messages.success(request, 'The project has been updated.')
             return redirect('projects')
@@ -254,20 +247,14 @@ def edit_project(request, id):
         except ValueError as e:
             return JsonResponse({'error': str(e)}, status=400)
 
-    # Prepare project tags for frontend
-    project_tags = json.dumps(project.ProjectM_tags) if project.ProjectM_tags else '[]'
-
     context = {
         'project': project,
         'all_users': CustomUser.objects.all(),
         'statuses': ['Not started', 'In progress', 'Completed', 'Overdue'],
         'life_stages': ['Starting', 'Organize and Prepare', 'Execution', 'Ending', 'Closed'],
-        'project_tags': project_tags,
         'project_tags': json.dumps(project.ProjectM_tags) if project.ProjectM_tags else '[]',
     }
-
     return render(request, 'PTM/UpdateP.html', context)
-
 
 
 
@@ -404,7 +391,7 @@ def tasks(request):
             except Exception as e:
                 print(f"Error saving file: {e}")  # Debugging: Print any errors encountered during file save
                 return JsonResponse({'error': 'Failed to save the file.'}, status=500)
-
+            file_url = task.task_file.url if task.task_file else None
         messages.success(request, 'The Task has been added.')
         send_task_email(
             usernames=[assigned_to.username],

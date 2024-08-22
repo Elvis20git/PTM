@@ -9,6 +9,30 @@
     {% load custom_filters %}
     <link rel="stylesheet" href="{% static 'css/user.css' %}">
     <title>Dashboard</title>
+    <style>
+        .search-container {
+    display: flex;
+    align-items: center;
+}
+
+.search-container input {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.search-container button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+    </style>
 </head>
 <body class="text-gray-800 font-inter">
 
@@ -107,7 +131,7 @@
                 </div>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <div class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md">
+                <div class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md" style="max-height: 15%; overflow-y: auto">
                     <div class="flex justify-between mb-4 items-start">
                         <div class="font-medium">Manage My Tasks</div>
                     </div>
@@ -132,7 +156,7 @@
                                 <tr>
                                     <td class="py-2 px-4 border-b border-b-gray-50">
                                         <div class="flex items-center">
-                                            <a href="#" class="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate">{{ task.project.project_name }}</a>
+                                            <a href="#" class="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2" style="max-width: 80px; overflow-x: auto">{{ task.project.project_name }}</a>
                                         </div>
                                     </td>
                                     <td class="py-2 px-4 border-b border-b-gray-50">
@@ -163,7 +187,7 @@
                                 <tr>
                                     <td class="py-2 px-4 border-b border-b-gray-50">
                                         <div class="flex items-center">
-                                            <a href="#" class="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate">{{ task.project.project_name }}</a>
+                                            <a href="#" class="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate" style="max-width: 80px; overflow-x: auto">{{ task.project.project_name }}</a>
                                         </div>
                                     </td>
                                     <td class="py-2 px-4 border-b border-b-gray-50">
@@ -243,31 +267,17 @@
                     </div>
                 </div>
 
-            <div class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md">
-                    <div class="flex justify-between mb-4 items-start">
-                        <div class="font-medium">All Tasks</div>
-                    </div>
-                    <form action="" class="flex items-center mb-4">
-                        {% block content %}
-                        <div class="relative w-full mr-2">
-                            <form action="{% url 'search_tasks' %}" method="get">
-                                <input type="text" name="q" class="py-2 pr-4 pl-10 bg-gray-50 w-full outline-none border border-gray-100 rounded-md text-sm focus:border-blue-500" placeholder="Search..." value="{{ query }}">
-                                <i class="ri-search-line absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"></i>
-                            </form>
-                        </div>
-
-                        {% if tasks %}
-                            <ul>
-                                {% for task in tasks %}
-                                    <li>{{ task.task_description }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                        {% endblock %}
-                    </form>
+            <div class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md" style="max-height: 15%; overflow-y: auto">
+                <div class="flex justify-between mb-4 items-start">
+                    <div class="font-medium">All Tasks</div>
+                </div>
+                <div class="search-container flex items-center mb-4">
+                    <input type="text" id="searchInput" placeholder="Search..." autocomplete="off">
+                    <button id="searchButton">Search</button>
+                </div>
                     <div class="overflow-x-auto">
                         <table class="w-full min-w-[540px]">
-                            <thead>
+                            <thead class="w-full">
                                 <tr>
                                     <th class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left rounded-tl-md rounded-bl-md">Project Name</th>
                                     <th class="text-[12px] uppercase tracking-wide font-medium text-gray-400 py-2 px-4 bg-gray-50 text-left">Task description</th>
@@ -278,10 +288,10 @@
                             </thead>
                             <tbody>
                             {% for task in user_tasks %}
-                            <tr>
+                            <tr class="task-row">
                                 <td class="py-2 px-4 border-b border-b-gray-50">
                                     <div class="flex items-center">
-                                        <a href="#" class="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 truncate">{{ task.project.project_name }}</a>
+                                        <a href="#" class="text-gray-600 text-sm font-medium hover:text-blue-500 ml-2 " style="max-width: 80px; overflow-x: auto">{{ task.project.project_name }}</a>
                                     </div>
                                 </td>
                                 <td class="py-2 px-4 border-b border-b-gray-50">
@@ -306,7 +316,6 @@
                                             </li>
                                             <li>
                                             <li>
-                                                <a href="{{ request|absolute_url:task.task_file.url }}" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-blue-500 hover:bg-gray-50" download>Download</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -385,6 +394,29 @@ document.addEventListener('DOMContentLoaded', function() {
         fileInputs[0].click();
     });
 });
+</script>
+
+<script>
+    document.getElementById('searchInput').addEventListener('input', function() {
+    // Get the search input value
+    const searchValue = this.value.toLowerCase();
+
+    // Get all the rows in the table
+    const rows = document.querySelectorAll('.task-row');
+
+    rows.forEach(row => {
+        // Get the project name from the current row
+        const projectName = row.querySelector('td:first-child a').textContent.toLowerCase();
+
+        // Check if the project name includes the search value
+        if (projectName.includes(searchValue)) {
+            row.style.display = ''; // Show the row if it matches
+        } else {
+            row.style.display = 'none'; // Hide the row if it doesn't match
+        }
+    });
+});
+
 </script>
 </body>
 </html>

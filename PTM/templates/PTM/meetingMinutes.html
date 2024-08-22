@@ -339,123 +339,76 @@ document.querySelector('.dropdown input').addEventListener("click", function(eve
 </script>
 <script>
     function setupNoteTypeDropdown(container) {
-    var noteTypeDropdown = container.querySelector('[id$=note-type-dropdown]');
-    if (noteTypeDropdown) {
-        noteTypeDropdown.addEventListener('change', function () {
-            var noteType = this.value;
-            container.querySelector('[id$=decided-by-field]').classList.toggle('d-none', noteType !== 'decision');
-            container.querySelector('[id$=assigned-to-field]').classList.toggle('d-none', noteType !== 'action');
-            container.querySelector('[id$=deadline-date-field]').classList.toggle('d-none', noteType !== 'action');
-            container.querySelector('[id$=assigned-by-field]').classList.toggle('d-none', noteType !== 'action');
+        var noteTypeDropdown = container.querySelector('[id$=note-type-dropdown]');
+        if (noteTypeDropdown) {
+            noteTypeDropdown.addEventListener('change', function () {
+                var noteType = this.value;
+                container.querySelector('[id$=decided-by-field]').classList.toggle('d-none', noteType !== 'decision');
+                container.querySelector('[id$=assigned-to-field]').classList.toggle('d-none', noteType !== 'action');
+                container.querySelector('[id$=deadline-date-field]').classList.toggle('d-none', noteType !== 'action');
+                container.querySelector('[id$=assigned-by-field]').classList.toggle('d-none', noteType !== 'action');
 
-            // Refresh selectpicker after changing visibility
-            $(container).find('.selectpicker').selectpicker('refresh');
-        });
+                // Refresh selectpicker after changing visibility
+                $(container).find('.selectpicker').selectpicker('refresh');
+            });
+        }
     }
-}
 
-function updateContainerIDs(container, index) {
-    container.querySelectorAll('input, textarea, select').forEach(function(element) {
-        if (element.name) {
-            element.name = element.name.replace(/-\d+-/, `-${index}-`);
-        }
-        if (element.id) {
-            element.id = element.id.replace(/_\d+_/, `_${index}_`);
-        }
-    });
-}
-
-function createNewContainer() {
-    var formCount = parseInt(document.getElementById('id_form-TOTAL_FORMS').value);
-    var originalContainer = document.querySelector('.meeting-note-form');
-    var container = originalContainer.cloneNode(true);
-
-    updateContainerIDs(container, formCount);
-
-    container.querySelectorAll('select').forEach(function(select) {
-        select.value = ''; // Clear any existing value
-    });
-
-    // Clear other input fields
-    var editorContainer = container.querySelector('[id^=editor]');
-    editorContainer.innerHTML = '';
-    container.querySelector('[name$=decided_by]').value = '';
-    container.querySelector('[name$=deadline_date]').value = '';
-
-    // Remove old selectpicker elements and reinitialize
-    container.querySelectorAll('.selectpicker').forEach(function(select) {
-        var parent = select.parentNode;
-        while (parent.firstChild) {
-            parent.removeChild(parent.firstChild);
-        }
-
-        var originalSelect = originalContainer.querySelector('#' + select.id);
-        var newSelect = originalSelect.cloneNode(true);
-        newSelect.value = '';
-        parent.appendChild(newSelect);
-    });
-
-    // Add event listener for delete button
-    container.querySelector('button.deleteButton').addEventListener('click', function(event) {
-        event.preventDefault();
-        container.remove();
-        formCount--;
-        document.getElementById('id_form-TOTAL_FORMS').value = formCount;
-    });
-
-    setupNoteTypeDropdown(container);
-
-    document.getElementById('containers').appendChild(container);
-    formCount++;
-    document.getElementById('id_form-TOTAL_FORMS').value = formCount;
-
-    // Initialize Quill for the new container
-    new Quill('#editor_' + (formCount - 1), {
-        theme: 'snow'
-    });
-
-    // Set up hidden input for Quill content
-    var hiddenInput = container.querySelector('[name$=note_content]');
-    if (hiddenInput) {
-        quill.on('text-change', function() {
-            var content = quill.root.innerHTML;
-            if (quill.getText().trim().length === 0) {
-                content = '';
+    function updateContainerIDs(container, index) {
+        container.querySelectorAll('input, textarea, select').forEach(function(element) {
+            if (element.name) {
+                element.name = element.name.replace(/-\d+-/, `-${index}-`);
             }
-            hiddenInput.value = content;
+            if (element.id) {
+                element.id = element.id.replace(/_\d+_/, `_${index}_`);
+            }
         });
     }
 
-    // Ensure assigned_to and assigned_by fields are visible if note type is 'action'
-    var noteTypeDropdown = container.querySelector('[id$=note-type-dropdown]');
-    if (noteTypeDropdown && noteTypeDropdown.value === 'action') {
-        container.querySelector('[id$=assigned-to-field]').classList.remove('d-none');
-        container.querySelector('[id$=assigned-by-field]').classList.remove('d-none');
-    }
+    function createNewContainer() {
+        var formCount = parseInt(document.getElementById('id_form-TOTAL_FORMS').value);
+        var originalContainer = document.querySelector('.meeting-note-form');
+        var container = originalContainer.cloneNode(true);
 
-    // Reinitialize selectpicker
-    $(container).find('.selectpicker').selectpicker('refresh');
-}
+        updateContainerIDs(container, formCount);
 
-document.addEventListener('DOMContentLoaded', function () {
-    var addButton = document.getElementById('addButton');
-    if (addButton) {
-        addButton.addEventListener('click', createNewContainer);
-    } else {
-        console.error("Add button not found");
-    }
+        container.querySelectorAll('select').forEach(function(select) {
+            select.value = ''; // Clear any existing value
+        });
 
-    document.querySelectorAll('.meeting-note-form').forEach(function(container) {
-        setupNoteTypeDropdown(container);
+        // Clear other input fields
+        container.querySelector('[id^=editor]').innerHTML = '';
+        container.querySelector('[name$=decided_by]').value = '';
+        container.querySelector('[name$=deadline_date]').value = '';
 
+        // Remove old selectpicker elements and reinitialize
+        container.querySelectorAll('.selectpicker').forEach(function(select) {
+            var parent = select.parentNode;
+            while (parent.firstChild) {
+                parent.removeChild(parent.firstChild);
+            }
+
+            var originalSelect = originalContainer.querySelector('#' + select.id);
+            var newSelect = originalSelect.cloneNode(true);
+            newSelect.value = '';
+            parent.appendChild(newSelect);
+        });
+
+        // Add event listener for delete button
         container.querySelector('button.deleteButton').addEventListener('click', function(event) {
             event.preventDefault();
             container.remove();
-            var formCount = parseInt(document.getElementById('id_form-TOTAL_FORMS').value);
             formCount--;
             document.getElementById('id_form-TOTAL_FORMS').value = formCount;
         });
 
+        setupNoteTypeDropdown(container);
+
+        document.getElementById('containers').appendChild(container);
+        formCount++;
+        document.getElementById('id_form-TOTAL_FORMS').value = formCount;
+
+        // Initialize Quill for the new container
         var editorContainer = container.querySelector('[id^=editor]');
         var quill = new Quill(editorContainer, {
             theme: 'snow'
@@ -464,11 +417,6 @@ document.addEventListener('DOMContentLoaded', function () {
         // Set up hidden input for Quill content
         var hiddenInput = container.querySelector('[name$=note_content]');
         if (hiddenInput) {
-            // Set initial content if there's any
-            if (hiddenInput.value) {
-                quill.root.innerHTML = hiddenInput.value;
-            }
-
             quill.on('text-change', function() {
                 var content = quill.root.innerHTML;
                 if (quill.getText().trim().length === 0) {
@@ -478,46 +426,99 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        // Hide fields by default
-        container.querySelector('[id$=decided-by-field]').classList.add('d-none');
-        container.querySelector('[id$=assigned-to-field]').classList.add('d-none');
-        container.querySelector('[id$=deadline-date-field]').classList.add('d-none');
-        container.querySelector('[id$=assigned-by-field]').classList.add('d-none');
-    });
+        // Ensure assigned_to and assigned_by fields are visible if note type is 'action'
+        var noteTypeDropdown = container.querySelector('[id$=note-type-dropdown]');
+        if (noteTypeDropdown && noteTypeDropdown.value === 'action') {
+            container.querySelector('[id$=assigned-to-field]').classList.remove('d-none');
+            container.querySelector('[id$=assigned-by-field]').classList.remove('d-none');
+        }
 
-    // Initialize selectpicker
-    $('.selectpicker').selectpicker();
+        // Reinitialize selectpicker
+        $(container).find('.selectpicker').selectpicker('refresh');
+    }
 
-    // Form submission
-    var form = document.querySelector('form');
-    form.onsubmit = function (e) {
-        e.preventDefault();
+    document.addEventListener('DOMContentLoaded', function () {
+        var addButton = document.getElementById('addButton');
+        if (addButton) {
+            addButton.addEventListener('click', createNewContainer);
+        } else {
+            console.error("Add button not found");
+        }
 
-        document.querySelectorAll('.meeting-note-form').forEach(function(container, index) {
-            var editorElement = container.querySelector('[id^=editor]');
-            var quill = Quill.find(editorElement);
-            var hiddenInput = document.createElement('input');
-            hiddenInput.type = 'hidden';
-            hiddenInput.name = `form-${index}-note_content`;
-            hiddenInput.value = quill.root.innerHTML;
-            form.appendChild(hiddenInput);
+        document.querySelectorAll('.meeting-note-form').forEach(function(container) {
+            setupNoteTypeDropdown(container);
 
-            // Handle assigned_to and assigned_by
-            ['assigned_to', 'assigned_by'].forEach(function(field) {
-                var select = container.querySelector(`[name$=${field}]`);
-                if (select) {
-                    var hiddenInput = document.createElement('input');
-                    hiddenInput.type = 'hidden';
-                    hiddenInput.name = `form-${index}-${field}`;
-                    hiddenInput.value = select.value;
-                    form.appendChild(hiddenInput);
-                }
+            container.querySelector('button.deleteButton').addEventListener('click', function(event) {
+                event.preventDefault();
+                container.remove();
+                var formCount = parseInt(document.getElementById('id_form-TOTAL_FORMS').value);
+                formCount--;
+                document.getElementById('id_form-TOTAL_FORMS').value = formCount;
             });
+
+            var editorContainer = container.querySelector('[id^=editor]');
+            var quill = new Quill(editorContainer, {
+                theme: 'snow'
+            });
+
+            // Set up hidden input for Quill content
+            var hiddenInput = container.querySelector('[name$=note_content]');
+            if (hiddenInput) {
+                // Set initial content if there's any
+                if (hiddenInput.value) {
+                    quill.root.innerHTML = hiddenInput.value;
+                }
+
+                quill.on('text-change', function() {
+                    var content = quill.root.innerHTML;
+                    if (quill.getText().trim().length === 0) {
+                        content = '';
+                    }
+                    hiddenInput.value = content;
+                });
+            }
+
+            // Hide fields by default
+            container.querySelector('[id$=decided-by-field]').classList.add('d-none');
+            container.querySelector('[id$=assigned-to-field]').classList.add('d-none');
+            container.querySelector('[id$=deadline-date-field]').classList.add('d-none');
+            container.querySelector('[id$=assigned-by-field]').classList.add('d-none');
         });
 
-        form.submit();
-    };
-});
+        // Initialize selectpicker
+        $('.selectpicker').selectpicker();
+
+        // Form submission
+        var form = document.querySelector('form');
+        form.onsubmit = function (e) {
+            e.preventDefault();
+
+            document.querySelectorAll('.meeting-note-form').forEach(function(container, index) {
+                var editorElement = container.querySelector('[id^=editor]');
+                var quill = Quill.find(editorElement);
+                var hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = `form-${index}-note_content`;
+                hiddenInput.value = quill.root.innerHTML;
+                form.appendChild(hiddenInput);
+
+                // Handle assigned_to and assigned_by
+                ['assigned_to', 'assigned_by'].forEach(function(field) {
+                    var select = container.querySelector(`[name$=${field}]`);
+                    if (select) {
+                        var hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = `form-${index}-${field}`;
+                        hiddenInput.value = select.value;
+                        form.appendChild(hiddenInput);
+                    }
+                });
+            });
+
+            form.submit();
+        };
+    });
 </script>
+
 </body>
 </html>
